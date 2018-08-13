@@ -1,0 +1,16 @@
+version: 0.2
+
+env:
+  parameter-store:
+    USER: "/CodeBuild/PypiUser"
+    PASSWORD: "/CodeBuild/password"
+
+phases:
+  pre_build:
+    commands:
+      - echo "[pypirc]\nservers = pypitest\n\n[server-login]\nusername:$USER\npassword:$PASSWORD" > ~/.pypirc
+  build:
+    commands:
+      - pip install -r requirements.txt
+      - nosetests -v
+      - python setup.py sdist upload --repository pypitest

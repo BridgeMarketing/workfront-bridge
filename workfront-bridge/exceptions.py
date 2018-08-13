@@ -1,0 +1,3 @@
+
+class WFBrigeException(Exception):
+    pass
