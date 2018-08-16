@@ -168,3 +168,33 @@ class WFEmailTestSeedBlock(WFBlock):
         self._deployment_datetime = date_time
         self.set_task_param_value("Create Flight", "Deployment Date/Time",
                                   date_time.strftime("%d/%m/%Y %H:%M"))
+
+
+class WFEmailLiveSeedBlock(WFBlock):
+    '''
+    @summary: Use this block to validate live seed lists using the CCM (without
+    sending emails).
+    This block contains a Live Setup block that has validate seed
+    list task and seed list approval task.
+    '''
+
+    template_name = 'Block - Email Live Setup'
+
+    def __init__(self, wf):
+        template_id = template_id_from_name(wf, self.template_name)
+        super(WFEmailLiveSeedBlock, self).__init__(wf, template_id)
+
+        req = ["live_seed_list_s3_path"]
+        self._set_required_fields(req)
+
+        # Block Fields :
+        self._seed_list_path = None
+
+    @property
+    def seed_list_s3_path(self):
+        return self._seed_list_path
+
+    @seed_list_s3_path.setter
+    def seed_list_s3_path(self, sl):
+        self._seed_list_path = sl
+        self.set_task_param_value("Live Setup", "live_seed_list_s3_path", sl)
