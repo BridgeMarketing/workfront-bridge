@@ -1,7 +1,7 @@
 import sys
 
 from workfront_bridge.exceptions import WFBrigeException
-from workfront_bridge.projects.email import WFProjectEmailBlock
+from workfront_bridge.projects.email import WFProjectEmailContainer
 from workfront_bridge.blocks.email import WFEmailTestSeedNoEmailSentBlock, WFEmailLiveSeedBlock
 from workfront_bridge.blocks.email import WFEmailTestSeedBlock
 from workfront_bridge.blocks.email import WFEmailGenHtmlFromZipBlock
@@ -82,7 +82,7 @@ class EmailProjectBuilder(object):
         '''
         self._check_viability()
 
-        pb = WFProjectEmailBlock(self.wf, self.project_name)
+        pb = WFProjectEmailContainer(self.wf, self.prjoject_name)
         pb.email_subject = self.subject
 
         if self.html_zip is not None:

@@ -168,7 +168,7 @@ class WFBlock(object):
             raise WFBrigeException(err.format(unused_parameters))
 
 
-class WFProjectBlock(object):
+class WFProjectContainer(object):
 
     def __init__(self, wf, wf_template_id, prj_name):
         '''
