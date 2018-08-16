@@ -1,7 +1,7 @@
 # workfront-bridge
 
-Workfront Bridge is a library that let you create bridge projects in workfront
-easily.
+Workfront Bridge is a library that make the creation of bridge projects in
+workfront easily.
 
 ## Design
 
@@ -11,36 +11,83 @@ parameters are being fullfilled while the project is developed and task are
 being excetuted).
 
 The library tries to divide and group logical blocks of tasks that can be
-convined to form a workfront project.
+convined to build a workfront project.
 So, in order to achieve this, two main abstractions are provided:
 
-* Project Blocks
+* Project Containers
 * Blocks
 
-### Blocks
+### Workfront Blocks
 
 A Block is a group of one or more task that live inside a workfront template
 project.
 Each particular block must knows its tasks, the parameters of them and the
-dependencies among them so it can instantiate them without difficulties.
+dependencies among them so it can instantiate and configure them without
+difficulties.
 The fact that the tasks live inside a workfront template project is just a
 convinient way of storing them(workfront does not allow to define a group of
 template task out of a template project).
 
-### Project Blocks
+### Workfront Project Containers
 
-Project Blocks are associated to workfront project templates wich have custom
-forms associated to them. These project blocks are typically empty (no tasks) so
-that we can add blocks to them.
-So, basically the idea is to create a project block, set the project block
-parameters and append the blocks according to the specific requirements of each
-project.
+Project Containers represents empty workfront project templates associated with
+one or more custom forms that can allocate different blocks.
+The idea of these project containers is to build different project types by
+adding different type of blocks to it.
+So, basically a workfront project will be constructed by creating a project
+container, setting the corresponding parameters to it and appending blocks to
+the project container according to the behaviour that is needed for that
+project. In this process, the parameters for the different blocks will be also
+set.
 
 ## Creating Blocks
 
-## Creating Project Blocks
+Inherit from **WFBlock** class to create a new specific block. A Workfront
+service and a template id needs to be provided to the WFBlock constructor. The
+template id must have only the tasks that belongs to this block.
+Also fields can be marked as optional and required to be automatically validated
+when a new project is being constructed with this block.
 
-To create a project block the new block should inherit from **WFProjectBlock**.
+For example, supose you want to add a block with 1 task:
+* My task : which has 2 parameters; name (required) and age (optional)
+
+Here it is an example of how you would make the block representing that task:
+
+```python
+class MyWFBlock(WFBlock):
+    def __init__(self, wf):
+        template_id = template_id_from_name(wf, "My block template")
+        super(WFEmailTestSeedBlock, self).__init__(wf, template_id)
+        self._set_required_fields(["name"])
+        self._set_optional_fields(["age"])
+```
+
+In order to set the concrete values for those parameters the
+**set_task_param_value** method must be used.
+The **set_task_param_value** receives a **task identifier** (that can be an
+integer, indicating the number of the task in the template project, or a string
+for the name of the task).
+Properties can be utilize for a clean design:
+
+```python
+@property
+def name(self):
+    return self._name
+
+@name.setter
+def name(self, value):
+    self.name = value
+    self.set_task_param_value("My task", "name", value)
+```
+
+The purpose of using the **set_task_param_value** is that when the block is used
+inside a project container and a workfront project is build, the block knows
+how to configure the value in the group of task represented by this block.
+
+## Creating Project Containers
+
+To create a project container the new block should inherit from
+**WFProjectContainer**.
 After that, the template id of the workfront template project and the required
 and optional parameters should be provided. This can be done calling the parent
 constructor and the methods **_set_required_fields** and
@@ -48,11 +95,12 @@ constructor and the methods **_set_required_fields** and
 function to get the template id):
 
 ```python
-def __init__(self, wf, prj_name):
-    tid = template_id_from_name(wf, "My WF Template")
-    super(MyWFProjectBlock, self).__init__(wf, tid, prj_name)
-    self._set_required_fields(["workfront_param_value_req"])
-    self._set_optional_fields(["workfront_param_value_optional"])
+class MyWFProjectContainer(WFProjectContainer)
+    def __init__(self, wf, prj_name):
+        tid = template_id_from_name(wf, "My WF Template")
+        super(MyWFProjectContainer, self).__init__(wf, tid, prj_name)
+        self._set_required_fields(["workfront_param_value_req"])
+        self._set_optional_fields(["workfront_param_value_optional"])
 ```
 
 Then you can set the variables that will fullfill the parameter values of the
@@ -69,14 +117,14 @@ def my_param_value(self, v):
     self.set_param_value("workfront_param_value_req", v)
 ```
 
-You can check the **WFProjectEmailBlock** in workfront_bridge.projects.email
-for a complate example.
+You can check the **WFProjectEmailContainer** in workfront_bridge.projects.email
+for a complete example.
 
-### Using Blocks inside a Project Block
+### Using Blocks inside a Project Container
 
-Blocks are made to be appended to a project block. A project block can contain
-one or more blocks of the same type.
-When adding a block to a project block, the block is appended to the project
+Blocks are made to be appended to a project container. A project container can
+have one or more blocks of the same type.
+When adding a block to a project container, the block is appended to the project
 making this new block, dependent of the last added block. So for example, if
 block1, block2, block3 are appended to the same project block in that order,
 the workfront project will be created so that the first task in block2 will
@@ -84,7 +132,7 @@ only be excetuted when the last task in block1 is completed. The same happens to
 block3; the first task created that belongs to block3 will only start after the
 last task from block2 finishes.
 
-The project block does not have any restriction in the order that the blocks
+The project container does not have any restriction in the order that the blocks
 are added to the project block, it is the user responsability to add the blocks
 in an order that has some logic.
 
