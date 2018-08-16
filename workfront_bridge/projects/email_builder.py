@@ -132,6 +132,8 @@ class EmailOnBoardingProjectBuilder(object):
         self.html = None
         self.category = None
         self.from_line = None
+        self.suppression_file_path = None
+        self.client_id = None
 
     def set_html(self, s3_path):
         self.html = s3_path
@@ -155,6 +157,12 @@ class EmailOnBoardingProjectBuilder(object):
     def set_from_line(self, from_line):
         self.from_line = from_line
 
+    def set_suppression_file_path(self, s3_path):
+        self.suppression_file_path = s3_path
+
+    def set_client_id(self, client_id):
+        self.client_id = client_id
+
     def _check_viability(self):
 
         def check_not_none(name, value):
@@ -164,7 +172,8 @@ class EmailOnBoardingProjectBuilder(object):
         def check_file_extension(name, file_name, allowed_extensions=(".html",)):
             if not file_name.lower().endswith(allowed_extensions):
                 raise WFBrigeException(
-                    "{}: {} file hasn't an allowed extensions ({})".format(name, file_name, allowed_extensions))
+                    "{}: {} file hasn't an allowed extensions ({})".format(name, file_name,
+                                                                           ",".join(allowed_extensions)))
 
         def check_files_extension(name, files_name=[], allowed_extensions=None):
             for file_name in files_name:
@@ -173,7 +182,8 @@ class EmailOnBoardingProjectBuilder(object):
         def check_length(field_name, collection, min_length=0, max_length=sys.maxint):
             if len(collection) < min_length or len(collection) > max_length:
                 raise WFBrigeException(
-                    "{}: length is not between {} to {}".format(field_name, min_length, max_length))
+                    "{}: length ({}) is not between {} to {}".format(field_name, len(collection), min_length,
+                                                                      max_length))
 
         check_not_none("subject", self.subject)
         check_not_none("html", self.html)
@@ -182,8 +192,13 @@ class EmailOnBoardingProjectBuilder(object):
         check_not_none("from_line", self.from_line)
         check_file_extension("live_seed_list", self.live_seed_list, (".csv",))
 
-        check_length("test_seed_lists", 1, 5)
-        check_files_extension("test_seed_lists", self.live_seed_list, (".csv",))
+        check_length("test_seed_lists", self.test_seed_lists, 1, 5)
+        check_files_extension("test_seed_lists", self.test_seed_lists, (".csv",))
+
+        if not self.suppression_file_path is None:
+            check_file_extension("suppression_file_path", self.suppression_file_path, (".csv",))
+
+        check_not_none("client_id", self.client_id)
 
     def build(self):
         '''
@@ -195,12 +210,16 @@ class EmailOnBoardingProjectBuilder(object):
         '''
         self._check_viability()
 
-        pb = WFProjectEmailBlock(self.wf, self.project_name)
+        pb = WFProjectEmailContainer(self.wf, self.project_name)
         pb.email_subject = self.subject
+        pb.from_line = self.from_line
+        pb.suppression_file_path = self.suppression_file_path
+        pb.client_id = self.client_id
+        pb.category = self.category
 
-        if self.html_zip is not None:
+        if self.html.lower().endswith(".zip"):
             zipb = WFEmailGenHtmlFromZipBlock(self.wf)
-            zipb.zip_s3_path = self.html_zip
+            zipb.zip_s3_path = self.html
             pb.append(zipb)
         else:
             pb.html_s3_path = self.html
@@ -214,8 +233,16 @@ class EmailOnBoardingProjectBuilder(object):
             slb.seed_list_s3_path = test_list
             pb.append(slb)
 
-        if self.live_seed_list is not None:
-            email_seed_block = WFEmailLiveSeedBlock(self.wf)
-            email_seed_block.seed_list_s3_path = self.live_seed_list
+        pb.test_seed_lists = ",".join(self.test_seed_lists)
 
-        return pb.create()
+        email_live_seed_block = WFEmailLiveSeedBlock(self.wf)
+        email_live_seed_block.seed_list_s3_path = self.live_seed_list
+
+        pb.live_seed_list = self.live_seed_list
+
+        pb.append(email_live_seed_block)
+
+        wf_project = pb.create()
+        wf_project.set_fields({"portfolioID": self.client_id})
+
+        return wf_project
