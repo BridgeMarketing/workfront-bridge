@@ -20,6 +20,7 @@ class WFEmailTestSeedNoEmailSentBlock(WFBlock):
 
         # Block Fields :
         self._seed_list_path = None
+        self._set_starter_task(2)
 
     @property
     def seed_list_s3_path(self):
@@ -120,6 +121,8 @@ class WFEmailTestSeedBlock(WFBlock):
         self._sender_email = None
         self._deployment_datetime = None
 
+        self._set_starter_task(2)  # Skip Test Setup
+
     @property
     def seed_list_s3_path(self):
         return self._seed_list_path
@@ -189,6 +192,8 @@ class WFEmailLiveSeedBlock(WFBlock):
 
         # Block Fields :
         self._seed_list_path = None
+
+        self._set_starter_task(2)  # Skip Live Setup
 
     @property
     def seed_list_s3_path(self):

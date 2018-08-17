@@ -31,6 +31,8 @@ class WFBlock(object):
         self.task_params = {}
         self.req_fields = []
         self.opt_fields = []
+        self.starter_task_identifier = None
+        self._set_starter_task(1)  # default to first task
 
     def __temp_name(self):
         '''
@@ -107,7 +109,12 @@ class WFBlock(object):
         prj.move_into(tasks)
 
         if predecessor_task:
-            tasks[0].add_predecessor(predecessor_task)
+            # get the first task that need to have a predecessor, this is to
+            # avoid non automatic block task not starting. So in general, you
+            # would like to have the first automatic task as a starter task
+            task = self.__task_from_indentifier(self.starter_task_identifier,
+                                                tasks, prj)
+            task.add_predecessor(predecessor_task)
 
         block_project.delete()
 
@@ -166,6 +173,13 @@ class WFBlock(object):
             unused_parameters = ",".join(all_params - req - opt)
             err = "{} have been specified but are not required nor optional"
             raise WFBrigeException(err.format(unused_parameters))
+
+    def _set_starter_task(self, task_identifier):
+        '''
+        @param task_identifier: a "task identifier" as defined in method
+        set_task_param_value (int or string).
+        '''
+        self.starter_task_identifier = task_identifier
 
 
 class WFProjectContainer(object):

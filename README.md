@@ -84,6 +84,37 @@ The purpose of using the **set_task_param_value** is that when the block is used
 inside a project container and a workfront project is build, the block knows
 how to configure the value in the group of task represented by this block.
 
+### Starter task
+
+Each block has as default starter task the first task. However this can be
+changed by using the **_set_starter_task(task_identifier)** method when
+inheriting from WFBlock.
+This can be handy when having indentation task that only organize task. So, for
+example if you have the following tasks in the block:
+
+* Grouping Task
+** Task 1
+** Task 2
+
+You should set the Task 1 as a starter task skipping the Grouping Task that only
+gives some visual clarity indenting Task 1 and 2.
+Why ? This is required when for example Task 1 is Automatic. The workfront proxy
+only starts Automatic tasks when they are a direct predecessor of a completed
+task.
+So, in this case, when the predecessor of Grouping task is complete (and
+starter task is the Grouping Task), Task 1 will not start (because Grouping Task
+predecessor is an indirect predecessor of Task 1). So to avoid that, Task 1
+must be set as starter task.
+This can be achieved in the constructor of the block like this :
+
+```python
+    def __init(...)
+        # Other blcok stuff...
+        self._set_starter_task(2) # Task 1 is the second task
+        # or you can set it by name
+        self._set_starter_task("Task 1")
+```
+
 ## Creating Project Containers
 
 To create a project container the new block should inherit from
@@ -127,10 +158,10 @@ have one or more blocks of the same type.
 When adding a block to a project container, the block is appended to the project
 making this new block, dependent of the last added block. So for example, if
 block1, block2, block3 are appended to the same project block in that order,
-the workfront project will be created so that the first task in block2 will
+the workfront project will be created so that the starter task in block2 will
 only be excetuted when the last task in block1 is completed. The same happens to
-block3; the first task created that belongs to block3 will only start after the
-last task from block2 finishes.
+block3; the starter task created that belongs to block3 will only start after
+the last task from block2 finishes.
 
 The project container does not have any restriction in the order that the blocks
 are added to the project block, it is the user responsability to add the blocks

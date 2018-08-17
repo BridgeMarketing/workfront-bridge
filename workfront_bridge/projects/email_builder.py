@@ -82,7 +82,7 @@ class EmailProjectBuilder(object):
         '''
         self._check_viability()
 
-        pb = WFProjectEmailContainer(self.wf, self.prjoject_name)
+        pb = WFProjectEmailContainer(self.wf, self.project_name)
         pb.email_subject = self.subject
 
         if self.html_zip is not None:
