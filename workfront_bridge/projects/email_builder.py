@@ -210,39 +210,39 @@ class EmailOnBoardingProjectBuilder(object):
         '''
         self._check_viability()
 
-        pb = WFProjectEmailContainer(self.wf, self.project_name)
-        pb.email_subject = self.subject
-        pb.from_line = self.from_line
-        pb.suppression_file_path = self.suppression_file_path
-        pb.client_id = self.client_id
-        pb.category = self.category
+        project = WFProjectEmailContainer(self.wf, self.project_name)
+        project.email_subject = self.subject
+        project.from_line = self.from_line
+        project.suppression_file_path = self.suppression_file_path
+        project.client_id = self.client_id
+        project.category = self.category
 
         if self.html.lower().endswith(".zip"):
             zipb = WFEmailGenHtmlFromZipBlock(self.wf)
             zipb.zip_s3_path = self.html
-            pb.append(zipb)
+            project.append(zipb)
         else:
-            pb.html_s3_path = self.html
+            project.html_s3_path = self.html
 
         bval_html = WFEmailValidateHtmlBlock(self.wf)
         bval_html.email_subject = self.subject
-        pb.append(bval_html)
+        project.append(bval_html)
 
         for test_list in self.test_seed_lists:
             slb = WFEmailTestSeedNoEmailSentBlock(self.wf)
             slb.seed_list_s3_path = test_list
-            pb.append(slb)
+            project.append(slb)
 
-        pb.test_seed_lists = ",".join(self.test_seed_lists)
+        project.test_seed_lists = ",".join(self.test_seed_lists)
 
         email_live_seed_block = WFEmailLiveSeedBlock(self.wf)
         email_live_seed_block.seed_list_s3_path = self.live_seed_list
 
-        pb.live_seed_list = self.live_seed_list
+        project.live_seed_list = self.live_seed_list
 
-        pb.append(email_live_seed_block)
+        project.append(email_live_seed_block)
 
-        wf_project = pb.create()
+        wf_project = project.create()
         wf_project.set_fields({"portfolioID": self.client_id})
 
         return wf_project
