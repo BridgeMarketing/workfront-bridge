@@ -93,8 +93,8 @@ This can be handy when having indentation task that only organize task. So, for
 example if you have the following tasks in the block:
 
 * Grouping Task
-** Task 1
-** Task 2
+  * Task 1
+  * Task 2
 
 You should set the Task 1 as a starter task skipping the Grouping Task that only
 gives some visual clarity indenting Task 1 and 2.
