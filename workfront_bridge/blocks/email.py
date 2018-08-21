@@ -1,4 +1,4 @@
-from workfront_bridge.blocks.base import WFBlock, template_id_from_name
+from workfront_bridge.blocks.base import WFBlock
 
 
 class WFEmailTestSeedNoEmailSentBlock(WFBlock):
@@ -11,12 +11,11 @@ class WFEmailTestSeedNoEmailSentBlock(WFBlock):
 
     template_name = 'Block - Email Test Setup (no emails sent)'
 
-    def __init__(self, wf):
-        template_id = template_id_from_name(wf, self.template_name)
-        super(WFEmailTestSeedNoEmailSentBlock, self).__init__(wf, template_id)
+    def __init__(self):
+        super(WFEmailTestSeedNoEmailSentBlock, self).__init__(self.template_name)
 
         req = ["cm_test_aud_s3_path"]
-        self._set_required_fields(req)
+        self._add_required_parameters(req)
 
         # Block Fields :
         self._seed_list_path = None
@@ -29,7 +28,7 @@ class WFEmailTestSeedNoEmailSentBlock(WFBlock):
     @seed_list_s3_path.setter
     def seed_list_s3_path(self, sl):
         self._seed_list_path = sl
-        self.set_task_param_value("Test Setup", "cm_test_aud_s3_path", sl)
+        self.set_parameter("Test Setup", "cm_test_aud_s3_path", sl)
 
 
 class WFEmailValidateHtmlBlock(WFBlock):
@@ -41,11 +40,10 @@ class WFEmailValidateHtmlBlock(WFBlock):
     template_name = 'Block - Email Validate Html'
 
     def __init__(self, wf):
-        template_id = template_id_from_name(wf, self.template_name)
-        super(WFEmailValidateHtmlBlock, self).__init__(wf, template_id)
+        super(WFEmailValidateHtmlBlock, self).__init__(self.template_name)
 
         req = ["ecm_email_subject"]
-        self._set_required_fields(req)
+        self._add_required_parameters(req)
 
         # Block Fields :
         self._email_subject = None
@@ -57,7 +55,7 @@ class WFEmailValidateHtmlBlock(WFBlock):
     @email_subject.setter
     def email_subject(self, v):
         self._email_subject = v
-        self.set_task_param_value("Validate HTML", "ecm_email_subject", v)
+        self.set_parameter("Validate HTML", "ecm_email_subject", v)
 
 
 class WFEmailGenHtmlFromZipBlock(WFBlock):
@@ -68,12 +66,11 @@ class WFEmailGenHtmlFromZipBlock(WFBlock):
 
     template_name = 'Block - Email Generate Html from zip'
 
-    def __init__(self, wf):
-        template_id = template_id_from_name(wf, self.template_name)
-        super(WFEmailGenHtmlFromZipBlock, self).__init__(wf, template_id)
+    def __init__(self):
+        super(WFEmailGenHtmlFromZipBlock, self).__init__(self.template_name)
 
         req = ["ecm_zip"]
-        self._set_required_fields(req)
+        self._add_required_parameters(req)
 
         # Block Fields:
         self._zip_s3_path = None
@@ -85,7 +82,7 @@ class WFEmailGenHtmlFromZipBlock(WFBlock):
     @zip_s3_path.setter
     def zip_s3_path(self, v):
         self._zip_s3_path = v
-        self.set_task_param_value("Generate HTML from zip", "ecm_zip", v)
+        self.set_parameter("Generate HTML from zip", "ecm_zip", v)
 
 
 class WFEmailTestSeedBlock(WFBlock):
@@ -103,16 +100,15 @@ class WFEmailTestSeedBlock(WFBlock):
 
     template_name = 'Block - Email Test Setup'
 
-    def __init__(self, wf):
-        template_id = template_id_from_name(wf, self.template_name)
-        super(WFEmailTestSeedBlock, self).__init__(wf, template_id)
+    def __init__(self):
+        super(WFEmailTestSeedBlock, self).__init__(self.template_name)
 
         req = ["cm_test_aud_s3_path", "Campaign Name", "Sender Name",
                "Deployment Date/Time", "Sender Email"]
-        self._set_required_fields(req)
+        self._add_required_parameters(req)
 
         opt = ["SelectedProvider"]
-        self._set_optional_fields(opt)
+        self._add_optional_parameters(opt)
 
         # Block Fields:
         self._seed_list_path = None
@@ -130,7 +126,7 @@ class WFEmailTestSeedBlock(WFBlock):
     @seed_list_s3_path.setter
     def seed_list_s3_path(self, sl):
         self._seed_list_path = sl
-        self.set_task_param_value("Test Setup", "cm_test_aud_s3_path", sl)
+        self.set_parameter("Test Setup", "cm_test_aud_s3_path", sl)
 
     @property
     def campaign_name(self):
@@ -139,7 +135,7 @@ class WFEmailTestSeedBlock(WFBlock):
     @campaign_name.setter
     def campaign_name(self, name):
         self._campaign_name = name
-        self.set_task_param_value("Create Flight", "Campaign Name", name)
+        self.set_parameter("Create Flight", "Campaign Name", name)
 
     @property
     def sender_email(self):
@@ -148,7 +144,7 @@ class WFEmailTestSeedBlock(WFBlock):
     @sender_email.setter
     def sender_email(self, email):
         self._sender_email = email
-        self.set_task_param_value("Create Flight", "Sender Email", email)
+        self.set_parameter("Create Flight", "Sender Email", email)
 
     @property
     def sender_name(self):
@@ -157,7 +153,7 @@ class WFEmailTestSeedBlock(WFBlock):
     @sender_name.setter
     def sender_name(self, name):
         self._sender_name = name
-        self.set_task_param_value("Create Flight", "Sender Name", name)
+        self.set_parameter("Create Flight", "Sender Name", name)
 
     @property
     def deployment_datetime(self):
@@ -169,8 +165,8 @@ class WFEmailTestSeedBlock(WFBlock):
         @param date_time: datetime object.
         '''
         self._deployment_datetime = date_time
-        self.set_task_param_value("Create Flight", "Deployment Date/Time",
-                                  date_time.strftime("%d/%m/%Y %H:%M"))
+        self.set_parameter("Create Flight", "Deployment Date/Time",
+                           date_time.strftime("%d/%m/%Y %H:%M"))
 
 
 class WFEmailLiveSeedBlock(WFBlock):
@@ -183,12 +179,11 @@ class WFEmailLiveSeedBlock(WFBlock):
 
     template_name = 'Block - Email Live Setup'
 
-    def __init__(self, wf):
-        template_id = template_id_from_name(wf, self.template_name)
-        super(WFEmailLiveSeedBlock, self).__init__(wf, template_id)
+    def __init__(self):
+        super(WFEmailLiveSeedBlock, self).__init__(self.template_name)
 
         req = ["live_seed_list_s3_path"]
-        self._set_required_fields(req)
+        self._add_required_parameters(req)
 
         # Block Fields :
         self._seed_list_path = None
@@ -202,4 +197,4 @@ class WFEmailLiveSeedBlock(WFBlock):
     @seed_list_s3_path.setter
     def seed_list_s3_path(self, sl):
         self._seed_list_path = sl
-        self.set_task_param_value("Live Setup", "live_seed_list_s3_path", sl)
+        self.set_parameter("Live Setup", "live_seed_list_s3_path", sl)

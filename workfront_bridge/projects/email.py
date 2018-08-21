@@ -1,8 +1,7 @@
-from workfront_bridge.blocks.base import WFProjectContainer
-from workfront_bridge.blocks.base import template_id_from_name
+from workfront_bridge.blocks.base import WFBlock
 
 
-class WFProjectEmailContainer(WFProjectContainer):
+class WFProjectEmailContainer(WFBlock):
     '''
     @summary: Workfront Email Project Container.
     Use this project container to create workfront email projects.
@@ -12,16 +11,15 @@ class WFProjectEmailContainer(WFProjectContainer):
 
     template_name = "Base Project Container - Email Channel"
 
-    def __init__(self, wf, prj_name):
-        tid = template_id_from_name(wf, self.template_name)
-        super(WFProjectEmailContainer, self).__init__(wf, tid, prj_name)
+    def __init__(self, prj_name):
+        super(WFProjectEmailContainer, self).__init__(self.template_name, name=prj_name)
 
         req = ["ecm_subject"]
-        self._set_required_fields(req)
+        self._add_required_parameters(req)
 
         opt = ["input_html_s3_path", "ecm_from_line", "Suppression File Path", "Category", "ecm_live_seed_list",
                "ecm_test_seed_lists"]
-        self._set_optional_fields(opt)
+        self._add_optional_parameters(opt)
 
         # Project Container fields:
         self._email_subject = None
@@ -40,7 +38,7 @@ class WFProjectEmailContainer(WFProjectContainer):
     @email_subject.setter
     def email_subject(self, v):
         self._email_subject = v
-        self.set_param_value("ecm_subject", v)
+        self.set_parameter("", "ecm_subject", v)
 
     @property
     def html_s3_path(self):
@@ -49,7 +47,7 @@ class WFProjectEmailContainer(WFProjectContainer):
     @html_s3_path.setter
     def html_s3_path(self, v):
         self._html_s3_path = v
-        self.set_param_value("input_html_s3_path", v)
+        self.set_parameter("", "input_html_s3_path", v)
 
     @property
     def from_line(self):
@@ -58,7 +56,7 @@ class WFProjectEmailContainer(WFProjectContainer):
     @from_line.setter
     def from_line(self, v):
         self._html_s3_path = v
-        self.set_param_value("ecm_from_line", v)
+        self.set_parameter("", "ecm_from_line", v)
 
     @property
     def suppression_file_path(self):
@@ -67,7 +65,7 @@ class WFProjectEmailContainer(WFProjectContainer):
     @suppression_file_path.setter
     def suppression_file_path(self, v):
         self._suppression_file_path = v
-        self.set_param_value("Suppression File Path", v)
+        self.set_parameter("", "Suppression File Path", v)
 
     @property
     def category(self):
@@ -76,7 +74,7 @@ class WFProjectEmailContainer(WFProjectContainer):
     @category.setter
     def category(self, v):
         self._category = v
-        self.set_param_value("Category", v)
+        self.set_parameter("", "Category", v)
 
     @property
     def live_seed_list(self):
@@ -85,7 +83,7 @@ class WFProjectEmailContainer(WFProjectContainer):
     @live_seed_list.setter
     def live_seed_list(self, v):
         self._live_seed_list = v
-        self.set_param_value("ecm_live_seed_list", v)
+        self.set_parameter("", "ecm_live_seed_list", v)
 
     @property
     def test_seed_lists(self):
@@ -94,4 +92,4 @@ class WFProjectEmailContainer(WFProjectContainer):
     @test_seed_lists.setter
     def test_seed_lists(self, v):
         self._test_seed_lists = v
-        self.set_param_value("ecm_test_seed_lists", v)
+        self.set_parameter("", "ecm_test_seed_lists", v)

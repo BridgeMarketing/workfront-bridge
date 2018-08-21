@@ -8,76 +8,88 @@ class WFBlockTestCase(unittest.TestCase):
 
     def test_contructor(self):
         template_id = "temp1234"
-        wf = None
-        obj = WFBlock(wf, template_id)
-        self.assertEqual(template_id, obj.wf_template_id)
+        obj = WFBlock(template_id, name="block name")
+
+        self.assertEqual(template_id, obj.wf_template_name)
+        self.assertEqual("block name", obj.name)
 
     def test_members_default_values(self):
-        wf = None
-        obj = WFBlock(wf, "1234")
-        self.assertEqual({}, obj.task_params)
-        self.assertEqual([], obj.req_fields)
-        self.assertEqual([], obj.opt_fields)
+        obj = WFBlock("1234")
+
+        self.assertEqual([], obj.blocks)
+        self.assertEqual({}, obj.parameters)
+        self.assertEqual([], obj.required_parameters)
+        self.assertEqual([], obj.optional_parameters)
         self.assertEqual(1, obj.starter_task_identifier)
 
-    def test_set_task_param_value(self):
-        wf = None
-        obj = WFBlock(wf, "1234")
+    def test_append(self):
+        obj = WFBlock("1234")
+        child_block1 = WFBlock("child_block")
+        child_block2 = WFBlock("child_block2")
 
-        obj.set_task_param_value("task Name 1", "customField1", "customField1Value")
-        self.assertEqual(obj.task_params, {"task Name 1": {"customField1": "customField1Value"}})
+        obj.append(child_block1)
+        obj.append(child_block2)
 
-        obj.set_task_param_value("task Name 2", "customField2", "customField2Value")
-        self.assertEqual(obj.task_params, {
+        self.assertEqual([child_block1, child_block2], obj.blocks)
+
+    def test_set_parameter(self):
+        obj = WFBlock("1234")
+
+        obj.set_parameter("task Name 1", "customField1", "customField1Value")
+        self.assertEqual(obj.parameters, {"task Name 1": {"customField1": "customField1Value"}})
+
+        obj.set_parameter("task Name 2", "customField2", "customField2Value")
+        self.assertEqual(obj.parameters, {
             "task Name 1": {"customField1": "customField1Value"},
             "task Name 2": {"customField2": "customField2Value"}
         })
 
-        obj.set_task_param_value("task Name 1", "customField1_2", "customField1_2Value")
-        self.assertEqual(obj.task_params, {
+        obj.set_parameter("task Name 1", "customField1_2", "customField1_2Value")
+        self.assertEqual(obj.parameters, {
             "task Name 1": {"customField1": "customField1Value", "customField1_2": "customField1_2Value"},
             "task Name 2": {"customField2": "customField2Value"}
         })
 
-    def test_set_required_fields(self):
-        wf = None
-        obj = WFBlock(wf, "1234")
+    def test_set_required_parameters(self):
+        obj = WFBlock("1234")
 
-        obj._set_required_fields(["requiredfield1", "requiredfield2"])
-        self.assertEqual(obj.req_fields, ["requiredfield1", "requiredfield2"])
+        obj._add_required_parameters(["required1", "required2"])
+        self.assertEqual(obj.required_parameters, ["required1", "required2"])
 
-        obj._set_required_fields(["requiredfield3", "requiredfield4"])
-        self.assertEqual(obj.req_fields, ["requiredfield1", "requiredfield2", "requiredfield3", "requiredfield4"])
+        obj._add_required_parameters(["required3", "required4"])
+        self.assertEqual(obj.required_parameters, ["required1", "required2", "required3", "required4"])
 
-    def test_set_optional_fields(self):
-        wf = None
-        obj = WFBlock(wf, "1234")
+    def test_set_optional_parameters(self):
+        obj = WFBlock("1234")
 
-        obj._set_optional_fields(["optionalfield1", "optionalfield2"])
-        self.assertEqual(obj.opt_fields, ["optionalfield1", "optionalfield2"])
+        obj._add_optional_parameters(["optionalfield1", "optionalfield2"])
+        self.assertEqual(obj.optional_parameters, ["optionalfield1", "optionalfield2"])
 
-        obj._set_optional_fields(["optionalfield3", "optionalfield4"])
-        self.assertEqual(obj.opt_fields, ["optionalfield1", "optionalfield2", "optionalfield3", "optionalfield4"])
+        obj._add_optional_parameters(["optionalfield3", "optionalfield4"])
+        self.assertEqual(obj.optional_parameters, ["optionalfield1", "optionalfield2", "optionalfield3", "optionalfield4"])
 
-    def test_check_param_values(self):
-        wf = None
-        obj = WFBlock(wf, "1234")
+    def test_check_parameters(self):
+        obj = WFBlock("1234")
 
-        obj._set_required_fields(["requiredfield1", "requiredfield2"])
-        obj._set_optional_fields(["optionalfield1", "optionalfield2"])
-        self.assertRaises(WFBrigeException, obj._check_param_values)
+        obj._add_required_parameters(["requiredfield1", "requiredfield2"])
+        obj._add_optional_parameters(["optionalfield1", "optionalfield2"])
+        self.assertRaises(WFBrigeException, obj.check_parameters)
 
-        obj.set_task_param_value("Task 1", "requiredfield1", "a")
-        obj.set_task_param_value("Task 2", "requiredfield2", "b")
-        obj.set_task_param_value("Task 1", "optionalfield1", "c")
-        obj.set_task_param_value("Task 1", "optionalfield2", "d")
+        obj.set_parameter("Task 1", "requiredfield1", "a")
+        obj.set_parameter("Task 2", "requiredfield2", "b")
+        obj.set_parameter("Task 1", "optionalfield1", "c")
+        obj.set_parameter("Task 1", "optionalfield2", "d")
         try:
-            obj._check_param_values()
+            obj.check_parameters()
         except WFBrigeException:
             self.fail("_check_param_values() raised WFBrigeException")
 
-        obj.set_task_param_value("Task 1", "Non_exist_optionalfield", "x")
-        self.assertRaises(WFBrigeException, obj._check_param_values)
+        obj.set_parameter("Task 1", "Non_exist_optionalfield", "x")
+        self.assertRaises(WFBrigeException, obj.check_parameters)
 
-    def test_attach_to_project(self):
-        pass
+    def _set_starter_task(self):
+        obj = WFBlock("1234")
+
+        obj._set_starter_task(12)
+
+        self.assertEqual(12, obj.starter_task_identifier)
