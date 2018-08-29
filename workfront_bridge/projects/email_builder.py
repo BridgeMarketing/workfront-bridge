@@ -1,9 +1,11 @@
 import sys
 
+from workfront.objects.template_project import WFTemplateProject
+
 from workfront_bridge.blocks.base import WFBlockParser
 from workfront_bridge.exceptions import WFBrigeException
 from workfront_bridge.projects.email import WFProjectEmailContainer
-from workfront_bridge.blocks.email import WFEmailTestSeedNoEmailSentBlock,\
+from workfront_bridge.blocks.email import WFEmailTestSeedNoEmailSentBlock, \
     WFEmailAudienceLiveSetupBlock, WFEmailReviewDeploymentBlock
 from workfront_bridge.blocks.email import WFEmailLiveSeedBlock
 from workfront_bridge.blocks.email import WFEmailTestSeedBlock
@@ -237,6 +239,8 @@ class EmailOnBoardingProjectBuilder(object):
         self.suppression_file_path = None
         self.client_id = None
 
+        self.__project = None
+
     def set_html(self, s3_path):
         self.html = s3_path
         return self
@@ -302,6 +306,26 @@ class EmailOnBoardingProjectBuilder(object):
 
         check_not_none("client_id", self.client_id)
 
+    def _get_parameter_test_send_email(self):
+        template = WFTemplateProject.from_name(self.wf, self.__project.wf_template_name)
+        parameters = template.get_param_values()
+        return parameters["test_send_email"]
+
+    def _get_parameter_selected_provider(self):
+        template = WFTemplateProject.from_name(self.wf, self.__project.wf_template_name)
+        parameters = template.get_param_values()
+        return parameters["SelectedProvider"]
+
+    def _create_test_list_block(self, test_list, prefix, sender_email, selected_provider):
+        slb = WFEmailTestSeedBlock()
+        slb.seed_list_s3_path = test_list
+        slb.campaign_name = "T" + prefix + "_" + self.project_name
+        slb.deployment_datetime = datetime.now()
+        slb.sender_email = sender_email
+        slb.sender_name = self.from_line
+        slb.provider = selected_provider
+        return slb
+
     def build(self):
         '''
         @summary: According to all the parameters set to the builder, build a
@@ -312,7 +336,11 @@ class EmailOnBoardingProjectBuilder(object):
         '''
         self._check_viability()
 
-        project = WFProjectEmailContainer(self.project_name)
+        parser = WFBlockParser(self.wf)
+
+        self.__project = WFProjectEmailContainer(self.project_name)
+        project = self.__project
+
         project.email_subject = self.subject
         project.from_line = self.from_line
         project.suppression_file_path = self.suppression_file_path
@@ -330,9 +358,11 @@ class EmailOnBoardingProjectBuilder(object):
         bval_html.email_subject = self.subject
         project.append(bval_html)
 
-        for test_list in self.test_seed_lists:
-            slb = WFEmailTestSeedNoEmailSentBlock()
-            slb.seed_list_s3_path = test_list
+        test_send_email = self._get_parameter_test_send_email()
+        selected_provider = self._get_parameter_selected_provider()
+
+        for index, test_list in enumerate(self.test_seed_lists, start=1):
+            slb = self._create_test_list_block(test_list, str(index), test_send_email, selected_provider)
             project.append(slb)
 
         project.test_seed_lists = ",".join(self.test_seed_lists)
@@ -344,7 +374,6 @@ class EmailOnBoardingProjectBuilder(object):
 
         project.append(email_live_seed_block)
 
-        parser = WFBlockParser(self.wf)
         wf_project = parser.create(project)
 
         wf_project.set_fields({"portfolioID": self.client_id})
