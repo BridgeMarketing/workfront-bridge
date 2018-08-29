@@ -25,7 +25,6 @@ class WFBlock(object):
         self.starter_task_identifier = None
         self._set_starter_task(1)  # default to first task
 
-
     def set_parameter(self, task_identifier, field, value):
         '''
         @summary: Set the value to the given field for the specified task of
@@ -40,6 +39,8 @@ class WFBlock(object):
         @param field: parameter value field name.
         @param value: value of the parameter field.
         '''
+        if value is None:
+            return
         if task_identifier not in self.parameters:
             self.parameters[task_identifier] = {}
         self.parameters[task_identifier][field] = value
