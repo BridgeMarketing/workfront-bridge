@@ -301,7 +301,7 @@ class EmailOnBoardingProjectBuilder(object):
         check_length("test_seed_lists", self.test_seed_lists, 1, 5)
         check_files_extension("test_seed_lists", self.test_seed_lists, (".csv",))
 
-        if self.suppression_file_path is not None:
+        if self.suppression_file_path is not None and self.suppression_file_path:
             check_file_extension("suppression_file_path", self.suppression_file_path, (".csv",))
 
         check_not_none("client_id", self.client_id)
