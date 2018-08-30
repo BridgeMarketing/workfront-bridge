@@ -1,30 +1,30 @@
 from workfront_bridge.blocks.base import WFBlock
 
 
-class WFProjectMatchAndExportlContainer(WFBlock):
-    '''
+class WFProjectMatchAndExportContainer(WFBlock):
+    """
     @summary: Workfront M&E Project Container.
     Use this project container to create workfront M&E projects.
     This project container has no tasks in it but has all the fields of the
     custom forms that an M&E project needs.
-    '''
+    """
 
     template_name = "Base Project Container - Match And Export Channel"
 
     def __init__(self, prj_name):
-        super(WFProjectEmailContainer, self).__init__(self.template_name, name=prj_name)
+        super(WFProjectMatchAndExportContainer, self).__init__(self.template_name, name=prj_name)
 
         opt = [
             "Audience Id",
             "Audience File Path",
             "Data Task Id",
-            "Suppression Task Ids"]
+            "Suppression Task Ids"
+        ]
         self._add_optional_parameters(opt)
 
         # Project Container fields:
         self._audience_id = None
         self._audience_file_path = None
-
         self._data_task_id = None
         self._suppression_task_ids = []
 
@@ -59,7 +59,7 @@ class WFProjectMatchAndExportlContainer(WFBlock):
     def suppression_task_ids(self):
         return self._suppression_task_ids
 
-    @data_task_id.setter
+    @suppression_task_ids.setter
     def suppression_task_ids(self, v):
         self._suppression_task_ids = v
         self.set_parameter("", "Suppression Task Ids", ','.join(v))
