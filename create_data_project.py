@@ -5,12 +5,8 @@ wf = Workfront("notifications@wf.bridgemarketing.com", 'beef6060', 'thebridgecor
 wf.login()
 
 b = match_and_export_builder.MatchAndExportProjectBuilder(wf, "Test match and export project builder 1")
-b.audience_name = 'audience_name_1'
-b.audience_file_path = 'audience_file_path_1'
-b.suppression_file_path = 's3://example/lala.csv'
-b.audience_id = 'audience_id_1'
-b.data_task_id = 1
-b.suppression_task_ids = ['1', '2', '3']
+b.audience_name = 'Sarlanga'
+b.audience_file_path = 's3://bridge-file-assets/API_files/orderID_1239/Channel_0/5b575e51000bcb1d2cea4a5532889aee_26_20180828190332.csv'
 
 prj = b.build()
 print(prj)

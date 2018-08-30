@@ -13,8 +13,7 @@ class WFMatchAndExport1ABlock(WFBlock):
 
         req = [
             'Audience Name',
-            'Audience File Path',
-            'Suppression File Path',
+            'Audience File Path'
         ]
         self._audience_name = None
         self._audience_file_path = None
