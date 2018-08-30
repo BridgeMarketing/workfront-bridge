@@ -341,6 +341,7 @@ class EmailOnBoardingProjectBuilder(object):
         self.__project = WFProjectEmailContainer(self.project_name)
         project = self.__project
 
+        project.tags = "onboarding"
         project.email_subject = self.subject
         project.from_line = self.from_line
         project.suppression_file_path = self.suppression_file_path
