@@ -26,10 +26,34 @@ class MatchAndExportProjectBuilder(object):
         self.audience_name = None
         self.suppression_file_path = None
 
+    def set_audience_id(self, audience_id):
+        self.audience_id = audience_id
+        return self
+
+    def set_audience_file_path(self, audience_file_path):
+        self.audience_file_path = audience_file_path
+        return self
+
+    def set_data_task_id(self, data_task_id):
+        self.data_task_id = data_task_id
+        return self
+
+    def set_suppression_task_ids(self, suppression_task_ids):
+        self.suppression_task_ids = suppression_task_ids
+        return self
+
+    def set_audience_name(self, audience_name):
+        self.audience_name = audience_name
+        return self
+
+    def set_suppression_file_path(self, suppression_file_path):
+        self.suppression_file_path = suppression_file_path
+        return self
+
     def build(self):
         """
         @summary: Build the WF project.
-        @raise WFBrigeException: if the combination of parameters set in the
+        @raise WFBridgeException: if the combination of parameters set in the
         builder are not compatible (like missing parameters).
         @return: a WFProject object.
         """
