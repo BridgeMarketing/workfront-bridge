@@ -1,5 +1,6 @@
 import sys
 
+import pytz
 from workfront.objects.template_project import WFTemplateProject
 
 from workfront_bridge.blocks.base import WFBlockParser
@@ -136,7 +137,7 @@ class EmailProjectBuilder(object):
             slb = WFEmailTestSeedBlock()
             slb.seed_list_s3_path = test_list
             slb.campaign_name = "Test List - " + self.project_name
-            slb.deployment_datetime = datetime.now()
+            slb.deployment_datetime = datetime.utcnow().replace(tzinfo=pytz.utc)
             self._configure_provider_in_setup_block(slb, self.seeds_provider)
         else:
             slb = WFEmailTestSeedNoEmailSentBlock()
@@ -320,7 +321,8 @@ class EmailOnBoardingProjectBuilder(object):
         slb = WFEmailTestSeedBlock()
         slb.seed_list_s3_path = test_list
         slb.campaign_name = "T" + prefix + "_" + self.project_name
-        slb.deployment_datetime = datetime.now()
+
+        slb.deployment_datetime = datetime.utcnow().replace(tzinfo=pytz.utc)
         slb.sender_email = sender_email
         slb.sender_name = self.from_line
         slb.provider = selected_provider

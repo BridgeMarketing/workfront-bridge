@@ -4,3 +4,4 @@ rednose==1.2.3
 requests==2.18.4
 requests-mock==1.4.0
 workfront-sdk>=0.15
+pytz==2018.5
