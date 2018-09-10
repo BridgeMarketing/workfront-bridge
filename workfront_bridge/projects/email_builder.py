@@ -46,6 +46,7 @@ class EmailProjectBuilder(object):
         self.provider = None
         self.test_sl_send_emails = True
         self.review_deployment = True
+        self.email_creative_id = None
 
         self.audience_provider = ProviderConfig()
         self.seeds_provider = ProviderConfig()
@@ -114,6 +115,10 @@ class EmailProjectBuilder(object):
         self.seeds_provider.token = token
         return self
 
+    def set_email_creative_id(self, id):
+        self.email_creative_id = id
+        return self
+
     def _configure_provider_in_setup_block(self, block, provider):
         block.sender_email = provider.sender_email
         block.sender_name = provider.sender_name
@@ -158,6 +163,7 @@ class EmailProjectBuilder(object):
                 raise WFBrigeException("{} is required".format(name))
 
         check_not_none("subject", self.subject)
+        check_not_none("email_creative_id", self.email_creative_id)
 
         check_not_none("audience_provider", self.audience_provider.name)
         check_not_none("audience_sender_name",
@@ -184,6 +190,7 @@ class EmailProjectBuilder(object):
 
         project = WFProjectEmailContainer(self.project_name)
         project.email_subject = self.subject
+        project.email_creative_id = self.email_creative_id
 
         if self.html_zip is not None:
             zipb = WFEmailGenHtmlFromZipBlock()
@@ -239,6 +246,7 @@ class EmailOnBoardingProjectBuilder(object):
         self.from_line = None
         self.suppression_file_path = None
         self.client_id = None
+        self.email_creative_id = None
 
         self.__project = None
 
@@ -270,6 +278,10 @@ class EmailOnBoardingProjectBuilder(object):
     def set_client_id(self, client_id):
         self.client_id = client_id
 
+    def set_email_creative_id(self, id):
+        self.email_creative_id = id
+        return self
+
     def _check_viability(self):
 
         def check_not_none(name, value):
@@ -293,6 +305,7 @@ class EmailOnBoardingProjectBuilder(object):
                                                                      max_length))
 
         check_not_none("subject", self.subject)
+        check_not_none("email_creative_id", self.email_creative_id)
         check_not_none("html", self.html)
         check_file_extension("html", self.html, (".html", ".zip"))
         check_not_none("category", self.category)
@@ -349,6 +362,7 @@ class EmailOnBoardingProjectBuilder(object):
         project.suppression_file_path = self.suppression_file_path
         project.client_id = self.client_id
         project.category = self.category
+        project.email_creative_id = self.email_creative_id
 
         if self.html.lower().endswith(".zip"):
             zipb = WFEmailGenHtmlFromZipBlock()
