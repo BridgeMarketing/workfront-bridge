@@ -207,3 +207,17 @@ wf_project = b.build()
 # When calling build a WFBrigeException can arise telling you if some
 # parameters are missing, or something is wrong.
 ```
+
+## Examples
+
+There are many examples inside the **examples** folder on how to use the
+project builders that the library has. In general, it supouse to have 1 per
+builder type.
+
+To run them you should step into the project and run(assuming you clone it in a
+folder called workfront-bridge):
+
+```bash
+cd workfront-bridge
+PYTHONPATH=. python examples/<builder-script>.py
+```

@@ -6,7 +6,7 @@ class WFProjectB2CContainer(WFBlock):
     @summary: Workfront Data B2C Project Container.
     """
 
-    template_name = "Base Project Container - Match And Export Channel"
+    template_name = "Base Project Container - Data B2C"
 
     def __init__(self, prj_name):
         super(WFProjectB2CContainer, self).__init__(self.template_name,
