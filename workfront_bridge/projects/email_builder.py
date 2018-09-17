@@ -158,7 +158,6 @@ class EmailProjectBuilder(object):
                 raise WFBrigeException("{} is required".format(name))
 
         check_not_none("subject", self.subject)
-
         check_not_none("audience_provider", self.audience_provider.name)
         check_not_none("audience_sender_name",
                        self.audience_provider.sender_name)
@@ -184,6 +183,7 @@ class EmailProjectBuilder(object):
 
         project = WFProjectEmailContainer(self.project_name)
         project.email_subject = self.subject
+        project.from_line = self.audience_provider.sender_name
 
         if self.html_zip is not None:
             zipb = WFEmailGenHtmlFromZipBlock()
