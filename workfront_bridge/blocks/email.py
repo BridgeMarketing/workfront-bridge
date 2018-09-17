@@ -108,7 +108,7 @@ class WFEmailTestSeedBlock(WFBlock):
         self._add_required_parameters(req)
 
         opt = ["SelectedProvider", "Email Provider User",
-               "Email Provider Password", "Email Provider Token"]
+               "Email Provider Password", "Email Provider Token", "isTest"]
         self._add_optional_parameters(opt)
 
         # Block Fields:
@@ -123,6 +123,9 @@ class WFEmailTestSeedBlock(WFBlock):
         self._provider_token = None
 
         self._set_starter_task(2)  # Skip Test Setup
+
+        self.set_parameter("Push to provider", "isTest", "yes")
+
 
     @property
     def seed_list_s3_path(self):
