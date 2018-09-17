@@ -191,6 +191,7 @@ class EmailProjectBuilder(object):
         project = WFProjectEmailContainer(self.project_name)
         project.email_subject = self.subject
         project.email_creative_id = self.email_creative_id
+        project.from_line = self.audience_provider.sender_name
 
         if self.html_zip is not None:
             zipb = WFEmailGenHtmlFromZipBlock()
