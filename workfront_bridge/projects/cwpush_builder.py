@@ -18,6 +18,21 @@ class CWToolProjectBuilder(object):
 
         # Project
         self.bridge_order_id = None
+        self.order_name = None
+        self.partner_name = None
+        self.industry = None
+        self.html_link = None
+        self.banner_link = None
+        self.start_date = None
+        self.target_volume = None
+        self.overage = None
+        self.geo_target = None
+        self.geo_target_state = None
+        self.deployment_file_link = None
+        self.deployment_file_segment = None
+        self.click_tier = None
+        self.open_tier = None
+        self.cw_tool_link = None
 
     def build(self):
         """
@@ -29,6 +44,21 @@ class CWToolProjectBuilder(object):
         project = CWPushContainer(self.project_name)
         # Project
         project.bridge_order_id = self.bridge_order_id
+        project.order_name = self.order_name
+        project.partner_name = self.partner_name
+        project.industry = self.industry
+        project.html_link = self.html_link
+        project.banner_link = self.banner_link
+        project.start_date = self.start_date
+        project.target_volume = self.target_volume
+        project.overage = self.overage
+        project.geo_target = self.geo_target
+        project.geo_target_state = self.geo_target_state
+        project.deployment_file_link = self.deployment_file_link
+        project.deployment_file_segment = self.deployment_file_segment
+        project.click_tier = self.click_tier
+        project.open_tier = self.open_tier
+        project.cw_tool_link = self.cw_tool_link
         # Block
         block = CWPushBlock()
         project.append(block)
