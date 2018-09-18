@@ -4,7 +4,6 @@ from workfront_bridge.exceptions import WFBrigeException
 import uuid
 
 
-
 class WFBlock(object):
     '''
     @summary: Workfront Base Block class
@@ -116,9 +115,10 @@ class WFBlockParser(object):
         """
         wf_block.check_parameters()
 
-        template_id = self.template_id_from_name( wf_block.wf_template_name)
+        template_id = self.template_id_from_name(wf_block.wf_template_name)
         prj = wf_project.crt_from_template(self.wf, template_id, wf_block.name)
-        prj.set_param_values(wf_block.parameters[""])
+        if "" in wf_block.parameters:
+            prj.set_param_values(wf_block.parameters[""])
 
         for block in wf_block.blocks:
             self.attach_to_project(prj, block)
@@ -148,7 +148,7 @@ class WFBlockParser(object):
     def __create_project_from(self, block):
         name = self._get_temporal_project_name(block.__class__.__name__)
 
-        template_id = self.template_id_from_name( block.wf_template_name)
+        template_id = self.template_id_from_name(block.wf_template_name)
         prj = wf_project.crt_from_template(self.wf, template_id, name)
         tasks = prj.get_tasks()
 

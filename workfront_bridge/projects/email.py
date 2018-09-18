@@ -14,10 +14,10 @@ class WFProjectEmailContainer(WFBlock):
     def __init__(self, prj_name):
         super(WFProjectEmailContainer, self).__init__(self.template_name, name=prj_name)
 
-        req = ["ecm_subject"]
+        req = ["ecm_subject", "email_creative_id"]
         self._add_required_parameters(req)
 
-        opt = ["input_html_s3_path", "ecm_from_line", "Suppression File Path", "Category", "ecm_live_seed_list",
+        opt = ["tags", "input_html_s3_path", "ecm_from_line", "Suppression File Path", "Category", "ecm_live_seed_list",
                "ecm_test_seed_lists"]
         self._add_optional_parameters(opt)
 
@@ -30,6 +30,17 @@ class WFProjectEmailContainer(WFBlock):
         self._suppression_file_path = None
         self._live_seed_list = None
         self._test_seed_lists = None
+        self._tags = None
+        self._email_creative_id = None
+
+    @property
+    def tags(self):
+        return self._tags
+
+    @tags.setter
+    def tags(self, v):
+        self._tags = v
+        self.set_parameter("", "tags", v)
 
     @property
     def email_subject(self):
@@ -93,3 +104,12 @@ class WFProjectEmailContainer(WFBlock):
     def test_seed_lists(self, v):
         self._test_seed_lists = v
         self.set_parameter("", "ecm_test_seed_lists", v)
+
+    @property
+    def email_creative_id(self):
+        return self._email_creative_id
+
+    @email_creative_id.setter
+    def email_creative_id(self, v):
+        self._email_creative_id = v
+        self.set_parameter("", "email_creative_id", v)

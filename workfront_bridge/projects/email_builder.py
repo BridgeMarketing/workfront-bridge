@@ -1,5 +1,6 @@
 import sys
 
+import pytz
 from workfront.objects.template_project import WFTemplateProject
 
 from workfront_bridge.blocks.base import WFBlockParser
@@ -45,6 +46,7 @@ class EmailProjectBuilder(object):
         self.provider = None
         self.test_sl_send_emails = True
         self.review_deployment = True
+        self.email_creative_id = None
 
         self.audience_provider = ProviderConfig()
         self.seeds_provider = ProviderConfig()
@@ -113,6 +115,10 @@ class EmailProjectBuilder(object):
         self.seeds_provider.token = token
         return self
 
+    def set_email_creative_id(self, id):
+        self.email_creative_id = id
+        return self
+
     def _configure_provider_in_setup_block(self, block, provider):
         block.sender_email = provider.sender_email
         block.sender_name = provider.sender_name
@@ -136,7 +142,7 @@ class EmailProjectBuilder(object):
             slb = WFEmailTestSeedBlock()
             slb.seed_list_s3_path = test_list
             slb.campaign_name = "Test List - " + self.project_name
-            slb.deployment_datetime = datetime.now()
+            slb.deployment_datetime = datetime.utcnow().replace(tzinfo=pytz.utc)
             self._configure_provider_in_setup_block(slb, self.seeds_provider)
         else:
             slb = WFEmailTestSeedNoEmailSentBlock()
@@ -157,6 +163,7 @@ class EmailProjectBuilder(object):
                 raise WFBrigeException("{} is required".format(name))
 
         check_not_none("subject", self.subject)
+        check_not_none("email_creative_id", self.email_creative_id)
 
         check_not_none("audience_provider", self.audience_provider.name)
         check_not_none("audience_sender_name",
@@ -183,6 +190,8 @@ class EmailProjectBuilder(object):
 
         project = WFProjectEmailContainer(self.project_name)
         project.email_subject = self.subject
+        project.email_creative_id = self.email_creative_id
+        project.from_line = self.audience_provider.sender_name
 
         if self.html_zip is not None:
             zipb = WFEmailGenHtmlFromZipBlock()
@@ -238,6 +247,7 @@ class EmailOnBoardingProjectBuilder(object):
         self.from_line = None
         self.suppression_file_path = None
         self.client_id = None
+        self.email_creative_id = None
 
         self.__project = None
 
@@ -269,6 +279,10 @@ class EmailOnBoardingProjectBuilder(object):
     def set_client_id(self, client_id):
         self.client_id = client_id
 
+    def set_email_creative_id(self, id):
+        self.email_creative_id = id
+        return self
+
     def _check_viability(self):
 
         def check_not_none(name, value):
@@ -292,6 +306,7 @@ class EmailOnBoardingProjectBuilder(object):
                                                                      max_length))
 
         check_not_none("subject", self.subject)
+        check_not_none("email_creative_id", self.email_creative_id)
         check_not_none("html", self.html)
         check_file_extension("html", self.html, (".html", ".zip"))
         check_not_none("category", self.category)
@@ -301,7 +316,7 @@ class EmailOnBoardingProjectBuilder(object):
         check_length("test_seed_lists", self.test_seed_lists, 1, 5)
         check_files_extension("test_seed_lists", self.test_seed_lists, (".csv",))
 
-        if self.suppression_file_path is not None:
+        if self.suppression_file_path is not None and self.suppression_file_path:
             check_file_extension("suppression_file_path", self.suppression_file_path, (".csv",))
 
         check_not_none("client_id", self.client_id)
@@ -320,7 +335,8 @@ class EmailOnBoardingProjectBuilder(object):
         slb = WFEmailTestSeedBlock()
         slb.seed_list_s3_path = test_list
         slb.campaign_name = "T" + prefix + "_" + self.project_name
-        slb.deployment_datetime = datetime.now()
+
+        slb.deployment_datetime = datetime.utcnow().replace(tzinfo=pytz.utc)
         slb.sender_email = sender_email
         slb.sender_name = self.from_line
         slb.provider = selected_provider
@@ -341,11 +357,13 @@ class EmailOnBoardingProjectBuilder(object):
         self.__project = WFProjectEmailContainer(self.project_name)
         project = self.__project
 
+        project.tags = "onboarding"
         project.email_subject = self.subject
         project.from_line = self.from_line
         project.suppression_file_path = self.suppression_file_path
         project.client_id = self.client_id
         project.category = self.category
+        project.email_creative_id = self.email_creative_id
 
         if self.html.lower().endswith(".zip"):
             zipb = WFEmailGenHtmlFromZipBlock()
