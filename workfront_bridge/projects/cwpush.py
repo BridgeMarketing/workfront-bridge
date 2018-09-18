@@ -1,4 +1,5 @@
 from workfront_bridge.blocks.base import WFBlock
+from workfront_bridge.tools import datetime_to_wf_format
 
 
 class CWPushContainer(WFBlock):
@@ -16,7 +17,6 @@ class CWPushContainer(WFBlock):
 
         req = [
             "Bridge_orderID",
-            "Start Date",
         ]
         self._add_required_parameters(req)
         opt = [
@@ -25,6 +25,7 @@ class CWPushContainer(WFBlock):
             "Industry",
             "HTML Link",
             "Banner Link",
+            "Start Date",
             "Target Volume",
             "Overage",
             "Geo Target",
@@ -116,7 +117,7 @@ class CWPushContainer(WFBlock):
     @start_date.setter
     def start_date(self, v):
         self._start_date = v
-        self.set_parameter("", "Start Date", v.isoformat().split('.')[0] + '.000+0000')
+        self.set_parameter("", "Start Date", datetime_to_wf_format(v))
 
     @property
     def target_volume(self):
