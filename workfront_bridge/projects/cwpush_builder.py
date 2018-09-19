@@ -1,9 +1,9 @@
 from workfront_bridge.blocks.base import WFBlockParser
 from workfront_bridge.projects.cwpush import CWPushContainer
-from workfront_bridge.blocks.cwtool.cwpush import CWPushBlock
+from workfront_bridge.blocks.cwpush.cwpush import CWPushBlock
 
 
-class CWToolProjectBuilder(object):
+class CWPushProjectBuilder(object):
     """
     @summary: Project builder for CW Push projects.
     """

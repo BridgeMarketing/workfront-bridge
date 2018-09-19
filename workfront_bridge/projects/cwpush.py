@@ -17,23 +17,23 @@ class CWPushContainer(WFBlock):
 
         req = [
             "Bridge_orderID",
+            "Partner Name",
+            "Industry",
+            "Target Volume",
+            "Click Tier",
+            "Open Tier",
         ]
         self._add_required_parameters(req)
         opt = [
             "Name",
-            "Partner Name",
-            "Industry",
             "HTML Link",
             "Banner Link",
             "Start Date",
-            "Target Volume",
             "Overage",
             "Geo Target",
             "Geo Target State",
             "Deployment File Link",
             "Deployment File Segment",
-            "Click Tier",
-            "Open Tier",
             "CW Tool Link",
         ]
         self._add_optional_parameters(opt)
