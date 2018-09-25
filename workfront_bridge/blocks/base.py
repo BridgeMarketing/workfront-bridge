@@ -161,7 +161,7 @@ class WFBlockParser(object):
         # Task identifier is a task number in the project block
         if type(task_name) == int:
             if len(tasks) < task_name:
-                tmpl = prj.get_template()
+                tmpl = prj.get_template_id()
                 err = "Project Template {} has {} tasks. Task {} referenced " \
                       "from task parameter values."
                 err = err.format(tmpl, len(tasks), task_name)
@@ -173,13 +173,13 @@ class WFBlockParser(object):
         if len(mtasks) == 1:
             return mtasks[0]
         elif len(mtasks) == 0:
-            tmpl = prj.get_template()
+            tmpl = prj.get_template_id()
             err = "Project Template {} does not have task name {} referenced " \
                   "from task parameter values."
             err = err.format(tmpl, task_name)
             raise WFBrigeException(err)
         else:
-            tmpl = prj.get_template()
+            tmpl = prj.get_template_id()
             err = "Project Template {} has more than one task named as {}"
             err = err.format(tmpl, task_name)
             raise WFBrigeException(err)
