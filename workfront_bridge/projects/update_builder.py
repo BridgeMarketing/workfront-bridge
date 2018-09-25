@@ -57,6 +57,7 @@ class UpdateProjectBuilder(object):
                 raise WFBrigeException("{} is required".format(name))
 
         check_not_none("wf_project_id", self.wf_project_id)
+        check_not_none("deploy_datetime", self.deploy_datetime)
         self.__fullfill_project_type()
         check_not_none("project_type", self.project_type)
 
@@ -81,6 +82,7 @@ class UpdateProjectBuilder(object):
         '''
         @return: a update wf project to update an email project.
         '''
+        prj_being_updated = WFProject(self.wf, self.wf_project_id)
         prj_name = "Update - {}".format(prj_being_updated.name)
         project = WFProjectUpdateContainer(prj_name)
         update_block = WFUpdateEmailDeployBlock()

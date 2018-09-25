@@ -15,7 +15,7 @@ class WFUpdateEmailDeployBlock(WFBlock):
     def __init__(self):
         super(WFUpdateEmailDeployBlock, self).__init__(self.template_name)
 
-        req = ["wf_email_project_id"]
+        req = ["wf_email_project_id", "Deployment Date/Time"]
         self._add_required_parameters(req)
 
         # Block Fields :
@@ -40,6 +40,6 @@ class WFUpdateEmailDeployBlock(WFBlock):
         @summary: deploy datetime of the project being updated
         '''
         self._deploy_datetime = dt
-        self.set_parameter('Deploy Datetime',
+        self.set_parameter('Update Email Deploy',
                            'Deployment Date/Time',
                            datetime_to_wf_format(dt))
