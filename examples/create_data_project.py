@@ -8,6 +8,9 @@ b = match_and_export_builder.MatchAndExportProjectBuilder(wf, "Test match and ex
 prj = (b.set_audience_name('Sarlanga')
         .set_audience_file_path('s3://bridge-file-assets/API_files/orderID_1239/Channel_0'
                                 '/5b575e51000bcb1d2cea4a5532889aee_26_20180828190332.csv')
+        .set_suppression_file_path("s3://bridge-file-assets/suppression_test.csv")
+        .set_audience_identifier("email") #oneAudienceID or email or deviceID
+
         .build())
 
 print(prj)

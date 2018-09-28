@@ -15,10 +15,16 @@ class WFMatchAndExport1ABlock(WFBlock):
             'Audience Name',
             'Audience File Path'
         ]
+
+        optional_parameters = ["Audience Field Identifier", "Suppression File Path"]
+
         self._audience_name = None
         self._audience_file_path = None
         self._suppression_file_path = None
+        self._audience_identifier = "oneAudienceID"
+
         self._add_required_parameters(req)
+        self._add_optional_parameters(optional_parameters)
 
     @property
     def audience_name(self):
@@ -46,3 +52,12 @@ class WFMatchAndExport1ABlock(WFBlock):
     def suppression_file_path(self, sup_file_path):
         self._suppression_file_path = sup_file_path
         self.set_parameter('Suppression', 'Suppression File Path', sup_file_path)
+
+    @property
+    def audience_identifier(self):
+        return self._audience_identifier
+
+    @audience_identifier.setter
+    def audience_identifier(self, audience_identifier):
+        self._audience_identifier = audience_identifier
+        self.set_parameter('Create Matched Audience', 'Audience Field Identifier', audience_identifier)
