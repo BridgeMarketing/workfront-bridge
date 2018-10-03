@@ -6,7 +6,7 @@ class WFB2CBlock(WFBlock):
     @summary: Use this block to create an audience fron a count id.
     """
 
-    template_name = 'Block - Data B2C'
+    template_name = 'Block - Data B2C (DEV)'
 
     def __init__(self):
         super(WFB2CBlock, self).__init__(self.template_name)

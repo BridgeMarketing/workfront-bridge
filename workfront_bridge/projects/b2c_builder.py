@@ -21,7 +21,7 @@ class B2CProjectBuilder(object):
         self.audience_id = None
         self.audience_file_path = None
         self.data_task_id = None
-        self.suppression_task_ids = []
+        self.suppression_task_ids = None
 
         # Block
         self.count_id = None

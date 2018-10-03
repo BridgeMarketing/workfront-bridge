@@ -6,7 +6,7 @@ class WFProjectB2CContainer(WFBlock):
     @summary: Workfront Data B2C Project Container.
     """
 
-    template_name = "Base Project Container - Data B2C"
+    template_name = "Base Project Container - Data B2C (DEV)"
 
     def __init__(self, prj_name):
         super(WFProjectB2CContainer, self).__init__(self.template_name,
@@ -24,7 +24,7 @@ class WFProjectB2CContainer(WFBlock):
         self._audience_id = None
         self._audience_file_path = None
         self._data_task_id = None
-        self._suppression_task_ids = []
+        self._suppression_task_ids = None
 
     @property
     def audience_id(self):
@@ -60,4 +60,4 @@ class WFProjectB2CContainer(WFBlock):
     @suppression_task_ids.setter
     def suppression_task_ids(self, v):
         self._suppression_task_ids = v
-        self.set_parameter("", "Suppression Task Ids", ','.join(v))
+        self.set_parameter("", "Suppression Task Ids", v)
