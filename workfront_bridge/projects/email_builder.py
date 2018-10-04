@@ -144,7 +144,15 @@ class EmailProjectBuilder(object):
         audb = WFEmailAudienceLiveSetupBlock()
         audb.campaign_name = self.project_name
 
-        audb.deployment_datetime = self.deployment_time.utcnow().replace(tzinfo=pytz.utc)
+        deployment_datetime_to_local = self.deployment_time
+
+        # if the datetime is Naive (hasnt timezone) assume that the tz is the current env tz
+        if deployment_datetime_to_local.tzinfo is None or deployment_datetime_to_local.tzinfo.utcoffset(
+                deployment_datetime_to_local) is None:
+            deployment_datetime_to_local = self.deployment_time.replace(tzinfo=tz.tzlocal())
+
+        audb.deployment_datetime = deployment_datetime_to_local.astimezone(tz.tzutc())
+
         audb.seed_list_s3_path = self.live_seed_list
         self._configure_provider_in_setup_block(audb, self.audience_provider)
         return audb
