@@ -143,7 +143,8 @@ class EmailProjectBuilder(object):
     def _crt_audience_block(self):
         audb = WFEmailAudienceLiveSetupBlock()
         audb.campaign_name = self.project_name
-        audb.deployment_datetime = self.deployment_time
+
+        audb.deployment_datetime = self.deployment_time.utcnow().replace(tzinfo=pytz.utc)
         audb.seed_list_s3_path = self.live_seed_list
         self._configure_provider_in_setup_block(audb, self.audience_provider)
         return audb
