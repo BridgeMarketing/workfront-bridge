@@ -36,10 +36,9 @@ class WFB2CBlock(WFBlock):
     @suppression_file_path.setter
     def suppression_file_path(self, sup_file_path):
         self._suppression_file_path = sup_file_path
-        self.set_parameter(
-            'Suppression',
-            'Suppression File Path',
-            sup_file_path)
+        self.set_parameter('Suppression',
+                           'Suppression File Path',
+                           sup_file_path)
 
     @property
     def suppression_type(self):

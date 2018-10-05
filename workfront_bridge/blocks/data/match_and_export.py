@@ -16,7 +16,11 @@ class WFMatchAndExport1ABlock(WFBlock):
             'Audience File Path'
         ]
 
-        optional_parameters = ["Audience Field Identifier", "Suppression File Path"]
+        optional_parameters = [
+            'Audience Field Identifier',
+            'Suppression File Path',
+            'suppression type'
+        ]
 
         self._audience_name = None
         self._audience_file_path = None
@@ -42,7 +46,9 @@ class WFMatchAndExport1ABlock(WFBlock):
     @audience_file_path.setter
     def audience_file_path(self, file_path):
         self._audience_file_path = file_path
-        self.set_parameter('Create Matched Audience', 'Audience File Path', file_path)
+        self.set_parameter('Create Matched Audience',
+                           'Audience File Path',
+                           file_path)
 
     @property
     def suppression_file_path(self):
@@ -51,7 +57,9 @@ class WFMatchAndExport1ABlock(WFBlock):
     @suppression_file_path.setter
     def suppression_file_path(self, sup_file_path):
         self._suppression_file_path = sup_file_path
-        self.set_parameter('Suppression', 'Suppression File Path', sup_file_path)
+        self.set_parameter('Suppression',
+                           'Suppression File Path',
+                           sup_file_path)
 
     @property
     def audience_identifier(self):
@@ -60,4 +68,15 @@ class WFMatchAndExport1ABlock(WFBlock):
     @audience_identifier.setter
     def audience_identifier(self, audience_identifier):
         self._audience_identifier = audience_identifier
-        self.set_parameter('Create Matched Audience', 'Audience Field Identifier', audience_identifier)
+        self.set_parameter('Create Matched Audience',
+                           'Audience Field Identifier',
+                           audience_identifier)
+
+    @property
+    def suppression_type(self):
+        return self._suppression_type
+
+    @suppression_type.setter
+    def suppression_type(self, sup_type):
+        self._suppression_type = sup_type
+        self.set_parameter('Suppression', 'suppression type', sup_type)
