@@ -12,7 +12,7 @@ class WFB2CBlock(WFBlock):
         super(WFB2CBlock, self).__init__(self.template_name)
 
         req = ['Count Id']
-        optional_parameters = ['Suppression File Path']
+        optional_parameters = ['Suppression File Path', 'suppression type']
 
         self._count_id = None
         self._suppression_file_path = None
@@ -36,4 +36,16 @@ class WFB2CBlock(WFBlock):
     @suppression_file_path.setter
     def suppression_file_path(self, sup_file_path):
         self._suppression_file_path = sup_file_path
-        self.set_parameter('Suppression', 'Suppression File Path', sup_file_path)
+        self.set_parameter(
+            'Suppression',
+            'Suppression File Path',
+            sup_file_path)
+
+    @property
+    def suppression_type(self):
+        return self._suppression_type
+
+    @suppression_type.setter
+    def suppression_type(self, sup_type):
+        self._suppression_type = sup_type
+        self.set_parameter('Suppression', 'suppression type', sup_type)
