@@ -5,3 +5,4 @@ requests==2.18.4
 requests-mock==1.4.0
 workfront-sdk>=0.18
 pytz==2018.5
+python-dateutil==2.7.3

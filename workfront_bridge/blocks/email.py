@@ -330,9 +330,8 @@ class WFEmailAudienceLiveSetupBlock(WFBlock):
         '''
         self._deployment_datetime = date_time
 
-        # TODO: check datetime format!!!!! see above
         self.set_parameter("Create Flight", "Deployment Date/Time",
-                           date_time.strftime("%d/%m/%Y %H:%M"))
+                           date_time.strftime("%Y-%m-%dT%H:%M:%S.000%z"))
 
     @property
     def provider(self):
