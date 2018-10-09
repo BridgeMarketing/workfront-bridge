@@ -1,5 +1,6 @@
 from workfront_bridge.blocks.base import WFBlock
 from workfront_bridge.tools import datetime_to_wf_format
+from distutils.util import strtobool
 
 
 class CWPushContainer(WFBlock):
@@ -130,12 +131,14 @@ class CWPushContainer(WFBlock):
 
     @property
     def overage(self):
-        return self._overage
+        # type encapsulation: str to bool
+        return bool(strtobool(self._overage))
 
     @overage.setter
     def overage(self, v):
-        self._overage = v
-        self.set_parameter("", "Overage", v)
+        # type encapsulation: bool to str
+        self._overage = str(v)
+        self.set_parameter("", "Overage", self._overage)
 
     @property
     def geo_target(self):
