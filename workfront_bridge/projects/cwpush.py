@@ -36,6 +36,7 @@ class CWPushContainer(WFBlock):
             "Deployment File Link",
             "Deployment File Segment",
             "CW Tool Link",
+            "Duration"
         ]
         self._add_optional_parameters(opt)
 
@@ -56,6 +57,16 @@ class CWPushContainer(WFBlock):
         self._click_tier = None
         self._open_tier = None
         self._cw_tool_link = None
+        self._duration = None
+
+    @property
+    def duration(self):
+        return self._duration
+
+    @duration.setter
+    def duration(self, v):
+        self._duration = v
+        self.set_parameter("", "Duration", v)
 
     @property
     def bridge_order_id(self):

@@ -33,6 +33,7 @@ class CWPushProjectBuilder(object):
         self.click_tier = None
         self.open_tier = None
         self.cw_tool_link = None
+        self.duration = None
 
     def build(self):
         """
@@ -59,6 +60,7 @@ class CWPushProjectBuilder(object):
         project.click_tier = self.click_tier
         project.open_tier = self.open_tier
         project.cw_tool_link = self.cw_tool_link
+        project.duration = self.duration
         # Block
         block = CWPushBlock()
         project.append(block)
