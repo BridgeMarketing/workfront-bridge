@@ -1,6 +1,7 @@
 import sys
 
 import pytz
+from dateutil import tz
 from workfront.objects.template_project import WFTemplateProject
 
 from workfront_bridge.blocks.base import WFBlockParser
@@ -36,6 +37,7 @@ class EmailProjectBuilder(object):
         @param wf: Workfront service object
         @param project_name: that the created will have.
         '''
+
         self.project_name = project_name
         self.wf = wf
         self.live_seed_list = None
@@ -50,6 +52,9 @@ class EmailProjectBuilder(object):
 
         self.audience_provider = ProviderConfig()
         self.seeds_provider = ProviderConfig()
+
+        self.exclude_html_validation = False
+        self.ecm_html = None
 
     def set_html(self, s3_path):
         self.html = s3_path
@@ -119,6 +124,14 @@ class EmailProjectBuilder(object):
         self.email_creative_id = id
         return self
 
+    def set_exclude_html_validation(self, exclude):
+        self.exclude_html_validation = exclude
+        return self
+
+    def set_ecm_html(self, s3_path):
+        self.ecm_html = s3_path
+        return self
+
     def _configure_provider_in_setup_block(self, block, provider):
         block.sender_email = provider.sender_email
         block.sender_name = provider.sender_name
@@ -131,7 +144,16 @@ class EmailProjectBuilder(object):
     def _crt_audience_block(self):
         audb = WFEmailAudienceLiveSetupBlock()
         audb.campaign_name = self.project_name
-        audb.deployment_datetime = self.deployment_time
+
+        deployment_datetime_to_local = self.deployment_time
+
+        # if the datetime is Naive (hasnt timezone) assume that the tz is the current env tz
+        if deployment_datetime_to_local.tzinfo is None or deployment_datetime_to_local.tzinfo.utcoffset(
+                deployment_datetime_to_local) is None:
+            deployment_datetime_to_local = self.deployment_time.replace(tzinfo=tz.tzlocal())
+
+        audb.deployment_datetime = deployment_datetime_to_local.astimezone(tz.tzutc())
+
         audb.seed_list_s3_path = self.live_seed_list
         self._configure_provider_in_setup_block(audb, self.audience_provider)
         return audb
@@ -150,17 +172,28 @@ class EmailProjectBuilder(object):
         return slb
 
     def _check_viability(self):
-        if self.html is None and self.html_zip is None:
-            err = "At least a zip or an html should be provided"
-            raise WFBrigeException(err)
-
-        if self.html is not None and self.html_zip is not None:
-            err = "Only a zip or an html should be provided"
-            raise WFBrigeException(err)
 
         def check_not_none(name, value):
             if value is None:
                 raise WFBrigeException("{} is required".format(name))
+
+        if self.exclude_html_validation:
+            check_not_none("ecm_html", self.ecm_html)
+        else:
+            if self.html is None and self.html_zip is None:
+                err = "At least a zip or an html should be provided"
+                raise WFBrigeException(err)
+
+            if self.html is not None and self.html_zip is not None:
+                err = "Only a zip or an html should be provided"
+                raise WFBrigeException(err)
+
+            if len(self.test_seed_lists) > 0:
+                check_not_none("seeds_provider", self.seeds_provider.name)
+                check_not_none("seeds_sender_name",
+                               self.seeds_provider.sender_name)
+                check_not_none("seeds_sender_email",
+                               self.seeds_provider.sender_email)
 
         check_not_none("subject", self.subject)
         check_not_none("email_creative_id", self.email_creative_id)
@@ -170,13 +203,6 @@ class EmailProjectBuilder(object):
                        self.audience_provider.sender_name)
         check_not_none("audience_sender_email",
                        self.audience_provider.sender_email)
-
-        if len(self.test_seed_lists) > 0:
-            check_not_none("seeds_provider", self.seeds_provider.name)
-            check_not_none("seeds_sender_name",
-                           self.seeds_provider.sender_name)
-            check_not_none("seeds_sender_email",
-                           self.seeds_provider.sender_email)
 
     def build(self):
         '''
@@ -189,29 +215,34 @@ class EmailProjectBuilder(object):
         self._check_viability()
 
         project = WFProjectEmailContainer(self.project_name)
+
         project.email_subject = self.subject
         project.email_creative_id = self.email_creative_id
         project.from_line = self.audience_provider.sender_name
 
-        if self.html_zip is not None:
-            zipb = WFEmailGenHtmlFromZipBlock()
-            zipb.zip_s3_path = self.html_zip
-            project.append(zipb)
+        if self.exclude_html_validation:
+            project.ecm_html = self.ecm_html
+
         else:
-            project.html_s3_path = self.html
+            if self.html_zip is not None:
+                zipb = WFEmailGenHtmlFromZipBlock()
+                zipb.zip_s3_path = self.html_zip
+                project.append(zipb)
+            else:
+                project.html_s3_path = self.html
 
-        bval_html = WFEmailValidateHtmlBlock()
-        bval_html.email_subject = self.subject
-        project.append(bval_html)
+            bval_html = WFEmailValidateHtmlBlock()
+            bval_html.email_subject = self.subject
+            project.append(bval_html)
 
-        for test_list in self.test_seed_lists:
-            slb = self._crt_test_list_block(test_list)
-            project.append(slb)
+            for test_list in self.test_seed_lists:
+                slb = self._crt_test_list_block(test_list)
+                project.append(slb)
 
-        if self.live_seed_list is not None:
-            email_seed_block = WFEmailLiveSeedBlock()
-            email_seed_block.seed_list_s3_path = self.live_seed_list
-            project.append(email_seed_block)
+            if self.live_seed_list is not None:
+                email_seed_block = WFEmailLiveSeedBlock()
+                email_seed_block.seed_list_s3_path = self.live_seed_list
+                project.append(email_seed_block)
 
         audb = self._crt_audience_block()
         project.append(audb)

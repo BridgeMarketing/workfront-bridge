@@ -28,6 +28,7 @@ b.set_audience_sender_name("Sender NAME")
 b.set_seeds_provider("ActOn")
 b.set_seeds_sender_email("seedssender@email.com")
 b.set_seeds_sender_name("Seed Name")
+b.set_email_creative_id("10")
 
 prj = b.build()
 
