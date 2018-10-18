@@ -10,6 +10,7 @@ b.add_creative(
     landing_page_url='Test Landing Page URL',
     image_s3_url='Test Image S3 URL',
     creative_size='300x250',
+    third_party_impression_tracking_url='Third party impression tracking URL'
 )
 b.add_creative(
     creative_name='Test Creative 2',
@@ -17,8 +18,19 @@ b.add_creative(
     landing_page_url='Test Landing Page URL 2',
     image_s3_url='Test Image S3 URL 2',
     creative_size='300x250',
+    third_party_impression_tracking_url='Third party impression tracking URL 2'
+)
+b.add_creative(
+    creative_name='Test Creative 3',
+    clickthrough_url='Test Clickthrough URL 3',
+    landing_page_url='Test Landing Page URL 3',
+    image_s3_url='Test Image S3 URL 3',
+    creative_size='300x250',
+    third_party_impression_tracking_url='Third party impression tracking URL 3'
 )
 (b.
+ set_ttd_advertiser_id('ttd_advertiser_id').
+ set_audience_name('audience_name').
  set_start_date_inclusive_utc('2018-11-01').
  set_end_date_exclusive_utc('2018-12-01').
  set_campaign_name('Test Campaign').

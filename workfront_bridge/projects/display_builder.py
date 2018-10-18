@@ -133,6 +133,7 @@ class DisplayProjectBuilder(object):
             raise WFBrigeException('The project does not have any creatives. Please use add_creative to add them.')
 
         project = WFProjectDisplayContainer(self.project_name)
+        project.ttd_advertiser_id = self._ttd_advertiser_id
 
         order_review_block = WFDisplayOrderReviewBlock()    # Manual
 
