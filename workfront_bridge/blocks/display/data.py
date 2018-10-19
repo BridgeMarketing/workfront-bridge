@@ -16,6 +16,8 @@ class WFDisplayDataBlock(WFBlock):
         ])
         self._audience_name = None
 
+        self._set_starter_task(2)
+
     @property
     def audience_name(self):
         return self._audience_name

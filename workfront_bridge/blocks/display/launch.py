@@ -10,3 +10,4 @@ class WFDisplayLaunchBlock(WFBlock):
 
     def __init__(self):
         super(WFDisplayLaunchBlock, self).__init__(self.template_name)
+        self._set_starter_task(2)

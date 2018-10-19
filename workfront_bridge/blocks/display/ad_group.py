@@ -49,6 +49,8 @@ class WFDisplayAdGroupBlock(WFBlock):
         self._category = None
         self._ae_excluder = None
 
+        self._set_starter_task(2)
+
     @property
     def ad_group_name(self):
         return self._ad_group_name
