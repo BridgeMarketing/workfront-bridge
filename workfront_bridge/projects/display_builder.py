@@ -4,8 +4,9 @@ from workfront_bridge.blocks.display.campaign import WFDisplayCampaignBlock
 from workfront_bridge.blocks.display.data import WFDisplayDataBlock
 from workfront_bridge.blocks.display.launch import WFDisplayLaunchBlock
 from workfront_bridge.blocks.display.order_review import WFDisplayOrderReviewBlock
-from workfront_bridge.blocks.display.qa import WFDisplayQABlock
-from workfront_bridge.blocks.display.setup import WFDisplaySetupBlock
+from workfront_bridge.blocks.display.setup_creative_upload import WFDisplayCreativeUploadBlock
+from workfront_bridge.blocks.display.qa_creative import WFDisplayCreativeQABlock
+from workfront_bridge.blocks.display.qa_final_review import WFDisplayQAFinalReviewBlock
 from workfront_bridge.exceptions import WFBrigeException
 from workfront_bridge.blocks.base import WFBlockParser
 
@@ -165,11 +166,19 @@ class DisplayProjectBuilder(object):
         campaign_block.daily_target_in_advertiser_currency = self._daily_target_in_advertiser_currency
         campaign_block.daily_target_in_impressions = self._daily_target_in_impressions
 
-        setup_block = WFDisplaySetupBlock()
-        [setup_block.add_creative(
-            **{k: creative[k] for k in DisplayProjectBuilder.creative_upload_params if k in creative}
-        )
-         for creative in self.creatives]
+        creative_upload_blocks = []
+        for creative in self.creatives:
+            creative_upload_block = WFDisplayCreativeUploadBlock()
+            creative_upload_dict = {k: creative[k] for k in DisplayProjectBuilder.creative_upload_params
+                                    if k in creative}
+            for k, v in creative_upload_dict.items():
+                try:
+                    getattr(creative_upload_block, k)
+                except AttributeError:
+                    raise WFBrigeException('Invalid Key: {}'.format(k))
+                else:
+                    setattr(creative_upload_block, k, v)
+            creative_upload_blocks.append(creative_upload_block)
 
         ad_group_block = WFDisplayAdGroupBlock()
         ad_group_block.ad_group_name = self._ad_group_name
@@ -192,59 +201,71 @@ class DisplayProjectBuilder(object):
         ad_group_block.category = self._category
         ad_group_block.ae_excluder = self._ae_excluder
 
-        qa_block = WFDisplayQABlock()   # Manual
-        [qa_block.add_creative(
-            **{k: creative[k] for k in DisplayProjectBuilder.creative_qa_params if k in creative}
-        )
-         for creative in self.creatives]
-        qa_block.add_final_review(
-            start_date_inclusive_utc=self._start_date_inclusive_utc,
-            end_date_exclusive_utc=self._end_date_exclusive_utc,
-            campaign_name=self._campaign_name,
-            campaign_overview=self._campaign_overview,
-            partner_cost_percentage_fee=self._partner_cost_percentage_fee,
-            availability=self._availability,
-            auto_allocator=self._auto_allocator,
-            ctv_targeting_and_attribution=self._ctv_targeting_and_attribution,
-            pacing_mode=self._pacing_mode,
-            partner_cpm_fee_amount=self._partner_cpm_fee_amount,
-            partner_cpm_fee_currency=self._partner_cpm_fee_currency,
-            partner_cpc_fee_amount=self._partner_cpc_fee_amount,
-            partner_cpc_fee_currency=self._partner_cpc_fee_currency,
-            max_bid_amount=self._max_bid_amount,
-            budget_in_impressions_pre_calc=self._budget_in_impressions_pre_calc,
-            daily_target_in_advertiser_currency=self._daily_target_in_advertiser_currency,
-            daily_target_in_impressions=self._daily_target_in_impressions,
-            ad_group_name=self._ad_group_name,
-            adg_base_bid_amount=self._adg_base_bid_amount,
-            adg_description=self._adg_description,
-            adg_daily_budget=self._adg_daily_budget,
-            adg_daily_budget_in_impressions=self._adg_daily_budget_in_impressions,
-            adg_budget_in_impressions_pre_calc=self._adg_budget_in_impressions_pre_calc,
-            adg_pacing_mode=self._adg_pacing_mode,
-            adg_auto_allocator_priority=self._adg_auto_allocator_priority,
-            adg_max_bid_amount=self._adg_max_bid_amount,
-            adg_frequency_period_in_minutes=self._adg_frequency_period_in_minutes,
-            adg_frequency_cap=self._adg_frequency_cap,
-            adg_frequency_pricing_slope_cpm=self._adg_frequency_pricing_slope_cpm,
-            adg_ctr_in_percent=self._adg_ctr_in_percent,
-            device_type=self._device_type,
-            country=self._country,
-            category=self._category,
-            ae_excluder=self._ae_excluder,
-        )
+        creative_qa_blocks = []
+        for creative in self.creatives:
+            creative_qa_block = WFDisplayCreativeQABlock()
+            creative_qa_dict = {k: creative[k] for k in DisplayProjectBuilder.creative_qa_params
+                                if k in creative}
+            for k, v in creative_qa_dict.items():
+                try:
+                    getattr(creative_qa_block, k)
+                except AttributeError:
+                    raise WFBrigeException('Invalid Key: {}'.format(k))
+                else:
+                    setattr(creative_qa_block, k, v)
+            creative_qa_blocks.append(creative_qa_block)
+
+        qa_final_review_block = WFDisplayQAFinalReviewBlock()
+        qa_final_review_block.start_date_inclusive_utc = self._start_date_inclusive_utc
+        qa_final_review_block.end_date_exclusive_utc = self._end_date_exclusive_utc
+        qa_final_review_block.campaign_name = self._campaign_name
+        qa_final_review_block.campaign_overview = self._campaign_overview
+        qa_final_review_block.partner_cost_percentage_fee = self._partner_cost_percentage_fee
+        qa_final_review_block.availability = self._availability
+        qa_final_review_block.auto_allocator = self._auto_allocator
+        qa_final_review_block.ctv_targeting_and_attribution = self._ctv_targeting_and_attribution
+        qa_final_review_block.pacing_mode = self._pacing_mode
+        qa_final_review_block.partner_cpm_fee_amount = self._partner_cpm_fee_amount
+        qa_final_review_block.partner_cpm_fee_currency = self._partner_cpm_fee_currency
+        qa_final_review_block.partner_cpc_fee_amount = self._partner_cpc_fee_amount
+        qa_final_review_block.partner_cpc_fee_currency = self._partner_cpc_fee_currency
+        qa_final_review_block.max_bid_amount = self._max_bid_amount
+        qa_final_review_block.budget_in_impressions_pre_calc = self._budget_in_impressions_pre_calc
+        qa_final_review_block.daily_target_in_advertiser_currency = self._daily_target_in_advertiser_currency
+        qa_final_review_block.daily_target_in_impressions = self._daily_target_in_impressions
+        qa_final_review_block.ad_group_name = self._ad_group_name
+        qa_final_review_block.adg_base_bid_amount = self._adg_base_bid_amount
+        qa_final_review_block.adg_description = self._adg_description
+        qa_final_review_block.adg_daily_budget = self._adg_daily_budget
+        qa_final_review_block.adg_daily_budget_in_impressions = self._adg_daily_budget_in_impressions
+        qa_final_review_block.adg_budget_in_impressions_pre_calc = self._adg_budget_in_impressions_pre_calc
+        qa_final_review_block.adg_pacing_mode = self._adg_pacing_mode
+        qa_final_review_block.adg_auto_allocator_priority = self._adg_auto_allocator_priority
+        qa_final_review_block.adg_max_bid_amount = self._adg_max_bid_amount
+        qa_final_review_block.adg_frequency_period_in_minutes = self._adg_frequency_period_in_minutes
+        qa_final_review_block.adg_frequency_cap = self._adg_frequency_cap
+        qa_final_review_block.adg_frequency_pricing_slope_cpm = self._adg_frequency_pricing_slope_cpm
+        qa_final_review_block.adg_ctr_in_percent = self._adg_ctr_in_percent
+        qa_final_review_block.device_type = self._device_type
+        qa_final_review_block.country = self._country
+        qa_final_review_block.category = self._category
+        qa_final_review_block.ae_excluder = self._ae_excluder
 
         launch_block = WFDisplayLaunchBlock()   # Manual
 
-        [project.append(block) for block in [
+        project_blocks = [
             order_review_block,
             data_block,
             campaign_block,
-            setup_block,
-            ad_group_block,
-            qa_block,
+        ]
+        project_blocks.extend(creative_upload_blocks)
+        project_blocks.append(ad_group_block)
+        project_blocks.extend(creative_qa_blocks)
+        project_blocks.extend([
+            qa_final_review_block,
             launch_block,
-        ]]
+        ])
+        [project.append(block) for block in project_blocks]
         parser = WFBlockParser(self.wf)
         wf_project = parser.create(project)
         return wf_project
