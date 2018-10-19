@@ -9,7 +9,7 @@ wf.login()
 
 b = targeted_bonus_media_builder.TargetedBonusMediaProjectBuilder(
     wf,
-    'Test TBM alpha vers')
+    'Test Targeted Bonus Media Channel 2 (beta)')
 
 prj = b.build()
 

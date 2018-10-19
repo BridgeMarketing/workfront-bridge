@@ -1,4 +1,5 @@
 from workfront_bridge.blocks.base import WFBlock
+from workfront_bridge.tools import datetime_to_wf_format
 
 
 class WFProjectDisplayContainer(WFBlock):
@@ -22,7 +23,13 @@ class WFProjectDisplayContainer(WFBlock):
             "TTDFlightID",
             "TTDCreativeID",
             "IsTargetedBonusMedia",
-            "Project Type"
+            "Project Type",
+            "total click goal",
+            "curve type",
+            "links",
+            "weights",
+            "StartDateInclusiveUTC",
+            "EndDateExclusiveUTC"
         ])
 
         self._ttd_audience_id = None
@@ -32,6 +39,12 @@ class WFProjectDisplayContainer(WFBlock):
         self._ttd_advertiser_id = None
         self._is_targeted_bonus_media = None
         self._project_type = None
+        self._total_click_goal = None
+        self._curve_type = None
+        self._links = None
+        self._weights = None
+        self._start_date_inclusive_utc = None
+        self._end_date_exclusive_utc = None
 
     @property
     def ttd_audience_id(self):
@@ -96,5 +109,56 @@ class WFProjectDisplayContainer(WFBlock):
         self._project_type = v
         self.set_parameter("", "Project Type", v)
 
+    @property
+    def total_click_goal(self):
+        return self._total_click_goal
 
+    @total_click_goal.setter
+    def total_click_goal(self, v):
+        self._total_click_goal = v
+        self.set_parameter("", "total click goal", v)
 
+    @property
+    def curve_type(self):
+        return self._curve_type
+
+    @curve_type.setter
+    def curve_type(self, v):
+        self._curve_type = v
+        self.set_parameter("", "curve type", v)
+
+    @property
+    def links(self):
+        return self._links
+
+    @links.setter
+    def links(self, v):
+        self._links = v
+        self.set_parameter("", "links", v)
+
+    @property
+    def weights(self):
+        return self._weights
+
+    @weights.setter
+    def weights(self, v):
+        self._weights = v
+        self.set_parameter("", "weights", v)
+
+    @property
+    def start_date_inclusive_utc(self):
+        return self._start_date_inclusive_utc
+
+    @start_date_inclusive_utc.setter
+    def start_date_inclusive_utc(self, v):
+        self._start_date_inclusive_utc = v
+        self.set_parameter("", "StartDateInclusiveUTC", datetime_to_wf_format(v))
+
+    @property
+    def end_date_exclusive_utc(self):
+        return self._end_date_exclusive_utc
+
+    @end_date_exclusive_utc.setter
+    def end_date_exclusive_utc(self, v):
+        self._end_date_exclusive_utc = v
+        self.set_parameter("", "EndDateExclusiveUTC", datetime_to_wf_format(v))
