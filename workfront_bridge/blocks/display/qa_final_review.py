@@ -1,4 +1,5 @@
 from workfront_bridge.blocks.base import WFBlock
+from workfront_bridge.tools import datetime_to_wf_format
 
 
 class WFDisplayQAFinalReviewBlock(WFBlock):
@@ -89,7 +90,7 @@ class WFDisplayQAFinalReviewBlock(WFBlock):
     @start_date_inclusive_utc.setter
     def start_date_inclusive_utc(self, v):
         self._start_date_inclusive_utc = v
-        self.set_parameter("Final review of Campaign in TTD", "StartDateInclusiveUTC", v)
+        self.set_parameter("Final review of Campaign in TTD", "StartDateInclusiveUTC", datetime_to_wf_format(v))
 
     @property
     def end_date_exclusive_utc(self):
@@ -98,7 +99,7 @@ class WFDisplayQAFinalReviewBlock(WFBlock):
     @end_date_exclusive_utc.setter
     def end_date_exclusive_utc(self, v):
         self._end_date_exclusive_utc = v
-        self.set_parameter("Final review of Campaign in TTD", "EndDateExclusiveUTC", v)
+        self.set_parameter("Final review of Campaign in TTD", "EndDateExclusiveUTC", datetime_to_wf_format(v))
 
     @property
     def campaign_name(self):

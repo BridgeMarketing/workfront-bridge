@@ -1,5 +1,6 @@
 from workfront.workfront import Workfront
 from workfront_bridge.projects import display_builder
+from datetime import date
 
 wf = Workfront("notifications@wf.bridgemarketing.com", 'beef6060', 'thebridgecorp.sb01.workfront.com')
 wf.login()
@@ -31,8 +32,8 @@ b.add_creative(
 (b.
  set_ttd_advertiser_id('ttd_advertiser_id').
  set_audience_name('audience_name').
- set_start_date_inclusive_utc('2018-11-01').
- set_end_date_exclusive_utc('2018-12-01').
+ set_start_date_inclusive_utc(date(2018, 11, 1)).
+ set_end_date_exclusive_utc(date(2018, 12, 1)).
  set_campaign_name('Test Campaign').
  set_ad_group_name('Test AdGroup').
  set_adg_base_bid_amount(2.4))
