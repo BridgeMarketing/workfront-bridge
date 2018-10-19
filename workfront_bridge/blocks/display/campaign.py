@@ -50,6 +50,8 @@ class WFDisplayCampaignBlock(WFBlock):
         self._daily_target_in_advertiser_currency = None
         self._daily_target_in_impressions = None
 
+        self._set_starter_task(2)
+
     @property
     def start_date_inclusive_utc(self):
         return self._start_date_inclusive_utc
