@@ -133,9 +133,37 @@ class DisplayProjectBuilder(object):
             raise WFBrigeException('The project does not have any creatives. Please use add_creative to add them.')
 
         project = WFProjectDisplayContainer(self.project_name)
+        project.ttd_audience_id = self._ttd_audience_id
+        project.ttd_campaign_id = self._ttd_campaign_id
+        project.ttd_flight_id = self._ttd_flight_id
+        project.ttd_creative_id = self._ttd_creative_id
         project.ttd_advertiser_id = self._ttd_advertiser_id
+        project.is_targeted_bonus_media = self._is_targeted_bonus_media
+        project.project_type = self._project_type
 
         order_review_block = WFDisplayOrderReviewBlock()    # Manual
+
+        data_block = WFDisplayDataBlock()
+        data_block.audience_name = self._audience_name
+
+        campaign_block = WFDisplayCampaignBlock()
+        campaign_block.start_date_inclusive_utc = self._start_date_inclusive_utc
+        campaign_block.end_date_exclusive_utc = self._end_date_exclusive_utc
+        campaign_block.campaign_name = self._campaign_name
+        campaign_block.campaign_overview = self._campaign_overview
+        campaign_block.partner_cost_percentage_fee = self._partner_cost_percentage_fee
+        campaign_block.availability = self._availability
+        campaign_block.auto_allocator = self._auto_allocator
+        campaign_block.ctv_targeting_and_attribution = self._ctv_targeting_and_attribution
+        campaign_block.pacing_mode = self._pacing_mode
+        campaign_block.partner_cpm_fee_amount = self._partner_cpm_fee_amount
+        campaign_block.partner_cpm_fee_currency = self._partner_cpm_fee_currency
+        campaign_block.partner_cpc_fee_amount = self._partner_cpc_fee_amount
+        campaign_block.partner_cpc_fee_currency = self._partner_cpc_fee_currency
+        campaign_block.max_bid_amount = self._max_bid_amount
+        campaign_block.budget_in_impressions_pre_calc = self._budget_in_impressions_pre_calc
+        campaign_block.daily_target_in_advertiser_currency = self._daily_target_in_advertiser_currency
+        campaign_block.daily_target_in_impressions = self._daily_target_in_impressions
 
         setup_block = WFDisplaySetupBlock()
         [setup_block.add_creative(
@@ -146,27 +174,64 @@ class DisplayProjectBuilder(object):
         ad_group_block = WFDisplayAdGroupBlock()
         ad_group_block.ad_group_name = self._ad_group_name
         ad_group_block.adg_base_bid_amount = self._adg_base_bid_amount
-
-        campaign_block = WFDisplayCampaignBlock()
-        campaign_block.start_date_inclusive_utc = self._start_date_inclusive_utc
-        campaign_block.end_date_exclusive_utc = self._end_date_exclusive_utc
-        campaign_block.campaign_name = self._campaign_name
-
-        data_block = WFDisplayDataBlock()
-        data_block.audience_name = self._audience_name
+        ad_group_block.ad_group_name = self._ad_group_name
+        ad_group_block.adg_base_bid_amount = self._adg_base_bid_amount
+        ad_group_block.adg_description = self._adg_description
+        ad_group_block.adg_daily_budget = self._adg_daily_budget
+        ad_group_block.adg_daily_budget_in_impressions = self._adg_daily_budget_in_impressions
+        ad_group_block.adg_budget_in_impressions_pre_calc = self._adg_budget_in_impressions_pre_calc
+        ad_group_block.adg_pacing_mode = self._adg_pacing_mode
+        ad_group_block.adg_auto_allocator_priority = self._adg_auto_allocator_priority
+        ad_group_block.adg_max_bid_amount = self._adg_max_bid_amount
+        ad_group_block.adg_frequency_period_in_minutes = self._adg_frequency_period_in_minutes
+        ad_group_block.adg_frequency_cap = self._adg_frequency_cap
+        ad_group_block.adg_frequency_pricing_slope_cpm = self._adg_frequency_pricing_slope_cpm
+        ad_group_block.adg_ctr_in_percent = self._adg_ctr_in_percent
+        ad_group_block.device_type = self._device_type
+        ad_group_block.country = self._country
+        ad_group_block.category = self._category
+        ad_group_block.ae_excluder = self._ae_excluder
 
         qa_block = WFDisplayQABlock()   # Manual
         [qa_block.add_creative(
             **{k: creative[k] for k in DisplayProjectBuilder.creative_qa_params if k in creative}
         )
          for creative in self.creatives]
-
         qa_block.add_final_review(
             start_date_inclusive_utc=self._start_date_inclusive_utc,
             end_date_exclusive_utc=self._end_date_exclusive_utc,
             campaign_name=self._campaign_name,
+            campaign_overview=self._campaign_overview,
+            partner_cost_percentage_fee=self._partner_cost_percentage_fee,
+            availability=self._availability,
+            auto_allocator=self._auto_allocator,
+            ctv_targeting_and_attribution=self._ctv_targeting_and_attribution,
+            pacing_mode=self._pacing_mode,
+            partner_cpm_fee_amount=self._partner_cpm_fee_amount,
+            partner_cpm_fee_currency=self._partner_cpm_fee_currency,
+            partner_cpc_fee_amount=self._partner_cpc_fee_amount,
+            partner_cpc_fee_currency=self._partner_cpc_fee_currency,
+            max_bid_amount=self._max_bid_amount,
+            budget_in_impressions_pre_calc=self._budget_in_impressions_pre_calc,
+            daily_target_in_advertiser_currency=self._daily_target_in_advertiser_currency,
+            daily_target_in_impressions=self._daily_target_in_impressions,
             ad_group_name=self._ad_group_name,
             adg_base_bid_amount=self._adg_base_bid_amount,
+            adg_description=self._adg_description,
+            adg_daily_budget=self._adg_daily_budget,
+            adg_daily_budget_in_impressions=self._adg_daily_budget_in_impressions,
+            adg_budget_in_impressions_pre_calc=self._adg_budget_in_impressions_pre_calc,
+            adg_pacing_mode=self._adg_pacing_mode,
+            adg_auto_allocator_priority=self._adg_auto_allocator_priority,
+            adg_max_bid_amount=self._adg_max_bid_amount,
+            adg_frequency_period_in_minutes=self._adg_frequency_period_in_minutes,
+            adg_frequency_cap=self._adg_frequency_cap,
+            adg_frequency_pricing_slope_cpm=self._adg_frequency_pricing_slope_cpm,
+            adg_ctr_in_percent=self._adg_ctr_in_percent,
+            device_type=self._device_type,
+            country=self._country,
+            category=self._category,
+            ae_excluder=self._ae_excluder,
         )
 
         launch_block = WFDisplayLaunchBlock()   # Manual
