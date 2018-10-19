@@ -1,5 +1,6 @@
 from workfront.objects import project as wf_project
 from workfront.objects.codes import WFObjCode
+from workfront.exceptions import WFException
 from workfront_bridge.exceptions import WFBrigeException
 import uuid
 
@@ -132,6 +133,8 @@ class WFBlockParser(object):
             predecessor_task = prj_tasks[len(prj_tasks) - 1]
 
         block_project = self.__create_project_from(block_to_attach)
+        if block_to_attach.blocks:
+            [self.attach_to_project(block_project, child_block) for child_block in block_to_attach.blocks]
         tasks = block_project.get_tasks()
         project.move_into(tasks)
 
