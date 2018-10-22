@@ -1,5 +1,6 @@
 from workfront.objects import project as wf_project
 from workfront.objects.codes import WFObjCode
+from workfront.exceptions import WFException
 from workfront_bridge.exceptions import WFBrigeException
 import uuid
 
