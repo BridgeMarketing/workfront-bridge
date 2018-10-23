@@ -12,7 +12,6 @@ class WFDisplayAdGroupBlock(WFBlock):
         super(WFDisplayAdGroupBlock, self).__init__(self.template_name)
         self._add_required_parameters([
             "AdGroupName",
-            "ADGBaseBidAmount",
         ])
         self._add_optional_parameters([
             "ADGDescription",
@@ -26,6 +25,7 @@ class WFDisplayAdGroupBlock(WFBlock):
             "ADGFrequencyCap",
             "ADGFrequencyPricingSlopeCPM",
             "ADGCTRInPercent",
+            "ADGBaseBidAmount",
             "Device Type",
             "Country",
             "Category",

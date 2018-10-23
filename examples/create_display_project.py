@@ -35,8 +35,7 @@ b.add_creative(
  set_start_date_inclusive_utc(date(2018, 11, 1)).
  set_end_date_exclusive_utc(date(2018, 12, 1)).
  set_campaign_name('Test Campaign').
- set_ad_group_name('Test AdGroup').
- set_adg_base_bid_amount(2.4))
+ set_ad_group_name('Test AdGroup'))
 prj = b.build()
 prj.set_fields({"portfolioID": "5b45ff9b000aa3a5db15b2e269976a4c"})
 print(prj)
