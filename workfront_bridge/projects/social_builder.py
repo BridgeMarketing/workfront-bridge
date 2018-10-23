@@ -22,7 +22,27 @@ class SocialProjectBuilder(object):
         """
         self.project_name = project_name
         self.wf = wf
-        self.creatives = []
+        self._creatives = []
+
+        # Setup block
+        self._campaign_title = None
+        self._bid_amount = None
+        self._impressions_or_clicks = None
+        self._number_of_impressions = None
+        self._budget_daily_or_lifetime = None
+        self._datetime_start = None
+        self._datetime_end = None
+        self._device_type = None
+        self._mobile_os = None
+        self._exclude_categories = None
+        self._fb_advertising_objective = None
+        self._fb_offer = None
+        self._fb_apply_block_list = None
+
+        # Creative block
+
+
+        # Launch block
 
     def add_creative(self, **kwargs):
         """Allowed kwargs:
@@ -53,10 +73,27 @@ class SocialProjectBuilder(object):
         #     raise WFBrigeException('The project does not have any creatives. Please use add_creative to add them.')
 
         project = WFProjectSocialContainer(self.project_name)
+
         # Blocks
         order_review_block = WFSocialOrderReviewBlock()
+
         data_block = WFSocialDataBlock()
+
         setup_block = WFSocialSetupBlock()
+        setup_block.campaign_title = self._campaign_title
+        setup_block.bid_amount = self._bid_amount
+        setup_block.impressions_or_clicks = self._impressions_or_clicks
+        setup_block.number_of_impressions = self._number_of_impressions
+        setup_block.budget_daily_or_lifetime = self._budget_daily_or_lifetime
+        setup_block.datetime_start = self._datetime_start
+        setup_block.datetime_end = self._datetime_end
+        setup_block.device_type = self._device_type
+        setup_block.mobile_os = self._mobile_os
+        setup_block.exclude_categories = self._exclude_categories
+        setup_block.fb_advertising_objective = self._fb_advertising_objective
+        setup_block.fb_offer = self._fb_offer
+        setup_block.fb_apply_block_list = self._fb_apply_block_list
+
         creative_image_block_1 = WFSocialCreativeImageBlock()
         creative_image_block_2 = WFSocialCreativeImageBlock()
         creative_image_block_3 = WFSocialCreativeImageBlock()

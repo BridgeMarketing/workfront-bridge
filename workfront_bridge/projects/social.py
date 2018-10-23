@@ -12,3 +12,17 @@ class WFProjectSocialContainer(WFBlock):
 
     def __init__(self, prj_name):
         super(WFProjectSocialContainer, self).__init__(self.template_name, name=prj_name)
+        self._add_optional_parameters([
+            "FB/Instagram Audience S3 URI",
+        ])
+        self._audience_s3_uri = None
+
+    @property
+    def audience_s3_uri(self):
+        return self._audience_s3_uri
+
+    @audience_s3_uri.setter
+    def audience_s3_uri(self, v):
+        self._audience_s3_uri = v
+        self.set_parameter("", "FB/Instagram Audience S3 URI", v)
+
