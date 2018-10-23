@@ -1,4 +1,5 @@
 from workfront_bridge.blocks.base import WFBlock
+from workfront_bridge.tools import datetime_to_wf_format
 
 
 class WFSocialSetupBlock(WFBlock):
@@ -16,9 +17,9 @@ class WFSocialSetupBlock(WFBlock):
         self._add_required_parameters([
             'Social Campaign Title',
             'Social Bid Amount',
-            'Social Impressions / Clicks',
+            'Social Impressions/Clicks',
             'Social Number of impressions',
-            'Social Daily / Lifetime Budget',
+            'Social Daily/Lifetime Budget',
             'Social Start Date & Time',
             'Social End Date & Time',
             'Social Device Type',
@@ -70,7 +71,7 @@ class WFSocialSetupBlock(WFBlock):
     @impressions_or_clicks.setter
     def impressions_or_clicks(self, v):
         self._impressions_or_clicks = v
-        self.set_parameter(self.create_campaign_task_name, 'Social Impressions / Clicks', v)
+        self.set_parameter(self.create_campaign_task_name, 'Social Impressions/Clicks', v)
 
     @property
     def number_of_impressions(self):
@@ -88,7 +89,7 @@ class WFSocialSetupBlock(WFBlock):
     @budget_daily_or_lifetime.setter
     def budget_daily_or_lifetime(self, v):
         self._budget_daily_or_lifetime = v
-        self.set_parameter(self.create_campaign_task_name, 'Social Daily / Lifetime Budget', v)
+        self.set_parameter(self.create_campaign_task_name, 'Social Daily/Lifetime Budget', v)
 
     @property
     def datetime_start(self):
@@ -97,7 +98,7 @@ class WFSocialSetupBlock(WFBlock):
     @datetime_start.setter
     def datetime_start(self, v):
         self._datetime_start = v
-        self.set_parameter(self.create_campaign_task_name, 'Social Start Date & Time', v)
+        self.set_parameter(self.create_campaign_task_name, 'Social Start Date & Time', datetime_to_wf_format(v))
 
     @property
     def datetime_end(self):
@@ -106,7 +107,7 @@ class WFSocialSetupBlock(WFBlock):
     @datetime_end.setter
     def datetime_end(self, v):
         self._datetime_end = v
-        self.set_parameter(self.create_campaign_task_name, 'Social End Date & Time', v)
+        self.set_parameter(self.create_campaign_task_name, 'Social End Date & Time', datetime_to_wf_format(v))
 
     @property
     def device_type(self):
@@ -133,7 +134,8 @@ class WFSocialSetupBlock(WFBlock):
     @exclude_categories.setter
     def exclude_categories(self, v):
         self._exclude_categories = v
-        self.set_parameter(self.create_campaign_task_name, 'Social Exclude Categories', v)
+        if v:
+            self.set_parameter(self.create_campaign_task_name, 'Social Exclude Categories', v)
 
     @property
     def fb_advertising_objective(self):

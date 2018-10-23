@@ -18,7 +18,6 @@ class WFSocialCreativeVideoBlock(WFBlock):
             'Social Video S3 URI',
             'Social Video Image S3 URI',
             'Social Title',
-            'Social Description',
             'FB/Instagram Call to Action',
             'FB/Instagram Facebook Platforms',
             'FB/Instagram Instagram Platforms',
@@ -35,7 +34,6 @@ class WFSocialCreativeVideoBlock(WFBlock):
         self._s3_uri = None
         self._image_s3_uri = None
         self._title = None
-        self._description = None
         self._fb_call_to_action = None
         self._fb_facebook_platforms = None
         self._fb_instagram_platforms = None
@@ -88,15 +86,6 @@ class WFSocialCreativeVideoBlock(WFBlock):
     def title(self, v):
         self._title = v
         self.set_parameter(self.create_video_task_name, 'Social Title', v)
-
-    @property
-    def description(self):
-        return self._description
-
-    @description.setter
-    def description(self, v):
-        self._description = v
-        self.set_parameter(self.create_video_task_name, 'Social Description', v)
 
     @property
     def fb_call_to_action(self):
