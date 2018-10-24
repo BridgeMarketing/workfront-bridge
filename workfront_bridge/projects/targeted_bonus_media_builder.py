@@ -41,6 +41,7 @@ class TargetedBonusMediaProjectBuilder(object):
         project.weights = "50,50"
         project.start_date_inclusive_utc = \
             datetime.datetime.strptime('28102018', "%d%m%Y").date()
+        project.is_targeted_bonus_media = "True"
         aud = WFDisplayDataBlock()
         aud.audience_name = "TBM audience"
         project.append(aud)
