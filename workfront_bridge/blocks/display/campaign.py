@@ -12,11 +12,11 @@ class WFDisplayCampaignBlock(WFBlock):
     def __init__(self):
         super(WFDisplayCampaignBlock, self).__init__(self.template_name)
         self._add_required_parameters([
-            "StartDateInclusiveUTC",
-            "EndDateExclusiveUTC",
             "Campaign Name",
         ])
         self._add_optional_parameters([
+            "StartDateInclusiveUTC",
+            "EndDateExclusiveUTC",
             "Campaign Overview",
             "PartnerCostPercentageFee",
             "Availability",

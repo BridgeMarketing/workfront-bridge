@@ -12,10 +12,10 @@ class WFDisplayCreativeUploadBlock(WFBlock):
         super(WFDisplayCreativeUploadBlock, self).__init__(self.template_name)
         self._add_required_parameters([
             "Creative Name",
-            "ClickthroughUrl",
             "LandingPageUrl",
         ])
         self._add_optional_parameters([
+            "ClickthroughUrl",
             "ImageS3URL",
             "ThirdPartyTags",
             "ThirdPartyImpressionTrackingUrl",
