@@ -31,6 +31,7 @@ class TargetedBonusMediaProjectBuilder(object):
         builder are not compatible (like missing parameters).
         @return: a WFProject object.
         """
+        # Mocked campaign.
         project = WFProjectDisplayContainer(self.project_name)
         project.ttd_advertiser_id = "xc7votu"
         project.project_type = "Display - Desktop & Mobile"
@@ -38,21 +39,18 @@ class TargetedBonusMediaProjectBuilder(object):
         project.curve_type = 1
         project.links = "https://k0ch.github.io/,https://k0ch.github.io/peppe"
         project.weights = "50,50"
-        project.start_date_inclusive_utc = datetime.datetime.strptime('28102018', "%d%m%Y").date()
-        project.end_date_exclusive_utc = datetime.datetime.strptime('30102018', "%d%m%Y").date()
+        project.start_date_inclusive_utc = \
+            datetime.datetime.strptime('28102018', "%d%m%Y").date()
         aud = WFDisplayDataBlock()
         aud.audience_name = "TBM audience"
         project.append(aud)
         camp = WFDisplayCampaignBlock()
-        camp.start_date_inclusive_utc = datetime.datetime.strptime('28102018', "%d%m%Y").date()
-        camp.end_date_exclusive_utc = datetime.datetime.strptime('30102018', "%d%m%Y").date()
         camp.campaign_name = "TBM campaign"
         camp.budget_in_impressions_pre_calc = 80000
         project.append(camp)
         setup = WFDisplayCreativeUploadBlock()
         setup.creative_name = 'TBM creative'
-        setup.clickthrough_url = 'Test Clickthrough URL 3'
-        setup.landing_page_url = 'Test Landing Page URL 3'
+        setup.landing_page_url = 'http://dummy.com'
         setup.image_s3_url = 's3://bridge-file-assets/API_files/orderID_10000129/Channel_2/mobile_banner.png'
         project.append(setup)
         adgroup = WFDisplayAdGroupBlock()
