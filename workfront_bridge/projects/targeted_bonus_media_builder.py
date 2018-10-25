@@ -8,7 +8,6 @@ from workfront_bridge.blocks.display.campaign import WFDisplayCampaignBlock
 from workfront_bridge.blocks.display.data import WFDisplayDataBlock
 from workfront_bridge.blocks.display.setup_creative_upload import \
     WFDisplayCreativeUploadBlock
-import datetime
 
 
 class TargetedBonusMediaProjectBuilder(object):
@@ -24,6 +23,54 @@ class TargetedBonusMediaProjectBuilder(object):
         self.project_name = project_name
         self.wf = wf
 
+        # project
+        self._ttd_advertiser_id = None
+        self._project_type = None
+        self._total_click_goal = None
+        self._curve_type = None
+        self._links = None
+        self._weights = None
+        self._start_date_inclusive_utc = None
+
+        # blocks
+        self._budget_in_impressions_pre_calc = None
+        self._landing_page_url = None
+        self._image_s3_url = None
+        self._adg_base_bid_amount = None
+
+    def set_ttd_advertiser_id(self, v):
+        self._ttd_advertiser_id = v
+
+    def set_project_type(self, v):
+        self._project_type = v
+
+    def set_total_click_goal(self, v):
+        self._total_click_goal = v
+
+    def set_curve_type(self, v):
+        self._curve_type = v
+
+    def set_links(self, v):
+        self._links = v
+
+    def set_weights(self, v):
+        self._weights = v
+
+    def set_start_date_inclusive_utc(self, v):
+        self._start_date_inclusive_utc = v
+
+    def set_budget_in_impressions_pre_calc(self, v):
+        self._budget_in_impressions_pre_calc = v
+
+    def set_landing_page_url(self, v):
+        self._landing_page_url = v
+
+    def set_image_s3_url(self, v):
+        self._image_s3_url = v
+
+    def set_adg_base_bid_amount(self, v):
+        self._adg_base_bid_amount = v
+
     def build(self):
         """
         @summary: Build the WF project.
@@ -33,30 +80,30 @@ class TargetedBonusMediaProjectBuilder(object):
         """
         # Mocked campaign.
         project = WFProjectDisplayContainer(self.project_name)
-        project.ttd_advertiser_id = "xc7votu"
-        project.project_type = "Display - Desktop & Mobile"
-        project.total_click_goal = 20
-        project.curve_type = 1
-        project.links = "https://k0ch.github.io/,https://k0ch.github.io/peppe"
-        project.weights = "50,50"
-        project.start_date_inclusive_utc = \
-            datetime.datetime.strptime('28102018', "%d%m%Y").date()
+        project.ttd_advertiser_id = self._ttd_advertiser_id
+        project.project_type = self._project_type
+        project.total_click_goal = self._total_click_goal
+        project.curve_type = self._curve_type
+        project.links = self._links
+        project.weights = self._weights
+        project.start_date_inclusive_utc = self._start_date_inclusive_utc
         project.is_targeted_bonus_media = "True"
         aud = WFDisplayDataBlock()
-        aud.audience_name = "TBM audience"
+        aud.audience_name = '{} audience'.format(self.project_name)
         project.append(aud)
         camp = WFDisplayCampaignBlock()
-        camp.campaign_name = "TBM campaign"
-        camp.budget_in_impressions_pre_calc = 80000
+        camp.campaign_name = '{} campaign'.format(self.project_name)
+        camp.budget_in_impressions_pre_calc = \
+            self._budget_in_impressions_pre_calc
         project.append(camp)
         setup = WFDisplayCreativeUploadBlock()
-        setup.creative_name = 'TBM creative'
-        setup.landing_page_url = 'http://dummy.com'
-        setup.image_s3_url = 's3://bridge-file-assets/API_files/orderID_10000129/Channel_2/mobile_banner.png'
+        setup.creative_name = '{} creative'.format(self.project_name)
+        setup.landing_page_url = self._landing_page_url
+        setup.image_s3_url = self._image_s3_url
         project.append(setup)
         adgroup = WFDisplayAdGroupBlock()
-        adgroup.ad_group_name = "TBM AdGroup"
-        adgroup.adg_base_bid_amount = 1.5
+        adgroup.ad_group_name = '{} AdGroup'.format(self.project_name)
+        adgroup.adg_base_bid_amount = self._adg_base_bid_amount
         project.append(adgroup)
         el = EventLoopSetupBlock()
         project.append(el)

@@ -129,21 +129,27 @@ class WFProjectDisplayContainer(WFBlock):
 
     @property
     def links(self):
-        return self._links
+        lst = self._links.split(',')
+        return lst
 
     @links.setter
     def links(self, v):
-        self._links = v
-        self.set_parameter("", "links", v)
+        strv = ','.join(v)
+        self._links = strv
+        self.set_parameter("", "links", strv)
 
     @property
     def weights(self):
-        return self._weights
+        lst = self._weights.split(',')
+        lst = map(int, lst)
+        return lst
 
     @weights.setter
     def weights(self, v):
-        self._weights = v
-        self.set_parameter("", "weights", v)
+        v = map(str, v)
+        strv = ','.join(v)
+        self._weights = strv
+        self.set_parameter("", "weights", strv)
 
     @property
     def start_date_inclusive_utc(self):
