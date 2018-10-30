@@ -1,15 +1,15 @@
 from workfront_bridge.blocks.base import WFBlock
 
 
-class WFDisplayAdGroupBlock(WFBlock):
+class WFDisplayCreateAdGroupBlock(WFBlock):
     """
-    @summary: Display Ad Group block
+    @summary: Display Create Ad Group block
     """
 
-    template_name = 'Block - Display Ad Group'
+    template_name = 'Block - Display Create Ad Group'
 
     def __init__(self):
-        super(WFDisplayAdGroupBlock, self).__init__(self.template_name)
+        super(WFDisplayCreateAdGroupBlock, self).__init__(self.template_name)
         self._add_required_parameters([
             "AdGroupName",
         ])
@@ -48,8 +48,6 @@ class WFDisplayAdGroupBlock(WFBlock):
         self._country = None
         self._category = None
         self._ae_excluder = None
-
-        self._set_starter_task(2)
 
     @property
     def ad_group_name(self):

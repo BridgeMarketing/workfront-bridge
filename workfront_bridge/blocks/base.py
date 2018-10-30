@@ -59,9 +59,9 @@ class WFBlock(object):
 
     def check_parameters(self):
         '''
-        @summary: Check that all the paramenters given, match the ones set as
+        @summary: Check that all the parameters given, match the ones set as
         required and optional for this block.
-        @raise WFBridgeExcepion: if there is a mismatch with the parameters.
+        @raise WFBridgeException: if there is a mismatch with the parameters.
         '''
         all_params = []
         for pv in self.parameters.itervalues():
@@ -126,24 +126,32 @@ class WFBlockParser(object):
 
         return prj
 
-    def attach_to_project(self, project, block_to_attach):
+    def attach_to_project(self, project, block_to_attach, indent=False):
         prj_tasks = project.get_tasks()
         predecessor_task = None
         if len(prj_tasks) > 0:
             predecessor_task = prj_tasks[len(prj_tasks) - 1]
 
         block_project = self.__create_project_from(block_to_attach)
-        tasks = block_project.get_tasks()
-        project.move_into(tasks)
+        if block_to_attach.blocks:
+            [self.attach_to_project(block_project, child_block, indent=True) for child_block in block_to_attach.blocks]
+            # As the block is empty, the first task is the title,
+            # but we have to set the starter task after appending the sub-blocks
+            block_to_attach._set_starter_task(2)
+
+        block_tasks = block_project.get_tasks()
+        project.move_into(block_tasks)
+        if indent:
+            first_task_id = prj_tasks[0].wf_id
+            [task.set_fields({"parentID": first_task_id}) for task in block_tasks]
 
         if predecessor_task:
             # get the first task that need to have a predecessor, this is to
             # avoid non automatic block task not starting. So in general, you
             # would like to have the first automatic task as a starter task
             task = self.__task_from_name(block_to_attach.starter_task_identifier,
-                                         tasks, project)
+                                         block_tasks, project)
             task.add_predecessor(predecessor_task)
-
         block_project.delete()
 
     def __create_project_from(self, block):
