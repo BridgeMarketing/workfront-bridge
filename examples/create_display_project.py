@@ -10,27 +10,27 @@ b.add_ad_group(
     creatives=[
         {
             'creative_name': 'Test Creative 1',
-            'clickthrough_url': 'Test Clickthrough URL',
-            'landing_page_url': 'Test Landing Page URL',
-            'image_s3_url': 'Test Image S3 URL',
+            'clickthrough_url': 'http://dummy.com',
+            'landing_page_url': 'http://dummy.com',
+            'image_s3_url': 's3://bridge-file-assets/API_files/orderID_10000129/Channel_2/mobile_banner.png',
             'creative_size': '300x250',
-            'third_party_impression_tracking_url': 'Third party impression tracking URL'
+            'third_party_impression_tracking_url': 'http://dummy.com'
         },
         {
             'creative_name': 'Test Creative 2',
-            'clickthrough_url': 'Test Clickthrough URL 2',
-            'landing_page_url': 'Test Landing Page URL 2',
-            'image_s3_url': 'Test Image S3 URL 2',
+            'clickthrough_url': 'http://dummy.com',
+            'landing_page_url': 'http://dummy.com',
+            'image_s3_url': 's3://bridge-file-assets/API_files/orderID_10000129/Channel_2/mobile_banner.png',
             'creative_size': '300x250',
-            'third_party_impression_tracking_url': 'Third party impression tracking URL 2'
+            'third_party_impression_tracking_url': 'http://dummy.com'
         },
         {
             'creative_name': 'Test Creative 3',
-            'clickthrough_url': 'Test Clickthrough URL 3',
-            'landing_page_url': 'Test Landing Page URL 3',
-            'image_s3_url': 'Test Image S3 URL 3',
+            'clickthrough_url': 'http://dummy.com',
+            'landing_page_url': 'http://dummy.com',
+            'image_s3_url': 's3://bridge-file-assets/API_files/orderID_10000129/Channel_2/mobile_banner.png',
             'creative_size': '300x250',
-            'third_party_impression_tracking_url': 'Third party impression tracking URL 3'
+            'third_party_impression_tracking_url': 'http://dummy.com'
         },
     ]
 )
@@ -39,32 +39,32 @@ b.add_ad_group(
     creatives=[
         {
             'creative_name': 'Test Creative 4',
-            'clickthrough_url': 'Test Clickthrough URL 4',
-            'landing_page_url': 'Test Landing Page URL 4',
-            'image_s3_url': 'Test Image S3 URL 4',
+            'clickthrough_url': 'http://dummy.com',
+            'landing_page_url': 'http://dummy.com',
+            'image_s3_url': 's3://bridge-file-assets/API_files/orderID_10000129/Channel_2/mobile_banner.png',
             'creative_size': '300x250',
-            'third_party_impression_tracking_url': 'Third party impression tracking URL 4'
+            'third_party_impression_tracking_url': 'http://dummy.com'
         },
         {
             'creative_name': 'Test Creative 5',
-            'clickthrough_url': 'Test Clickthrough URL 5',
-            'landing_page_url': 'Test Landing Page URL 5',
-            'image_s3_url': 'Test Image S3 URL 5',
+            'clickthrough_url': 'http://dummy.com',
+            'landing_page_url': 'http://dummy.com',
+            'image_s3_url': 's3://bridge-file-assets/API_files/orderID_10000129/Channel_2/mobile_banner.png',
             'creative_size': '300x250',
-            'third_party_impression_tracking_url': 'Third party impression tracking URL 5'
+            'third_party_impression_tracking_url': 'http://dummy.com'
         },
         {
             'creative_name': 'Test Creative 6',
-            'clickthrough_url': 'Test Clickthrough URL 6',
-            'landing_page_url': 'Test Landing Page URL 6',
-            'image_s3_url': 'Test Image S3 URL 6',
+            'clickthrough_url': 'http://dummy.com',
+            'landing_page_url': 'http://dummy.com',
+            'image_s3_url': 's3://bridge-file-assets/API_files/orderID_10000129/Channel_2/mobile_banner.png',
             'creative_size': '300x250',
-            'third_party_impression_tracking_url': 'Third party impression tracking URL 6'
+            'third_party_impression_tracking_url': 'http://dummy.com'
         },
     ]
 )
 (b
- .set_ttd_advertiser_id('ttd_advertiser_id')
+ .set_ttd_advertiser_id('xc7votu')
  .set_audience_name('audience_name')
  .set_start_date_inclusive_utc(date(2018, 11, 1))
  .set_end_date_exclusive_utc(date(2018, 12, 1))
@@ -72,4 +72,5 @@ b.add_ad_group(
  .set_multiple_ad_groups(True))
 prj = b.build()
 prj.set_fields({"portfolioID": "5b45ff9b000aa3a5db15b2e269976a4c"})
+prj.set_fields({"programID": "5bc777f90014f1e7b86f4e7c38dbf31a"})
 print(prj)
