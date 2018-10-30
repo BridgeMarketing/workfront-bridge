@@ -15,9 +15,9 @@ class WFDisplayQAFinalReviewBlock(WFBlock):
             "EndDateExclusiveUTC",
             "Campaign Name",
             "AdGroupName",
-            "ADGBaseBidAmount",
         ])
         self._add_optional_parameters([
+            "ADGBaseBidAmount",
             "Campaign Overview",
             "PartnerCostPercentageFee",
             "Availability",

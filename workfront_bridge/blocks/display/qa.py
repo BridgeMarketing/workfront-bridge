@@ -1,7 +1,7 @@
 from workfront_bridge.blocks.base import WFBlock
 from workfront_bridge.blocks.display.qa_creative import WFDisplayCreativeQABlock
 from workfront_bridge.blocks.display.qa_final_review import WFDisplayQAFinalReviewBlock
-from workfront_bridge.exceptions import WFBrigeException
+from workfront_bridge.tools import set_kwargs
 
 
 class WFDisplayQABlock(WFBlock):
@@ -16,22 +16,11 @@ class WFDisplayQABlock(WFBlock):
 
     def add_creative(self, **kwargs):
         creative = WFDisplayCreativeQABlock()
-        for k, v in kwargs.items():
-            try:
-                getattr(creative, k)
-            except AttributeError:
-                raise WFBrigeException('Invalid Key: {}'.format(k))
-            else:
-                setattr(creative, k, v)
+        creative = set_kwargs(creative, kwargs)
         self.append(creative)
 
     def add_final_review(self, **kwargs):
         final_review = WFDisplayQAFinalReviewBlock()
-        for k, v in kwargs.items():
-            try:
-                getattr(final_review, k)
-            except AttributeError:
-                raise WFBrigeException('Invalid Key: {}'.format(k))
-            else:
-                setattr(final_review, k, v)
+        final_review = set_kwargs(final_review, kwargs, exclude=['creatives'])
         self.append(final_review)
+
