@@ -23,6 +23,7 @@ class WFProjectDisplayContainer(WFBlock):
             "TTDFlightID",
             "TTDCreativeID",
             "IsTargetedBonusMedia",
+            "MultipleAdGroups",
             "Project Type",
             "total click goal",
             "curve type",
@@ -45,6 +46,7 @@ class WFProjectDisplayContainer(WFBlock):
         self._weights = None
         self._start_date_inclusive_utc = None
         self._end_date_exclusive_utc = None
+        self._multiple_ad_groups = None
 
     @property
     def ttd_audience_id(self):
@@ -99,6 +101,15 @@ class WFProjectDisplayContainer(WFBlock):
     def is_targeted_bonus_media(self, v):
         self._is_targeted_bonus_media = v
         self.set_parameter("", "IsTargetedBonusMedia", v)
+
+    @property
+    def multiple_ad_groups(self):
+        return self._multiple_ad_groups
+
+    @multiple_ad_groups.setter
+    def multiple_ad_groups(self, v):
+        self._multiple_ad_groups = v
+        self.set_parameter("", "MultipleAdGroups", str(v))
 
     @property
     def project_type(self):
