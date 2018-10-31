@@ -34,8 +34,6 @@ class WFSocialCreativeCarouselSlideshowBlock(WFBlock):
             'Social Carousel Description 3',
             'Social Carousel URL 3',
             'FB/Instagram Call to Action',
-            'FB/Instagram Facebook Platforms',
-            'FB/Instagram Instagram Platforms',
         ])
         self._add_optional_parameters([
             'Social Carousel S3 URI 4',
@@ -48,10 +46,6 @@ class WFSocialCreativeCarouselSlideshowBlock(WFBlock):
             'Social Carousel Title 5',
             'Social Carousel Description 5',
             'Social Carousel URL 5',
-            'FB/Instagram Facebook Page ID',
-            'FB/Instagram Instagram Account ID',
-            'FB/Instagram Audience Network Platforms',
-            'FB/Instagram Messenger Platforms',
         ])
 
         self._creatives = []
@@ -59,12 +53,6 @@ class WFSocialCreativeCarouselSlideshowBlock(WFBlock):
         self._advertiser_website_url = None
         self._carousel_or_slideshow = None
         self._fb_call_to_action = None
-        self._fb_facebook_platforms = None
-        self._fb_instagram_platforms = None
-        self._fb_facebook_page_id = None
-        self._fb_instagram_account_id = None
-        self._fb_audience_network_platforms = None
-        self._fb_instagram_messenger_platforms = None
 
     def add_creative(self, **kwargs):
         n_creatives = len(self._creatives)
@@ -134,24 +122,6 @@ class WFSocialCreativeCarouselSlideshowBlock(WFBlock):
     def fb_instagram_platforms(self, v):
         self._fb_instagram_platforms = v
         self.set_parameter(self.create_carousel_slideshow_task_name, 'FB/Instagram Instagram Platforms', v)
-
-    @property
-    def fb_facebook_page_id(self):
-        return self._fb_facebook_page_id
-
-    @fb_facebook_page_id.setter
-    def fb_facebook_page_id(self, v):
-        self._fb_facebook_page_id = v
-        self.set_parameter(self.create_carousel_slideshow_task_name, 'FB/Instagram Facebook Page ID', v)
-
-    @property
-    def fb_instagram_account_id(self):
-        return self._fb_instagram_account_id
-
-    @fb_instagram_account_id.setter
-    def fb_instagram_account_id(self, v):
-        self._fb_instagram_account_id = v
-        self.set_parameter(self.create_carousel_slideshow_task_name, 'FB/Instagram Instagram Account ID', v)
 
     @property
     def fb_audience_network_platforms(self):

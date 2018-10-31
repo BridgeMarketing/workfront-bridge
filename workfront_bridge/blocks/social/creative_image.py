@@ -19,14 +19,6 @@ class WFSocialCreativeImageBlock(WFBlock):
             'Social Title',
             'Social Description',
             'FB/Instagram Call to Action',
-            'FB/Instagram Facebook Platforms',
-            'FB/Instagram Instagram Platforms',
-        ])
-        self._add_optional_parameters([
-            'FB/Instagram Facebook Page ID',
-            'FB/Instagram Instagram Account ID',
-            'FB/Instagram Audience Network Platforms',
-            'FB/Instagram Messenger Platforms',
         ])
 
         self._message = None
@@ -35,12 +27,6 @@ class WFSocialCreativeImageBlock(WFBlock):
         self._title = None
         self._description = None
         self._fb_call_to_action = None
-        self._fb_facebook_platforms = None
-        self._fb_instagram_platforms = None
-        self._fb_facebook_page_id = None
-        self._fb_instagram_account_id = None
-        self._fb_audience_network_platforms = None
-        self._fb_instagram_messenger_platforms = None
 
     @property
     def message(self):
@@ -95,57 +81,3 @@ class WFSocialCreativeImageBlock(WFBlock):
     def fb_call_to_action(self, v):
         self._fb_call_to_action = v
         self.set_parameter(self.create_image_task_name, 'FB/Instagram Call to Action', v)
-
-    @property
-    def fb_facebook_platforms(self):
-        return self._fb_facebook_platforms
-
-    @fb_facebook_platforms.setter
-    def fb_facebook_platforms(self, v):
-        self._fb_facebook_platforms = v
-        self.set_parameter(self.create_image_task_name, 'FB/Instagram Facebook Platforms', v)
-
-    @property
-    def fb_instagram_platforms(self):
-        return self._fb_instagram_platforms
-
-    @fb_instagram_platforms.setter
-    def fb_instagram_platforms(self, v):
-        self._fb_instagram_platforms = v
-        self.set_parameter(self.create_image_task_name, 'FB/Instagram Instagram Platforms', v)
-
-    @property
-    def fb_facebook_page_id(self):
-        return self._fb_facebook_page_id
-
-    @fb_facebook_page_id.setter
-    def fb_facebook_page_id(self, v):
-        self._fb_facebook_page_id = v
-        self.set_parameter(self.create_image_task_name, 'FB/Instagram Facebook Page ID', v)
-
-    @property
-    def fb_instagram_account_id(self):
-        return self._fb_instagram_account_id
-
-    @fb_instagram_account_id.setter
-    def fb_instagram_account_id(self, v):
-        self._fb_instagram_account_id = v
-        self.set_parameter(self.create_image_task_name, 'FB/Instagram Instagram Account ID', v)
-
-    @property
-    def fb_audience_network_platforms(self):
-        return self._fb_audience_network_platforms
-
-    @fb_audience_network_platforms.setter
-    def fb_audience_network_platforms(self, v):
-        self._fb_audience_network_platforms = v
-        self.set_parameter(self.create_image_task_name, 'FB/Instagram Audience Network Platforms', v)
-
-    @property
-    def fb_instagram_messenger_platforms(self):
-        return self._fb_instagram_messenger_platforms
-
-    @fb_instagram_messenger_platforms.setter
-    def fb_instagram_messenger_platforms(self, v):
-        self._fb_instagram_messenger_platforms = v
-        self.set_parameter(self.create_image_task_name, 'FB/Instagram Messenger Platforms', v)
