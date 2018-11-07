@@ -27,6 +27,7 @@ class WFSocialSetupBlock(WFBlock):
         self._fb_advertising_objective = None
         self._fb_offer = None
         self._fb_apply_block_list = None
+        self._set_starter_task(2)
 
     @property
     def campaign_title(self):
