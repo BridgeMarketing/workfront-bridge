@@ -22,6 +22,10 @@ class SocialProjectBuilder(object):
         'device_type',
         'mobile_os',
         'exclude_categories',
+        'fb_facebook_placement',
+        'fb_instagram_placement',
+        'fb_audience_network_placement',
+        'fb_instagram_messenger_placement',
         'creatives',    # Nested
     ]
 
@@ -30,12 +34,6 @@ class SocialProjectBuilder(object):
         'message',
         'advertiser_website_url',
         'fb_call_to_action',
-        'fb_facebook_platforms',
-        'fb_instagram_platforms',
-        'fb_facebook_page_id',
-        'fb_instagram_account_id',
-        'fb_audience_network_platforms',
-        'fb_instagram_messenger_platforms',
     ]
 
     creative_image_fields = [

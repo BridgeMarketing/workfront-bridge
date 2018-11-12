@@ -143,7 +143,7 @@ class WFSocialAdGroupCreateBlock(WFBlock):
     def fb_instagram_placement(self, v):
         self._fb_instagram_placement = v
         if v:
-            self.set_parameter(self.create_ad_group_task_name, 'FB/Instagram Facebook Platforms', v)
+            self.set_parameter(self.create_ad_group_task_name, 'FB/Instagram Instagram Platforms', v)
 
     @property
     def fb_audience_placement(self):
@@ -153,7 +153,7 @@ class WFSocialAdGroupCreateBlock(WFBlock):
     def fb_audience_placement(self, v):
         self._fb_audience_placement = v
         if v:
-            self.set_parameter(self.create_ad_group_task_name, 'FB/Instagram Facebook Platforms', v)
+            self.set_parameter(self.create_ad_group_task_name, 'FB/Instagram Audience Network Platforms', v)
 
     @property
     def fb_messenger_placement(self):
@@ -163,4 +163,4 @@ class WFSocialAdGroupCreateBlock(WFBlock):
     def fb_messenger_placement(self, v):
         self._fb_messenger_placement = v
         if v:
-            self.set_parameter(self.create_ad_group_task_name, 'FB/Instagram Facebook Platforms', v)
+            self.set_parameter(self.create_ad_group_task_name, 'FB/Instagram Messenger Platforms', v)
