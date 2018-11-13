@@ -97,7 +97,7 @@ class SocialProjectBuilder(object):
                     creative_allowed_keys = self.creative_type_allowed_fields[creative['creative_type']]
                     for creative_key, creative_value in creative.items():
                         if creative_key not in creative_allowed_keys:
-                            raise WFBrigeException('Invalid Key {}'.format(k))
+                            raise WFBrigeException('Invalid Creative Key {}'.format(creative_key))
         self._ad_groups.append(ad_group)
 
     def build(self):
