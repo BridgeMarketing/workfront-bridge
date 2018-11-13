@@ -17,6 +17,8 @@ class WFSocialCreativeVideoBlock(WFBlock):
             'Social Advertiser Website URL',
             'Social Video S3 URI',
             'Social Video Image S3 URI',
+        ])
+        self._add_optional_parameters([
             'Social Title',
             'FB/Instagram Call to Action',
         ])

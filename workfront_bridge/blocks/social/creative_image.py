@@ -16,6 +16,8 @@ class WFSocialCreativeImageBlock(WFBlock):
             'Social Creative Message',
             'Social Advertiser Website URL',
             'Social Image S3 URI',
+        ])
+        self._add_optional_parameters([
             'Social Title',
             'Social Description',
             'FB/Instagram Call to Action',
