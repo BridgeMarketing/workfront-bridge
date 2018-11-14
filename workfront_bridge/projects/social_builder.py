@@ -22,10 +22,7 @@ class SocialProjectBuilder(object):
         'device_type',
         'mobile_os',
         'exclude_categories',
-        'fb_facebook_placement',
-        'fb_instagram_placement',
-        'fb_audience_network_placement',
-        'fb_instagram_messenger_placement',
+        'fb_placement',
         'creatives',    # Nested
     ]
 

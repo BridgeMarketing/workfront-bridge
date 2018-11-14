@@ -11,7 +11,7 @@ b = social_builder.SocialProjectBuilder(wf, "Test - Social project")
  .set_campaign_title('Test Social Campaign Title')
  .set_fb_page_id('1355309931178027'))
 ad_group_1 = {
-    'fb_facebook_placement': 'Feeds',
+    'fb_placement': 'FB Feeds',
     'number_of_impressions': 1000,
     'impressions_or_clicks': 'Impressions',
     'datetime_start': datetime(2018, 11, 1, 10, 0, 0),
@@ -43,7 +43,7 @@ ad_group_1 = {
 }
 b.add_ad_group(ad_group_1)
 ad_group_2 = {
-    'fb_facebook_placement': 'Right Column',
+    'fb_placement': 'FB Right Column',
     'number_of_impressions': 1000,
     'impressions_or_clicks': 'Impressions',
     'datetime_start': datetime(2018, 11, 1, 10, 0, 0),
@@ -75,7 +75,7 @@ ad_group_2 = {
 }
 b.add_ad_group(ad_group_2)
 ad_group_3 = {
-    'fb_instagram_placement': 'Feed',
+    'fb_placement': 'IG Feed',
     'number_of_impressions': 1500,
     'impressions_or_clicks': 'Impressions',
     'datetime_start': datetime(2018, 11, 1, 10, 0, 0),

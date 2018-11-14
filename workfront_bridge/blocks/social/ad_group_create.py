@@ -21,13 +21,10 @@ class WFSocialAdGroupCreateBlock(WFBlock):
             'Social End Date & Time',
             'Social Device Type',
             'Social Mobile Operating System',
+            'FB/Instagram Placement',
         ])
         self._add_optional_parameters([
             'Social Exclude Categories',
-            'FB/Instagram Facebook Platforms',
-            'FB/Instagram Instagram Platforms',
-            'FB/Instagram Audience Network Platforms',
-            'FB/Instagram Messenger Platforms'
         ])
         self._bid_amount = None
         self._impressions_or_clicks = None
@@ -38,10 +35,7 @@ class WFSocialAdGroupCreateBlock(WFBlock):
         self._device_type = None
         self._mobile_os = None
         self._exclude_categories = None
-        self._fb_facebook_placement = None
-        self._fb_instagram_placement = None
-        self._fb_audience_placement = None
-        self._fb_messenger_placement = None
+        self._fb_placement = None
 
     @property
     def bid_amount(self):
@@ -126,41 +120,11 @@ class WFSocialAdGroupCreateBlock(WFBlock):
             self.set_parameter(self.create_ad_group_task_name, 'Social Exclude Categories', v)
 
     @property
-    def fb_facebook_placement(self):
-        return self._fb_facebook_placement
+    def fb_placement(self):
+        return self._fb_placement
 
-    @fb_facebook_placement.setter
-    def fb_facebook_placement(self, v):
-        self._fb_facebook_placement = v
+    @fb_placement.setter
+    def fb_placement(self, v):
+        self._fb_placement = v
         if v:
-            self.set_parameter(self.create_ad_group_task_name, 'FB/Instagram Facebook Platforms', v)
-
-    @property
-    def fb_instagram_placement(self):
-        return self._fb_instagram_placement
-
-    @fb_instagram_placement.setter
-    def fb_instagram_placement(self, v):
-        self._fb_instagram_placement = v
-        if v:
-            self.set_parameter(self.create_ad_group_task_name, 'FB/Instagram Instagram Platforms', v)
-
-    @property
-    def fb_audience_placement(self):
-        return self._fb_audience_placement
-
-    @fb_audience_placement.setter
-    def fb_audience_placement(self, v):
-        self._fb_audience_placement = v
-        if v:
-            self.set_parameter(self.create_ad_group_task_name, 'FB/Instagram Audience Network Platforms', v)
-
-    @property
-    def fb_messenger_placement(self):
-        return self._fb_messenger_placement
-
-    @fb_messenger_placement.setter
-    def fb_messenger_placement(self, v):
-        self._fb_messenger_placement = v
-        if v:
-            self.set_parameter(self.create_ad_group_task_name, 'FB/Instagram Messenger Platforms', v)
+            self.set_parameter(self.create_ad_group_task_name, 'FB/Instagram Placement', v)
