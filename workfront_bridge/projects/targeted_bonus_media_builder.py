@@ -78,7 +78,6 @@ class TargetedBonusMediaProjectBuilder(object):
         builder are not compatible (like missing parameters).
         @return: a WFProject object.
         """
-        # Mocked campaign.
         project = WFProjectDisplayContainer(self.project_name)
         project.ttd_advertiser_id = self._ttd_advertiser_id
         project.project_type = self._project_type
@@ -88,6 +87,11 @@ class TargetedBonusMediaProjectBuilder(object):
         project.weights = self._weights
         project.start_date_inclusive_utc = self._start_date_inclusive_utc
         project.is_targeted_bonus_media = "True"
+        project.click_tier = self._click_tier
+        project.click_tier_value = self._click_tier_value
+        project.open_tier = self._open_tier
+        project.open_tier_value = self._open_tier_value
+        project.overage = self._overage
         aud = WFDisplayDataBlock()
         aud.audience_name = '{} audience'.format(self.project_name)
         project.append(aud)

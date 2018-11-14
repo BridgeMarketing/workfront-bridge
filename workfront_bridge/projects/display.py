@@ -30,7 +30,12 @@ class WFProjectDisplayContainer(WFBlock):
             "links",
             "weights",
             "StartDateInclusiveUTC",
-            "EndDateExclusiveUTC"
+            "EndDateExclusiveUTC",
+            "Click Tier",
+            "Click Tier Value",
+            "Open Tier",
+            "Open Tier Value",
+            "Overage"
         ])
 
         self._ttd_audience_id = None
