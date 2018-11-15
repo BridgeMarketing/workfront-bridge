@@ -10,7 +10,7 @@ prj = (b.set_audience_name('Sarlanga')
                                 '/5b575e51000bcb1d2cea4a5532889aee_26_20180828190332.csv')
         .set_suppression_file_path("s3://bridge-file-assets/suppression_test.csv")
         .set_audience_identifier("email") #oneAudienceID or email or deviceID
-
+        .set_suppression_type("one_per_person")
         .build())
 
 print(prj)
