@@ -31,12 +31,32 @@ class TargetedBonusMediaProjectBuilder(object):
         self._links = None
         self._weights = None
         self._start_date_inclusive_utc = None
+        self._open_tier = None
+        self._open_tier_value = None
+        self._click_tier = None
+        self._click_tier_value = None
+        self._overage = None
 
         # blocks
         self._budget_in_impressions_pre_calc = None
         self._landing_page_url = None
         self._image_s3_url = None
         self._adg_base_bid_amount = None
+
+    def set_open_tier(self, v):
+        self._open_tier = v
+
+    def set_open_tier_value(self, v):
+        self._open_tier_value = v
+
+    def set_click_tier(self, v):
+        self._click_tier = v
+
+    def set_click_tier_value(self, v):
+        self._click_tier_value = v
+
+    def set_overage(self, v):
+        self._overage = v
 
     def set_ttd_advertiser_id(self, v):
         self._ttd_advertiser_id = v
