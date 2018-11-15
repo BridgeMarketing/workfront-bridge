@@ -35,7 +35,7 @@ class TargetedBonusMediaProjectBuilder(object):
         self._open_tier_value = None
         self._click_tier = None
         self._click_tier_value = None
-        self._overage = None
+        self._overage = False
 
         # blocks
         self._budget_in_impressions_pre_calc = None
