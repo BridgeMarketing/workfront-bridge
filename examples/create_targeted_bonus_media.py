@@ -22,10 +22,10 @@ b.set_image_s3_url('s3://bridge-file-assets/API_files/orderID_10000129/Channel_2
 b.set_landing_page_url('http://dummy.com')
 b.set_adg_base_bid_amount(1.5)
 b.set_budget_in_impressions_pre_calc(80000)
-# b.set_open_tier('O1')
-# b.set_open_tier_value(0.10)
-# b.set_click_tier('CL')
-# b.set_click_tier_value(0.05)
+b.set_open_tier('O1')
+b.set_open_tier_value(0.10)
+b.set_click_tier('CL')
+b.set_click_tier_value(0.05)
 
 prj = b.build()
 

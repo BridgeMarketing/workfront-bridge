@@ -99,7 +99,7 @@ class WFProjectDisplayContainer(WFBlock):
         return self._overage
 
     @overage.setter
-    def overate(self, v):
+    def overage(self, v):
         self._overage = v
         self.set_parameter("", "Overage", str(v))
 
