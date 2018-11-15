@@ -26,6 +26,7 @@ class MatchAndExportProjectBuilder(object):
         # Block
         self.audience_name = None
         self.suppression_file_path = None
+        self.suppression_type = None
 
     def set_audience_id(self, audience_id):
         self.audience_id = audience_id
@@ -55,6 +56,10 @@ class MatchAndExportProjectBuilder(object):
         self.audience_identifier = audience_identifier
         return self
 
+    def set_suppression_type(self, suppression_type):
+        self.suppression_type = suppression_type
+        return self
+
     def build(self):
         """
         @summary: Build the WF project.
@@ -75,6 +80,7 @@ class MatchAndExportProjectBuilder(object):
         block.audience_file_path = self.audience_file_path
         block.suppression_file_path = self.suppression_file_path
         block.audience_identifier = self.audience_identifier
+        block.suppression_type = self.suppression_type
         project.append(block)
 
         parser = WFBlockParser(self.wf)
