@@ -3,11 +3,9 @@ from workfront_bridge.projects.display import \
     WFProjectDisplayContainer
 from workfront_bridge.blocks.bonus_media.event_loop import \
     EventLoopSetupBlock
-from workfront_bridge.blocks.display.ad_group import WFDisplayAdGroupBlock
+from workfront_bridge.blocks.display.ad_group_setup import WFDisplayAdGroupSetupBlock
 from workfront_bridge.blocks.display.campaign import WFDisplayCampaignBlock
 from workfront_bridge.blocks.display.data import WFDisplayDataBlock
-from workfront_bridge.blocks.display.setup_creative_upload import \
-    WFDisplayCreativeUploadBlock
 
 
 class TargetedBonusMediaProjectBuilder(object):
@@ -120,15 +118,19 @@ class TargetedBonusMediaProjectBuilder(object):
         camp.budget_in_impressions_pre_calc = \
             self._budget_in_impressions_pre_calc
         project.append(camp)
-        setup = WFDisplayCreativeUploadBlock()
-        setup.creative_name = '{} creative'.format(self.project_name)
-        setup.landing_page_url = self._landing_page_url
-        setup.image_s3_url = self._image_s3_url
-        project.append(setup)
-        adgroup = WFDisplayAdGroupBlock()
-        adgroup.ad_group_name = '{} AdGroup'.format(self.project_name)
-        adgroup.adg_base_bid_amount = self._adg_base_bid_amount
-        project.append(adgroup)
+
+        ad_group_setup_block = WFDisplayAdGroupSetupBlock()
+        ad_group_setup_block.add_creative(
+            creative_name='{} creative'.format(self.project_name),
+            landing_page_url=self._landing_page_url,
+            image_s3_url=self._image_s3_url,
+        )
+        ad_group_setup_block.add_ad_group(
+            ad_group_name='{} AdGroup'.format(self.project_name),
+            adg_base_bid_amount=self._adg_base_bid_amount,
+        )
+        project.append(ad_group_setup_block)
+
         el = EventLoopSetupBlock()
         project.append(el)
 
