@@ -30,7 +30,12 @@ class WFProjectDisplayContainer(WFBlock):
             "links",
             "weights",
             "StartDateInclusiveUTC",
-            "EndDateExclusiveUTC"
+            "EndDateExclusiveUTC",
+            "Click Tier",
+            "Click Tier Value",
+            "Open Tier",
+            "Open Tier Value",
+            "Overage"
         ])
 
         self._ttd_audience_id = None
@@ -47,6 +52,56 @@ class WFProjectDisplayContainer(WFBlock):
         self._start_date_inclusive_utc = None
         self._end_date_exclusive_utc = None
         self._multiple_ad_groups = None
+        self._click_tier = None
+        self._click_tier_value = None
+        self._open_tier = None
+        self._open_tier_value = None
+        self._overage = None
+
+    @property
+    def click_tier(self):
+        return self._click_tier
+
+    @click_tier.setter
+    def click_tier(self, v):
+        self._click_tier = v
+        self.set_parameter("", "Click Tier", v)
+
+    @property
+    def click_tier_value(self):
+        return self._click_tier_value
+
+    @click_tier_value.setter
+    def click_tier_value(self, v):
+        self._click_tier_value = v
+        self.set_parameter("", "Click Tier Value", v)
+
+    @property
+    def open_tier(self):
+        return self._open_tier
+
+    @open_tier.setter
+    def open_tier(self, v):
+        self._open_tier = v
+        self.set_parameter("", "Open Tier", v)
+
+    @property
+    def open_tier_value(self):
+        return self._open_tier_value
+
+    @open_tier_value.setter
+    def open_tier_value(self, v):
+        self._open_tier_value = v
+        self.set_parameter("", "Open Tier Value", v)
+
+    @property
+    def overage(self):
+        return self._overage
+
+    @overage.setter
+    def overage(self, v):
+        self._overage = v
+        self.set_parameter("", "Overage", str(v))
 
     @property
     def ttd_audience_id(self):
