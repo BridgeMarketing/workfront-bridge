@@ -234,7 +234,7 @@ class DisplayProjectBuilder(object):
                 'daily_target_in_advertiser_currency': self._daily_target_in_advertiser_currency,
                 'daily_target_in_impressions': self._daily_target_in_impressions,
             })
-            qa_block.add_final_review(**ad_group)
+            qa_block.add_ad_group(**ad_group)
             qa_blocks.append(qa_block)
 
         launch_block = WFDisplayLaunchBlock()   # Manual

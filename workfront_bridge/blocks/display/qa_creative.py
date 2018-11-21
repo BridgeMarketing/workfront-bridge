@@ -3,10 +3,11 @@ from workfront_bridge.blocks.base import WFBlock
 
 class WFDisplayCreativeQABlock(WFBlock):
     """
-    @summary: Display Creative Upload block
+    @summary: Display QA Creative block
     """
 
-    template_name = 'Block - Display Creative QA'
+    template_name = 'Block - Display QA Creative'
+    creative_qa_task_name = 'Creative QA'
 
     def __init__(self):
         super(WFDisplayCreativeQABlock, self).__init__(self.template_name)
@@ -36,7 +37,7 @@ class WFDisplayCreativeQABlock(WFBlock):
     @creative_name.setter
     def creative_name(self, v):
         self._creative_name = v
-        self.set_parameter("Creative QA", "Creative Name", v)
+        self.set_parameter(self.creative_qa_task_name, "Creative Name", v)
 
     @property
     def image_s3_url(self):
@@ -45,7 +46,7 @@ class WFDisplayCreativeQABlock(WFBlock):
     @image_s3_url.setter
     def image_s3_url(self, v):
         self._image_s3_url = v
-        self.set_parameter("Creative QA", "ImageS3URL", v)
+        self.set_parameter(self.creative_qa_task_name, "ImageS3URL", v)
 
     @property
     def creative_size(self):
@@ -54,7 +55,7 @@ class WFDisplayCreativeQABlock(WFBlock):
     @creative_size.setter
     def creative_size(self, v):
         self._creative_size = v
-        self.set_parameter("Creative QA", "Creative Size", v)
+        self.set_parameter(self.creative_qa_task_name, "Creative Size", v)
 
     @property
     def clickthrough_url(self):
@@ -63,7 +64,7 @@ class WFDisplayCreativeQABlock(WFBlock):
     @clickthrough_url.setter
     def clickthrough_url(self, v):
         self._clickthrough_url = v
-        self.set_parameter("Creative QA", "ClickthroughUrl", v)
+        self.set_parameter(self.creative_qa_task_name, "ClickthroughUrl", v)
 
     @property
     def landing_page_url(self):
@@ -72,7 +73,7 @@ class WFDisplayCreativeQABlock(WFBlock):
     @landing_page_url.setter
     def landing_page_url(self, v):
         self._landing_page_url = v
-        self.set_parameter("Creative QA", "LandingPageUrl", v)
+        self.set_parameter(self.creative_qa_task_name, "LandingPageUrl", v)
 
     @property
     def third_party_tags(self):
@@ -81,7 +82,7 @@ class WFDisplayCreativeQABlock(WFBlock):
     @third_party_tags.setter
     def third_party_tags(self, v):
         self._third_party_tags = v
-        self.set_parameter("Creative QA", "ThirdPartyTags", v)
+        self.set_parameter(self.creative_qa_task_name, "ThirdPartyTags", v)
 
     @property
     def third_party_impression_tracking_url(self):
@@ -90,4 +91,4 @@ class WFDisplayCreativeQABlock(WFBlock):
     @third_party_impression_tracking_url.setter
     def third_party_impression_tracking_url(self, v):
         self._third_party_impression_tracking_url = v
-        self.set_parameter("Creative QA", "ThirdPartyImpressionTrackingUrl", v)
+        self.set_parameter(self.creative_qa_task_name, "ThirdPartyImpressionTrackingUrl", v)

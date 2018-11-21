@@ -2,14 +2,15 @@ from workfront_bridge.blocks.base import WFBlock
 from workfront_bridge.tools import datetime_to_wf_format
 
 
-class WFDisplayQAFinalReviewBlock(WFBlock):
+class WFDisplayQAAdGroupBlock(WFBlock):
     """
-    @summary: Display QA Final Review block
+    @summary: Display QA Ad Group block
     """
-    template_name = 'Block - Display QA Final Review'
+    template_name = 'Block - Display QA Ad Group'
+    ad_group_qa_task_name = 'Ad Group QA'
 
     def __init__(self):
-        super(WFDisplayQAFinalReviewBlock, self).__init__(self.template_name)
+        super(WFDisplayQAAdGroupBlock, self).__init__(self.template_name)
         self._add_required_parameters([
             "StartDateInclusiveUTC",
             "EndDateExclusiveUTC",
@@ -90,7 +91,7 @@ class WFDisplayQAFinalReviewBlock(WFBlock):
     @start_date_inclusive_utc.setter
     def start_date_inclusive_utc(self, v):
         self._start_date_inclusive_utc = v
-        self.set_parameter("Final review of Campaign in TTD", "StartDateInclusiveUTC", datetime_to_wf_format(v))
+        self.set_parameter(self.ad_group_qa_task_name, "StartDateInclusiveUTC", datetime_to_wf_format(v))
 
     @property
     def end_date_exclusive_utc(self):
@@ -99,7 +100,7 @@ class WFDisplayQAFinalReviewBlock(WFBlock):
     @end_date_exclusive_utc.setter
     def end_date_exclusive_utc(self, v):
         self._end_date_exclusive_utc = v
-        self.set_parameter("Final review of Campaign in TTD", "EndDateExclusiveUTC", datetime_to_wf_format(v))
+        self.set_parameter(self.ad_group_qa_task_name, "EndDateExclusiveUTC", datetime_to_wf_format(v))
 
     @property
     def campaign_name(self):
@@ -108,7 +109,7 @@ class WFDisplayQAFinalReviewBlock(WFBlock):
     @campaign_name.setter
     def campaign_name(self, v):
         self._campaign_name = v
-        self.set_parameter("Final review of Campaign in TTD", "Campaign Name", v)
+        self.set_parameter(self.ad_group_qa_task_name, "Campaign Name", v)
 
     @property
     def campaign_overview(self):
@@ -117,7 +118,7 @@ class WFDisplayQAFinalReviewBlock(WFBlock):
     @campaign_overview.setter
     def campaign_overview(self, v):
         self._campaign_overview = v
-        self.set_parameter("Final review of Campaign in TTD", "Campaign Overview", v)
+        self.set_parameter(self.ad_group_qa_task_name, "Campaign Overview", v)
 
     @property
     def partner_cost_percentage_fee(self):
@@ -126,7 +127,7 @@ class WFDisplayQAFinalReviewBlock(WFBlock):
     @partner_cost_percentage_fee.setter
     def partner_cost_percentage_fee(self, v):
         self._partner_cost_percentage_fee = v
-        self.set_parameter("Final review of Campaign in TTD", "PartnerCostPercentageFee", v)
+        self.set_parameter(self.ad_group_qa_task_name, "PartnerCostPercentageFee", v)
 
     @property
     def availability(self):
@@ -135,7 +136,7 @@ class WFDisplayQAFinalReviewBlock(WFBlock):
     @availability.setter
     def availability(self, v):
         self._availability = v
-        self.set_parameter("Final review of Campaign in TTD", "Availability", v)
+        self.set_parameter(self.ad_group_qa_task_name, "Availability", v)
 
     @property
     def auto_allocator(self):
@@ -144,7 +145,7 @@ class WFDisplayQAFinalReviewBlock(WFBlock):
     @auto_allocator.setter
     def auto_allocator(self, v):
         self._auto_allocator = v
-        self.set_parameter("Final review of Campaign in TTD", "AutoAllocator", v)
+        self.set_parameter(self.ad_group_qa_task_name, "AutoAllocator", v)
 
     @property
     def ctv_targeting_and_attribution(self):
@@ -153,7 +154,7 @@ class WFDisplayQAFinalReviewBlock(WFBlock):
     @ctv_targeting_and_attribution.setter
     def ctv_targeting_and_attribution(self, v):
         self._ctv_targeting_and_attribution = v
-        self.set_parameter("Final review of Campaign in TTD", "CtvTargetingAndAttribution", v)
+        self.set_parameter(self.ad_group_qa_task_name, "CtvTargetingAndAttribution", v)
 
     @property
     def pacing_mode(self):
@@ -162,7 +163,7 @@ class WFDisplayQAFinalReviewBlock(WFBlock):
     @pacing_mode.setter
     def pacing_mode(self, v):
         self._pacing_mode = v
-        self.set_parameter("Final review of Campaign in TTD", "PacingMode", v)
+        self.set_parameter(self.ad_group_qa_task_name, "PacingMode", v)
 
     @property
     def partner_cpm_fee_amount(self):
@@ -171,7 +172,7 @@ class WFDisplayQAFinalReviewBlock(WFBlock):
     @partner_cpm_fee_amount.setter
     def partner_cpm_fee_amount(self, v):
         self._partner_cpm_fee_amount = v
-        self.set_parameter("Final review of Campaign in TTD", "PartnerCPMFeeAmount", v)
+        self.set_parameter(self.ad_group_qa_task_name, "PartnerCPMFeeAmount", v)
 
     @property
     def partner_cpm_fee_currency(self):
@@ -180,7 +181,7 @@ class WFDisplayQAFinalReviewBlock(WFBlock):
     @partner_cpm_fee_currency.setter
     def partner_cpm_fee_currency(self, v):
         self._partner_cpm_fee_currency = v
-        self.set_parameter("Final review of Campaign in TTD", "PartnerCPMFeeCurrency", v)
+        self.set_parameter(self.ad_group_qa_task_name, "PartnerCPMFeeCurrency", v)
 
     @property
     def partner_cpc_fee_amount(self):
@@ -189,7 +190,7 @@ class WFDisplayQAFinalReviewBlock(WFBlock):
     @partner_cpc_fee_amount.setter
     def partner_cpc_fee_amount(self, v):
         self._partner_cpc_fee_amount = v
-        self.set_parameter("Final review of Campaign in TTD", "PartnerCPCFeeAmount", v)
+        self.set_parameter(self.ad_group_qa_task_name, "PartnerCPCFeeAmount", v)
 
     @property
     def partner_cpc_fee_currency(self):
@@ -198,7 +199,7 @@ class WFDisplayQAFinalReviewBlock(WFBlock):
     @partner_cpc_fee_currency.setter
     def partner_cpc_fee_currency(self, v):
         self._partner_cpc_fee_currency = v
-        self.set_parameter("Final review of Campaign in TTD", "PartnerCPCFeeCurrency", v)
+        self.set_parameter(self.ad_group_qa_task_name, "PartnerCPCFeeCurrency", v)
 
     @property
     def max_bid_amount(self):
@@ -207,7 +208,7 @@ class WFDisplayQAFinalReviewBlock(WFBlock):
     @max_bid_amount.setter
     def max_bid_amount(self, v):
         self._max_bid_amount = v
-        self.set_parameter("Final review of Campaign in TTD", "MaxBidAmount", v)
+        self.set_parameter(self.ad_group_qa_task_name, "MaxBidAmount", v)
 
     @property
     def budget_in_impressions_pre_calc(self):
@@ -216,7 +217,7 @@ class WFDisplayQAFinalReviewBlock(WFBlock):
     @budget_in_impressions_pre_calc.setter
     def budget_in_impressions_pre_calc(self, v):
         self._budget_in_impressions_pre_calc = v
-        self.set_parameter("Final review of Campaign in TTD", "BudgetInImpressions_preCalc", v)
+        self.set_parameter(self.ad_group_qa_task_name, "BudgetInImpressions_preCalc", v)
 
     @property
     def daily_target_in_advertiser_currency(self):
@@ -225,7 +226,7 @@ class WFDisplayQAFinalReviewBlock(WFBlock):
     @daily_target_in_advertiser_currency.setter
     def daily_target_in_advertiser_currency(self, v):
         self._daily_target_in_advertiser_currency = v
-        self.set_parameter("Final review of Campaign in TTD", "DailyTargetInAdvertiserCurrency", v)
+        self.set_parameter(self.ad_group_qa_task_name, "DailyTargetInAdvertiserCurrency", v)
 
     @property
     def daily_target_in_impressions(self):
@@ -234,7 +235,7 @@ class WFDisplayQAFinalReviewBlock(WFBlock):
     @daily_target_in_impressions.setter
     def daily_target_in_impressions(self, v):
         self._daily_target_in_impressions = v
-        self.set_parameter("Final review of Campaign in TTD", "DailyTargetInImpressions", v)
+        self.set_parameter(self.ad_group_qa_task_name, "DailyTargetInImpressions", v)
 
     @property
     def ad_group_name(self):
@@ -243,7 +244,7 @@ class WFDisplayQAFinalReviewBlock(WFBlock):
     @ad_group_name.setter
     def ad_group_name(self, v):
         self._ad_group_name = v
-        self.set_parameter("Final review of Campaign in TTD", "AdGroupName", v)
+        self.set_parameter(self.ad_group_qa_task_name, "AdGroupName", v)
 
     @property
     def adg_base_bid_amount(self):
@@ -252,7 +253,7 @@ class WFDisplayQAFinalReviewBlock(WFBlock):
     @adg_base_bid_amount.setter
     def adg_base_bid_amount(self, v):
         self._adg_base_bid_amount = v
-        self.set_parameter("Final review of Campaign in TTD", "ADGBaseBidAmount", v)
+        self.set_parameter(self.ad_group_qa_task_name, "ADGBaseBidAmount", v)
 
     @property
     def adg_description(self):
@@ -261,7 +262,7 @@ class WFDisplayQAFinalReviewBlock(WFBlock):
     @adg_description.setter
     def adg_description(self, v):
         self._adg_description = v
-        self.set_parameter("Final review of Campaign in TTD", "ADGDescription", v)
+        self.set_parameter(self.ad_group_qa_task_name, "ADGDescription", v)
 
     @property
     def adg_daily_budget(self):
@@ -270,7 +271,7 @@ class WFDisplayQAFinalReviewBlock(WFBlock):
     @adg_daily_budget.setter
     def adg_daily_budget(self, v):
         self._adg_daily_budget = v
-        self.set_parameter("Final review of Campaign in TTD", "ADGDailyBudget", v)
+        self.set_parameter(self.ad_group_qa_task_name, "ADGDailyBudget", v)
 
     @property
     def adg_daily_budget_in_impressions(self):
@@ -279,7 +280,7 @@ class WFDisplayQAFinalReviewBlock(WFBlock):
     @adg_daily_budget_in_impressions.setter
     def adg_daily_budget_in_impressions(self, v):
         self._adg_daily_budget_in_impressions = v
-        self.set_parameter("Final review of Campaign in TTD", "ADGDailyBudgetInImpressions", v)
+        self.set_parameter(self.ad_group_qa_task_name, "ADGDailyBudgetInImpressions", v)
 
     @property
     def adg_budget_in_impressions_pre_calc(self):
@@ -288,7 +289,7 @@ class WFDisplayQAFinalReviewBlock(WFBlock):
     @adg_budget_in_impressions_pre_calc.setter
     def adg_budget_in_impressions_pre_calc(self, v):
         self._adg_budget_in_impressions_pre_calc = v
-        self.set_parameter("Final review of Campaign in TTD", "ADGBudgetInImpressions_preCalc", v)
+        self.set_parameter(self.ad_group_qa_task_name, "ADGBudgetInImpressions_preCalc", v)
 
     @property
     def adg_pacing_mode(self):
@@ -297,7 +298,7 @@ class WFDisplayQAFinalReviewBlock(WFBlock):
     @adg_pacing_mode.setter
     def adg_pacing_mode(self, v):
         self._adg_pacing_mode = v
-        self.set_parameter("Final review of Campaign in TTD", "ADGPacingMode", v)
+        self.set_parameter(self.ad_group_qa_task_name, "ADGPacingMode", v)
 
     @property
     def adg_auto_allocator_priority(self):
@@ -306,7 +307,7 @@ class WFDisplayQAFinalReviewBlock(WFBlock):
     @adg_auto_allocator_priority.setter
     def adg_auto_allocator_priority(self, v):
         self._adg_auto_allocator_priority = v
-        self.set_parameter("Final review of Campaign in TTD", "ADGAutoAllocatorPriority", v)
+        self.set_parameter(self.ad_group_qa_task_name, "ADGAutoAllocatorPriority", v)
 
     @property
     def adg_max_bid_amount(self):
@@ -315,7 +316,7 @@ class WFDisplayQAFinalReviewBlock(WFBlock):
     @adg_max_bid_amount.setter
     def adg_max_bid_amount(self, v):
         self._adg_max_bid_amount = v
-        self.set_parameter("Final review of Campaign in TTD", "ADGMaxBidAmount", v)
+        self.set_parameter(self.ad_group_qa_task_name, "ADGMaxBidAmount", v)
 
     @property
     def adg_frequency_period_in_minutes(self):
@@ -324,7 +325,7 @@ class WFDisplayQAFinalReviewBlock(WFBlock):
     @adg_frequency_period_in_minutes.setter
     def adg_frequency_period_in_minutes(self, v):
         self._adg_frequency_period_in_minutes = v
-        self.set_parameter("Final review of Campaign in TTD", "ADGFrequencyPeriodInMinutes", v)
+        self.set_parameter(self.ad_group_qa_task_name, "ADGFrequencyPeriodInMinutes", v)
 
     @property
     def adg_frequency_cap(self):
@@ -333,7 +334,7 @@ class WFDisplayQAFinalReviewBlock(WFBlock):
     @adg_frequency_cap.setter
     def adg_frequency_cap(self, v):
         self._adg_frequency_cap = v
-        self.set_parameter("Final review of Campaign in TTD", "ADGFrequencyCap", v)
+        self.set_parameter(self.ad_group_qa_task_name, "ADGFrequencyCap", v)
 
     @property
     def adg_frequency_pricing_slope_cpm(self):
@@ -342,7 +343,7 @@ class WFDisplayQAFinalReviewBlock(WFBlock):
     @adg_frequency_pricing_slope_cpm.setter
     def adg_frequency_pricing_slope_cpm(self, v):
         self._adg_frequency_pricing_slope_cpm = v
-        self.set_parameter("Final review of Campaign in TTD", "ADGFrequencyPricingSlopeCPM", v)
+        self.set_parameter(self.ad_group_qa_task_name, "ADGFrequencyPricingSlopeCPM", v)
 
     @property
     def adg_ctr_in_percent(self):
@@ -351,7 +352,7 @@ class WFDisplayQAFinalReviewBlock(WFBlock):
     @adg_ctr_in_percent.setter
     def adg_ctr_in_percent(self, v):
         self._adg_ctr_in_percent = v
-        self.set_parameter("Final review of Campaign in TTD", "ADGCTRInPercent", v)
+        self.set_parameter(self.ad_group_qa_task_name, "ADGCTRInPercent", v)
 
     @property
     def device_type(self):
@@ -360,7 +361,7 @@ class WFDisplayQAFinalReviewBlock(WFBlock):
     @device_type.setter
     def device_type(self, v):
         self._device_type = v
-        self.set_parameter("Final review of Campaign in TTD", "Device Type", v)
+        self.set_parameter(self.ad_group_qa_task_name, "Device Type", v)
 
     @property
     def country(self):
@@ -369,7 +370,7 @@ class WFDisplayQAFinalReviewBlock(WFBlock):
     @country.setter
     def country(self, v):
         self._country = v
-        self.set_parameter("Final review of Campaign in TTD", "Country", v)
+        self.set_parameter(self.ad_group_qa_task_name, "Country", v)
 
     @property
     def category(self):
@@ -378,7 +379,7 @@ class WFDisplayQAFinalReviewBlock(WFBlock):
     @category.setter
     def category(self, v):
         self._category = v
-        self.set_parameter("Final review of Campaign in TTD", "Category", v)
+        self.set_parameter(self.ad_group_qa_task_name, "Category", v)
 
     @property
     def ae_excluder(self):
@@ -387,4 +388,4 @@ class WFDisplayQAFinalReviewBlock(WFBlock):
     @ae_excluder.setter
     def ae_excluder(self, v):
         self._ae_excluder = v
-        self.set_parameter("Final review of Campaign in TTD", "AEExcluder", v)
+        self.set_parameter(self.ad_group_qa_task_name, "AEExcluder", v)
