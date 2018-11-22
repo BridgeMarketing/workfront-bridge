@@ -35,7 +35,8 @@ class WFProjectDisplayContainer(WFBlock):
             "Click Tier Value",
             "Open Tier",
             "Open Tier Value",
-            "Overage"
+            "Overage",
+            "Campaign Type"
         ])
 
         self._ttd_audience_id = None
@@ -57,6 +58,7 @@ class WFProjectDisplayContainer(WFBlock):
         self._open_tier = None
         self._open_tier_value = None
         self._overage = None
+        self._campaign_type = None
 
     @property
     def click_tier(self):
@@ -102,6 +104,15 @@ class WFProjectDisplayContainer(WFBlock):
     def overage(self, v):
         self._overage = v
         self.set_parameter("", "Overage", str(v))
+
+    @property
+    def campaign_type(self):
+        return self._campaign_type
+
+    @overage.setter
+    def campaign_type(self, v):
+        self._campaign_type = v
+        self.set_parameter("", "Campaign Type", str(v))
 
     @property
     def ttd_audience_id(self):

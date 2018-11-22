@@ -26,6 +26,8 @@ b.set_open_tier('O1')
 b.set_open_tier_value(0.10)
 b.set_click_tier('CL')
 b.set_click_tier_value(0.05)
+b.set_overage(True)
+b.set_campaign_type("CPM Deployment")  # Options are: Match and Deploy | Reblast | CPM Deployment
 
 prj = b.build()
 

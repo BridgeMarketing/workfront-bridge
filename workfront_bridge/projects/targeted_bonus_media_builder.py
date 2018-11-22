@@ -34,6 +34,7 @@ class TargetedBonusMediaProjectBuilder(object):
         self._click_tier = None
         self._click_tier_value = None
         self._overage = False
+        self._campaign_type = None
 
         # blocks
         self._budget_in_impressions_pre_calc = None
@@ -55,6 +56,9 @@ class TargetedBonusMediaProjectBuilder(object):
 
     def set_overage(self, v):
         self._overage = v
+
+    def set_campaign_type(self, v):
+        self._campaign_type = v
 
     def set_ttd_advertiser_id(self, v):
         self._ttd_advertiser_id = v
@@ -110,6 +114,8 @@ class TargetedBonusMediaProjectBuilder(object):
         project.open_tier = self._open_tier
         project.open_tier_value = self._open_tier_value
         project.overage = self._overage
+        project.campaign_type = self._campaign_type
+
         aud = WFDisplayDataBlock()
         aud.audience_name = '{} audience'.format(self.project_name)
         project.append(aud)
