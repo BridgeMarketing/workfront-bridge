@@ -13,7 +13,7 @@ class WFDisplayCreativeUploadBlock(WFBlock):
         super(WFDisplayCreativeUploadBlock, self).__init__(self.template_name)
         self._add_required_parameters([
             "DisplayCreativeType",
-            "CreativeName",
+            "Creative Name",
             "LandingPageUrl",
         ])
         self._add_optional_parameters([
@@ -85,7 +85,7 @@ class WFDisplayCreativeUploadBlock(WFBlock):
     @creative_name.setter
     def creative_name(self, v):
         self._creative_name = v
-        self.set_parameter(self.creative_upload_task_name, "CreativeName", v)
+        self.set_parameter(self.creative_upload_task_name, "Creative Name", v)
 
     @property
     def image_s3_url(self):
