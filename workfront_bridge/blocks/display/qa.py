@@ -16,7 +16,9 @@ class WFDisplayQABlock(WFBlock):
 
     def add_creative(self, **kwargs):
         creative = WFDisplayCreativeQABlock()
-        creative = set_kwargs(creative, kwargs)
+        creative = set_kwargs(creative,
+                              kwargs,
+                              exclude=[param for param in kwargs if param.startswith('_native')])
         self.append(creative)
 
     def add_ad_group(self, **kwargs):

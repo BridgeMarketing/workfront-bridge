@@ -14,6 +14,7 @@ class DisplayProjectBuilder(object):
     @summary: Display project builder
     """
     creative_upload_params = [
+        "creative_type",
         "creative_name",
         "image_s3_url",
         "clickthrough_url",
@@ -27,6 +28,18 @@ class DisplayProjectBuilder(object):
         "third_party_tag",
         "width",
         "height",
+        # Native
+        "native_text_asset_title",
+        "native_text_asset_sponsor",
+        "native_text_asset_description",
+        "native_text_asset_call_to_action",
+        "native_text_asset_opt_out_url",
+        "native_text_asset_opt_out_text",
+        "native_image_asset_main",
+        "native_image_asset_logo",
+        "native_image_asset_icon",
+        "native_decimal_asset_rating",
+        "native_decimal_asset_price",
     ]
     creative_qa_params = [
         "creative_name",
@@ -138,6 +151,7 @@ class DisplayProjectBuilder(object):
         * third_party_tag
         * width
         * height
+        * [Native Params]
         """
         allowed_kwargs = self.ad_group_params
         creative_kwargs = set(self.creative_upload_params + self.creative_qa_params)
