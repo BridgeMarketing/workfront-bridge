@@ -282,6 +282,8 @@ class EmailOnBoardingProjectBuilder(object):
 
         self.__project = None
 
+        self.seeds_provider = ProviderConfig()
+
     def set_html(self, s3_path):
         self.html = s3_path
         return self
@@ -312,6 +314,22 @@ class EmailOnBoardingProjectBuilder(object):
 
     def set_email_creative_id(self, id):
         self.email_creative_id = id
+        return self
+
+    def set_seeds_sender_email(self, email):
+        self.seeds_provider.sender_email = email
+        return self
+
+    def set_seeds_sender_name(self, name):
+        self.seeds_provider.sender_name = name
+        return self
+
+    def set_seeds_provider(self, esp_name, esp_user=None, password=None,
+                           token=None):
+        self.seeds_provider.name = esp_name
+        self.seeds_provider.user = esp_user
+        self.seeds_provider.password = password
+        self.seeds_provider.token = token
         return self
 
     def _check_viability(self):
@@ -347,6 +365,10 @@ class EmailOnBoardingProjectBuilder(object):
         check_length("test_seed_lists", self.test_seed_lists, 1, 5)
         check_files_extension("test_seed_lists", self.test_seed_lists, (".csv",))
 
+        check_not_none("seeds_provider", self.seeds_provider.name)
+        check_not_none("seeds_sender_name", self.seeds_provider.sender_name)
+        check_not_none("seeds_sender_email", self.seeds_provider.sender_email)
+
         if self.suppression_file_path is not None and self.suppression_file_path:
             check_file_extension("suppression_file_path", self.suppression_file_path, (".csv",))
 
@@ -362,16 +384,22 @@ class EmailOnBoardingProjectBuilder(object):
         parameters = template.get_param_values()
         return parameters["SelectedProvider"]
 
-    def _create_test_list_block(self, test_list, prefix, sender_email, selected_provider):
+    def _crt_test_list_block(self, test_list):
         slb = WFEmailTestSeedBlock()
         slb.seed_list_s3_path = test_list
-        slb.campaign_name = "T" + prefix + "_" + self.project_name
-
+        slb.campaign_name = "Test List - " + self.project_name
         slb.deployment_datetime = datetime.utcnow().replace(tzinfo=pytz.utc)
-        slb.sender_email = sender_email
-        slb.sender_name = self.from_line
-        slb.provider = selected_provider
+        self._configure_provider_in_setup_block(slb, self.seeds_provider)
         return slb
+
+    def _configure_provider_in_setup_block(self, block, provider):
+        block.sender_email = provider.sender_email
+        block.sender_name = provider.sender_name
+
+        block.provider = provider.name
+        block.provider_user = provider.user
+        block.provider_password = provider.password
+        block.provider_token = provider.token
 
     def build(self):
         '''
@@ -407,11 +435,16 @@ class EmailOnBoardingProjectBuilder(object):
         bval_html.email_subject = self.subject
         project.append(bval_html)
 
-        test_send_email = self._get_parameter_test_send_email()
-        selected_provider = self._get_parameter_selected_provider()
+        # test_send_email = self._get_parameter_test_send_email()
+        #
+        # selected_provider = self._get_parameter_selected_provider()
+        #
+        # for index, test_list in enumerate(self.test_seed_lists, start=1):
+        #     slb = self._create_test_list_block(test_list, str(index), test_send_email, selected_provider)
+        #     project.append(slb)
 
-        for index, test_list in enumerate(self.test_seed_lists, start=1):
-            slb = self._create_test_list_block(test_list, str(index), test_send_email, selected_provider)
+        for test_list in self.test_seed_lists:
+            slb = self._crt_test_list_block(test_list)
             project.append(slb)
 
         project.test_seed_lists = ",".join(self.test_seed_lists)
