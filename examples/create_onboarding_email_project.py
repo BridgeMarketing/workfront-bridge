@@ -5,12 +5,17 @@ wf = Workfront("notifications@wf.bridgemarketing.com", 'beef6060',
                'thebridgecorp.sb01.workfront.com')
 wf.login()
 
-b = EmailOnBoardingProjectBuilder(wf, "Test pelu stg blocks 20")
+b = EmailOnBoardingProjectBuilder(wf, "Test pelu stg blocks 23")
 
 b.set_category("Automotive")
 b.set_subject("Some_example_subject")
 b.set_from_line("from line")
 b.set_email_creative_id("1")
+
+b.set_seeds_provider("Jango", "esp_user", "pass", "token")
+b.set_seeds_sender_email("seedssender@email.com")
+b.set_seeds_sender_name("Seed Name")
+
 
 #b.set_html("s3://mtnmnz-prod-email-deployment-nty5nz/onboarding/client_5b4caf8e038474320f450332e75c4400/20180816184445_creative_unsub.html")
 b.set_html("s3://bridge-file-assets/order/999/channels/a471ecc1-8b49-4ce5-838f-5bcf2cd60d46/html_file/Test_zip_(1).zip")
