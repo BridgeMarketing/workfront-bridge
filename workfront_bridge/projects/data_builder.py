@@ -13,6 +13,13 @@ class DataProjectBuilder(object):
     @summary: Project builder for M&E and B2C projects.
     """
 
+    SUPPRESSION_TYPES = set(["one_per_person", "one_per_household"])
+
+    SUPPRESSION_FILE_TYPES = set(["bridge_id", "email", "maid", "md5",
+                                  "postal"])
+
+    AUDIENCE_FILE_INDENTIFIERS = set(["oneAudienceID", "email", "deviceID"])
+
     def __init__(self, wf, project_name):
         """
         @param wf: Workfront service object
@@ -29,7 +36,7 @@ class DataProjectBuilder(object):
         self.suppression_task_ids = []
 
         # Blocks
-        self.count_id
+        self.count_id = None
 
         self.audience_file_path = None
         self.audience_identifier = None
@@ -37,8 +44,6 @@ class DataProjectBuilder(object):
 
         self.suppression_type = None
         self.suppression_files = []
-
-        return self
 
     def set_b2c(self):
         self.project_type = "b2c"
@@ -70,6 +75,12 @@ class DataProjectBuilder(object):
         return self
 
     def set_audience_identifier(self, audience_identifier):
+        if audience_identifier not in self.AUDIENCE_FILE_INDENTIFIERS:
+            m = "Invalid audience identifier {}. Possible values are {}"
+            err = m.format(audience_identifier,
+                           ",".join(self.AUDIENCE_FILE_INDENTIFIERS))
+            raise WFBrigeException(err)
+
         self.audience_identifier = audience_identifier
         return self
     #
@@ -82,19 +93,30 @@ class DataProjectBuilder(object):
     def add_suppression_file(self, file_path, suppression_file_type):
         '''
         @param file_path: s3 file path
-        @param supression_type: Bridge ID, Email, MAID, Md5, Postal
+        @param supression_type: bridge_id, email, maid, md5, postal
         '''
+        if suppression_file_type not in self.SUPPRESSION_FILE_TYPES:
+            m = "Invalid suppression file type {}. Possible values are {}"
+            err = m.format(suppression_file_type,
+                           ",".join(self.SUPPRESSION_FILE_TYPES))
+            raise WFBrigeException(err)
+
         kv = {
             "file_path": file_path,
             "suppression_file_type": suppression_file_type
         }
-        self.supression_files.append(kv)
+        self.suppression_files.append(kv)
         return self
 
     def set_suppression_type(self, suppression_type):
         '''
-        @param suppression_type: one_per_persone, one_per_household
+        @param suppression_type: one_per_person, one_per_household
         '''
+        if suppression_type not in self.SUPPRESSION_TYPES:
+            m = "Invalid suppression type {}. Possible values are {}"
+            raise WFBrigeException(m.format(suppression_type,
+                                            ",".join(self.SUPPRESSION_TYPES)))
+
         self.suppression_type = suppression_type
         return self
 
