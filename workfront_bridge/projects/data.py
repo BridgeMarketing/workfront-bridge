@@ -1,16 +1,19 @@
 from workfront_bridge.blocks.base import WFBlock
 
 
-class WFProjectB2CContainer(WFBlock):
+class WFProjectDataContainer(WFBlock):
     """
-    @summary: Workfront Data B2C Project Container.
+    @summary: Workfront Data Project Container.
+    Use this project container to create workfront M&E or B2C projects.
+    This project container has no tasks in it but has all the fields of the
+    custom forms that a M&E or B2C project needs.
     """
 
-    template_name = "Base Project Container - Data B2C v2"
+    template_name = "Base Project Container - Data"
 
     def __init__(self, prj_name):
-        super(WFProjectB2CContainer, self).__init__(self.template_name,
-                                                    name=prj_name)
+        super(WFProjectDataContainer, self).__init__(self.template_name,
+                                                     name=prj_name)
 
         opt = [
             "Audience Id",
@@ -20,11 +23,31 @@ class WFProjectB2CContainer(WFBlock):
         ]
         self._add_optional_parameters(opt)
 
+        req = ["Project Type"]
+        self._add_required_parameters(req)
+
         # Project Container fields:
         self._audience_id = None
         self._audience_file_path = None
         self._data_task_id = None
-        self._suppression_task_ids = None
+        self._suppression_task_ids = []
+        self._project_type = None
+
+    def set_b2c(self):
+        self._project_type = "Data"
+        self.set_parameter("", "Project Type", self._project_type)
+
+    def set_match_and_export(self):
+        self.project_type = "Match Export"
+        self.set_parameter("", "Project Type", self._project_type)
+
+    @property
+    def project_type(self):
+        return self._project_type
+
+    @project_type.setter
+    def project_type(self, v):
+        self._project_type = v
 
     @property
     def audience_id(self):
@@ -60,4 +83,4 @@ class WFProjectB2CContainer(WFBlock):
     @suppression_task_ids.setter
     def suppression_task_ids(self, v):
         self._suppression_task_ids = v
-        self.set_parameter("", "Suppression Task Ids", v)
+        self.set_parameter("", "Suppression Task Ids", ','.join(v))
