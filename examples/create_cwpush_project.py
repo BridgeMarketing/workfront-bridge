@@ -8,7 +8,9 @@ b.bridge_order_id = '12345'
 b.partner_name = 'Partner Name'
 b.industry = 'Arts & Entertainment'
 b.target_volume = 500
+b.overage = False
 b.click_tier = 'CL'
 b.open_tier = 'O1'
+b.purl_processing_enabled = True
 prj = b.build()
 print(prj)

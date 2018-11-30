@@ -1,6 +1,7 @@
 from workfront_bridge.blocks.base import WFBlockParser
 from workfront_bridge.projects.cwpush import CWPushContainer
 from workfront_bridge.blocks.cwpush.cwpush import CWPushBlock
+from workfront_bridge.exceptions import WFBrigeException
 
 
 class CWPushProjectBuilder(object):
@@ -34,6 +35,7 @@ class CWPushProjectBuilder(object):
         self.open_tier = None
         self.cw_tool_link = None
         self.duration = None
+        self.purl_processing_enabled = None
 
     def build(self):
         """
@@ -61,6 +63,10 @@ class CWPushProjectBuilder(object):
         project.open_tier = self.open_tier
         project.cw_tool_link = self.cw_tool_link
         project.duration = self.duration
+        if type(self.purl_processing_enabled) == bool:
+            project.purl_processing_enabled = self.purl_processing_enabled
+        else:
+            raise WFBrigeException('PURL Processing Enabled allowed values: True or False')
         # Block
         block = CWPushBlock()
         project.append(block)
