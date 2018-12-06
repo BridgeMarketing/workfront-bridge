@@ -165,7 +165,7 @@ class DisplayProjectBuilder(object):
                     ad_group_creative = {}
                     for creative_key, creative_value in creative.items():
                         if creative_key not in creative_kwargs:
-                            raise WFBrigeException('Invalid Key {}'.format(k))
+                            raise WFBrigeException('Invalid Key {}'.format(creative_key))
                         ad_group_creative[creative_key] = creative_value
                     ad_group['creatives'].append(ad_group_creative)
             else:
