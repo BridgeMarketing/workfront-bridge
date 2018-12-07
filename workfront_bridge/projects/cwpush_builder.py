@@ -63,10 +63,11 @@ class CWPushProjectBuilder(object):
         project.open_tier = self.open_tier
         project.cw_tool_link = self.cw_tool_link
         project.duration = self.duration
-        if type(self.purl_processing_enabled) == bool:
-            project.purl_processing_enabled = self.purl_processing_enabled
-        else:
-            raise WFBrigeException('PURL Processing Enabled allowed values: True or False')
+        if self.purl_processing_enabled is not None:
+            if type(self.purl_processing_enabled) == bool:
+                project.purl_processing_enabled = self.purl_processing_enabled
+            else:
+                raise WFBrigeException('PURL Processing Enabled allowed values: True or False')
         # Block
         block = CWPushBlock()
         project.append(block)
