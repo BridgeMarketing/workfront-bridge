@@ -101,6 +101,7 @@ class WFBlockParser(object):
 
     def __init__(self, wf):
         self.wf = wf
+        self.indented_tasks = []
 
     def _get_temporal_project_name(self, prefix="Generic"):
         '''
@@ -143,8 +144,11 @@ class WFBlockParser(object):
         project.move_into(block_tasks)
         if indent:
             first_task_id = prj_tasks[0].wf_id
-            [task.set_fields({"parentID": first_task_id}) for task in block_tasks]
-
+            for task in block_tasks:
+                if task.wf_id not in self.indented_tasks:
+                    task.set_fields({"parentID": first_task_id})
+                    self.indented_tasks.append(task.wf_id)
+                    
         if predecessor_task:
             # get the first task that need to have a predecessor, this is to
             # avoid non automatic block task not starting. So in general, you
