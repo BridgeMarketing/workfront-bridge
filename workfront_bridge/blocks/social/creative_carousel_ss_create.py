@@ -11,6 +11,9 @@ class WFSocialCreativeCarouselSlideshowCreateBlock(WFBlock):
 
     def __init__(self):
         super(WFSocialCreativeCarouselSlideshowCreateBlock, self).__init__(self.template_name)
+        self._add_required_parameters([
+            'Social Carousel/Slideshow',
+        ])
         self._add_optional_parameters([
             'Social Creative Message',
             'Social Advertiser Website URL',
@@ -28,7 +31,7 @@ class WFSocialCreativeCarouselSlideshowCreateBlock(WFBlock):
     @carousel_or_slideshow.setter
     def carousel_or_slideshow(self, v):
         self._carousel_or_slideshow = v
-        # TODO: set field in Workfront
+        self.set_parameter(self.task_name, 'Social Carousel/Slideshow', v.capitalize())
 
     @property        
     def message(self):

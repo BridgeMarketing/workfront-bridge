@@ -29,6 +29,7 @@ class WFSocialCreativeCarouselSlideshowSetupBlock(WFBlock):
         }
         AssetBlockClass = type_to_block[kwargs['asset_type']]
         asset = AssetBlockClass()
+        asset.task_type = 'SocialAsset'     # This tells the CM not to create a social_creative
         asset = set_kwargs(asset, kwargs, exclude=['asset_type'])
         self._assets.append(asset)
         self.append(asset)
