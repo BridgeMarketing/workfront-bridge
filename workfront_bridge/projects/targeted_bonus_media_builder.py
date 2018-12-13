@@ -127,6 +127,7 @@ class TargetedBonusMediaProjectBuilder(object):
 
         ad_group_setup_block = WFDisplayAdGroupSetupBlock()
         ad_group_setup_block.add_creative(
+            creative_type='Image Banner or Interstitial',
             creative_name='{} creative'.format(self.project_name),
             landing_page_url=self._landing_page_url,
             image_s3_url=self._image_s3_url,
