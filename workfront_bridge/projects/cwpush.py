@@ -20,7 +20,6 @@ class CWPushContainer(WFBlock):
             "Bridge_orderID",
             "Partner Name",
             "Industry",
-            "Target Volume",
             "Click Tier",
             "Open Tier",
         ]
@@ -29,6 +28,7 @@ class CWPushContainer(WFBlock):
             "Name",
             "HTML Link",
             "Banner Link",
+            "Target Volume",
             "Start Date",
             "Overage",
             "Geo Target",
