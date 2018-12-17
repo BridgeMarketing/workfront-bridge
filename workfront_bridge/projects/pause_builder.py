@@ -1,9 +1,9 @@
 from workfront.objects.project import WFProject
 
-from blocks.pause import WFPauseEmailDeployBlock
-from projects.pause import WFProjectPauseContainer
 from workfront_bridge.blocks.base import WFBlockParser
+from workfront_bridge.blocks.pause import WFPauseEmailDeployBlock
 from workfront_bridge.exceptions import WFBrigeException
+from workfront_bridge.projects.pause import WFProjectPauseContainer
 
 
 class PauseProjectBuilder(object):

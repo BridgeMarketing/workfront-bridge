@@ -1,9 +1,9 @@
 from workfront.objects.project import WFProject
 
-from blocks.resume import WFResumeEmailDeployBlock
-from projects.resume import WFProjectResumeContainer
 from workfront_bridge.blocks.base import WFBlockParser
+from workfront_bridge.blocks.resume import WFResumeEmailDeployBlock
 from workfront_bridge.exceptions import WFBrigeException
+from workfront_bridge.projects.resume import WFProjectResumeContainer
 
 
 class ResumeProjectBuilder(object):
