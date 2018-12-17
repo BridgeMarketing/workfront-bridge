@@ -48,7 +48,7 @@ class SocialProjectBuilder(object):
 
     creative_carousel_or_slideshow_fields = [
         'carousel_or_slideshow',
-        'creatives'
+        'assets'
     ]
 
     def __init__(self, wf, project_name):

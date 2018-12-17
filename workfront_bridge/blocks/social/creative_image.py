@@ -18,6 +18,7 @@ class WFSocialCreativeImageBlock(WFBlock):
             'Social Image S3 URI',
         ])
         self._add_optional_parameters([
+            'type',
             'Social Title',
             'Social Description',
             'FB/Instagram Call to Action',
@@ -26,6 +27,7 @@ class WFSocialCreativeImageBlock(WFBlock):
         self._message = None
         self._advertiser_website_url = None
         self._s3_uri = None
+        self._task_type = None
         self._title = None
         self._description = None
         self._fb_call_to_action = None
@@ -65,6 +67,15 @@ class WFSocialCreativeImageBlock(WFBlock):
     def title(self, v):
         self._title = v
         self.set_parameter(self.create_image_task_name, 'Social Title', v)
+
+    @property
+    def task_type(self):
+        return self._task_type
+
+    @task_type.setter
+    def task_type(self, v):
+        self._task_type = v
+        self.set_parameter(self.create_image_task_name, 'type', v)
 
     @property
     def description(self):
