@@ -2,6 +2,7 @@ from workfront_bridge.blocks.base import WFBlockParser
 from workfront_bridge.exceptions import WFBrigeException
 from workfront_bridge.projects.data import WFProjectDataContainer
 from workfront_bridge.blocks.data.pull_and_hygine_data import WFPullAndHygieneDataBlock
+from workfront_bridge.blocks.data.pull_10x_data import WFPull10xDataBlock
 from workfront_bridge.blocks.data.create_and_export_audience import WFCreatExportAudienceBlock
 from workfront_bridge.blocks.data.review_data import WFReviewDataBlock
 from workfront_bridge.blocks.data.suppression import WFSuppressionGroupBlock
@@ -53,14 +54,18 @@ class DataProjectBuilder(object):
         self.project_type = "m&e"
         return self
 
+    def set_10x_data(self):
+        self.project_type = "10x"
+        return self
+
     #
-    # B2c Specific settings
+    # B2c & 10x Specific settings
     #
     def set_count_id(self, count_id):
         self.count_id = count_id
         return self
     #
-    # END B2c Specific settings
+    # END B2c & 10x Specific settings
     #
 
     #
@@ -148,6 +153,10 @@ class DataProjectBuilder(object):
         if self.audience_identifier is None:
             raise_missing("audience_identifier")
 
+    def _check_viability_10x(self):
+        if self.count_id is None:
+            raise WFBrigeException("{} is required".format("count_id"))
+
     def _check_viability(self):
         if self.project_type is None:
             m = "You must specify the type of data project to be created (use"\
@@ -158,6 +167,8 @@ class DataProjectBuilder(object):
             self._check_viability_b2c()
         elif self.project_type == "m&e":
             self._check_viability_match_and_export()
+        elif self.project_type == "10x":
+            self._check_viability_10x()
         else:
             raise Exception("Invalid data project type")
 
@@ -189,6 +200,11 @@ class DataProjectBuilder(object):
             b.audience_file_path = self.audience_file_path
             b.audience_identifier = self.audience_identifier
             b.audience_name = self.audience_name
+            project.append(b)
+        elif self.project_type == "10x":
+            project.set_10x_data()
+            b = WFPull10xDataBlock()
+            b.count_id = self.count_id
             project.append(b)
 
         # Suppressions
