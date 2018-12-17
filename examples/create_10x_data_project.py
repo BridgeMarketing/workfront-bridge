@@ -30,7 +30,7 @@ def b2c_with_suppression_files(wf):
 
 
 def b2c_with_suppressions(wf):
-    b = data_builder.DataProjectBuilder(wf, "Test B2C project builder")
+    b = data_builder.DataProjectBuilder(wf, "Test 10x project builder")
     prj = b.set_10x_data()\
            .set_count_id("COUNTID_1234")\
            .set_suppression_type("one_per_person")\
