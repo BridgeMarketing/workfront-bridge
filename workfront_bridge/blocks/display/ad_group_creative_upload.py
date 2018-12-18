@@ -39,7 +39,7 @@ class WFDisplayCreativeUploadBlock(WFBlock):
             "NativeImageAssetLogo",
             "NativeImageAssetIcon",
             "NativeDecimalAssetRating",
-            "NativeDecimalAssetPrice",
+            "NativeTextAssetPrice",
         ])
         self._creative_type = None
         self._creative_name = None
@@ -67,7 +67,7 @@ class WFDisplayCreativeUploadBlock(WFBlock):
         self._native_image_asset_logo = None
         self._native_image_asset_icon = None
         self._native_decimal_asset_rating = None
-        self._native_decimal_asset_price = None
+        self._native_text_asset_price = None
 
     @property
     def creative_type(self):
@@ -286,10 +286,10 @@ class WFDisplayCreativeUploadBlock(WFBlock):
         self.set_parameter(self.creative_upload_task_name, "NativeDecimalAssetRating", v)
 
     @property
-    def native_decimal_asset_price(self):
-        return self._native_decimal_asset_price
+    def native_text_asset_price(self):
+        return self._native_text_asset_price
 
-    @native_decimal_asset_price.setter
-    def native_decimal_asset_price(self, v):
-        self._native_decimal_asset_price = v
-        self.set_parameter(self.creative_upload_task_name, "NativeDecimalAssetPrice", v)
+    @native_text_asset_price.setter
+    def native_text_asset_price(self, v):
+        self._native_text_asset_price = v
+        self.set_parameter(self.creative_upload_task_name, "NativeTextAssetPrice", v)

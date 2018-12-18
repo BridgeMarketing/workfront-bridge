@@ -39,7 +39,7 @@ class DisplayProjectBuilder(object):
         "native_image_asset_logo",
         "native_image_asset_icon",
         "native_decimal_asset_rating",
-        "native_decimal_asset_price",
+        "native_text_asset_price",
     ]
     creative_qa_params = [
         "creative_name",
