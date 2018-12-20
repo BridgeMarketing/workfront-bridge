@@ -28,10 +28,23 @@ class DisplayProjectBuilder(object):
         "third_party_tag",
         "width",
         "height",
-        # Native
-        "native_text_asset_title",
+    ]
+    creative_qa_params = [
+        "creative_type",
+        "creative_name",
+        "image_s3_url",
+        "creative_size",
+        "clickthrough_url",
+        "landing_page_url",
+        "third_party_tags",
+        "third_party_impression_tracking_url",
+    ]
+    creative_native_params = [
+        "native_text_asset_title_long",
+        "native_text_asset_title_short",
         "native_text_asset_sponsor",
-        "native_text_asset_description",
+        "native_text_asset_description_long",
+        "native_text_asset_description_short",
         "native_text_asset_call_to_action",
         "native_text_asset_opt_out_url",
         "native_text_asset_opt_out_text",
@@ -40,15 +53,6 @@ class DisplayProjectBuilder(object):
         "native_image_asset_icon",
         "native_decimal_asset_rating",
         "native_text_asset_price",
-    ]
-    creative_qa_params = [
-        "creative_name",
-        "image_s3_url",
-        "creative_size",
-        "clickthrough_url",
-        "landing_page_url",
-        "third_party_tags",
-        "third_party_impression_tracking_url",
     ]
     ad_group_params = [
         "ad_group_name",
@@ -154,7 +158,9 @@ class DisplayProjectBuilder(object):
         * [Native Params]
         """
         allowed_kwargs = self.ad_group_params
-        creative_kwargs = set(self.creative_upload_params + self.creative_qa_params)
+        creative_kwargs = set(self.creative_upload_params
+                              + self.creative_qa_params
+                              + self.creative_native_params)
         ad_group = {}
         for k, v in kwargs.items():
             if k not in allowed_kwargs:
@@ -164,6 +170,10 @@ class DisplayProjectBuilder(object):
                 for creative in v:
                     ad_group_creative = {}
                     for creative_key, creative_value in creative.items():
+                        if creative_key in self.creative_native_params and creative['creative_type'] != 'Image Native':
+                            raise WFBrigeException('Invalid key {} for non-native. '
+                                                   '"creative_type" should be "Image Native"'
+                                                   .format(creative_key))
                         if creative_key not in creative_kwargs:
                             raise WFBrigeException('Invalid Key {}'.format(creative_key))
                         ad_group_creative[creative_key] = creative_value
@@ -221,10 +231,12 @@ class DisplayProjectBuilder(object):
             ad_group_setup_block = WFDisplayAdGroupSetupBlock()
             qa_block = WFDisplayQABlock()
             for creative in ad_group['creatives']:
-                creative_upload_dict = {k: creative[k] for k in self.creative_upload_params
+                creative_upload_dict = {k: creative[k] for k in
+                                        (self.creative_upload_params + self.creative_native_params)
                                         if k in creative}
                 ad_group_setup_block.add_creative(**creative_upload_dict)
-                creative_qa_dict = {k: creative[k] for k in self.creative_qa_params
+                creative_qa_dict = {k: creative[k] for k in
+                                    (self.creative_qa_params + self.creative_native_params)
                                     if k in creative}
                 qa_block.add_creative(**creative_qa_dict)
             ad_group_setup_block.add_ad_group(**ad_group)

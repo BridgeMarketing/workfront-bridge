@@ -29,9 +29,11 @@ class WFDisplayCreativeUploadBlock(WFBlock):
             "Width",
             "Height",
             # Native
-            "NativeTextAssetTitle",
+            "NativeTextAssetTitleLong",
+            "NativeTextAssetTitleShort",
             "NativeTextAssetSponsor",
-            "NativeTextAssetDescription",
+            "NativeTextAssetDescriptionLong",
+            "NativeTextAssetDescriptionShort",
             "NativeTextAssetCallToAction",
             "NativeTextAssetOptOutUrl",
             "NativeTextAssetOptOutText",
@@ -57,9 +59,11 @@ class WFDisplayCreativeUploadBlock(WFBlock):
         self._height = None
 
         # Native
-        self._native_text_asset_title = None
+        self._native_text_asset_title_long = None
+        self._native_text_asset_title_short = None
         self._native_text_asset_sponsor = None
-        self._native_text_asset_description = None
+        self._native_text_asset_description_long = None
+        self._native_text_asset_description_short = None
         self._native_text_asset_call_to_action = None
         self._native_text_asset_opt_out_url = None
         self._native_text_asset_opt_out_text = None
@@ -196,14 +200,24 @@ class WFDisplayCreativeUploadBlock(WFBlock):
         self.set_parameter(self.creative_upload_task_name, "Height", v)
 
     @property
-    def native_text_asset_title(self):
-        return self._native_text_asset_title
+    def native_text_asset_title_long(self):
+        return self._native_text_asset_title_long
 
-    @native_text_asset_title.setter
-    def native_text_asset_title(self, v):
-        self._native_text_asset_title = v
-        self.set_parameter(self.creative_upload_task_name, "NativeTextAssetTitle", v)
+    @native_text_asset_title_long.setter
+    def native_text_asset_title_long(self, v):
+        self._native_text_asset_title_long = v
+        self.set_parameter(self.creative_upload_task_name, "NativeTextAssetTitleLong", v)
+        
+    @property
+    def native_text_asset_title_short(self):
+        return self._native_text_asset_title_short
 
+    @native_text_asset_title_short.setter
+    def native_text_asset_title_short(self, v):
+        self._native_text_asset_title_short = v
+        self.set_parameter(self.creative_upload_task_name, "NativeTextAssetTitleShort", v)
+
+        
     @property
     def native_text_asset_sponsor(self):
         return self._native_text_asset_sponsor
@@ -214,13 +228,22 @@ class WFDisplayCreativeUploadBlock(WFBlock):
         self.set_parameter(self.creative_upload_task_name, "NativeTextAssetSponsor", v)
 
     @property
-    def native_text_asset_description(self):
-        return self._native_text_asset_description
+    def native_text_asset_description_long(self):
+        return self._native_text_asset_description_long
 
-    @native_text_asset_description.setter
-    def native_text_asset_description(self, v):
-        self._native_text_asset_description = v
-        self.set_parameter(self.creative_upload_task_name, "NativeTextAssetDescription", v)
+    @native_text_asset_description_long.setter
+    def native_text_asset_description_long(self, v):
+        self._native_text_asset_description_long = v
+        self.set_parameter(self.creative_upload_task_name, "NativeTextAssetDescriptionLong", v)
+
+    @property
+    def native_text_asset_description_short(self):
+        return self._native_text_asset_description_short
+
+    @native_text_asset_description_short.setter
+    def native_text_asset_description_short(self, v):
+        self._native_text_asset_description_short = v
+        self.set_parameter(self.creative_upload_task_name, "NativeTextAssetDescriptionShort", v)
 
     @property
     def native_text_asset_call_to_action(self):
