@@ -28,6 +28,7 @@ class CWPushContainer(WFBlock):
             "Name",
             "HTML Link",
             "Banner Link",
+            "Target Volume",
             "Start Date",
             "Overage",
             "Target Volume",
