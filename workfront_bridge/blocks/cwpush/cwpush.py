@@ -6,7 +6,7 @@ class CWPushBlock(WFBlock):
     @summary: Single block for CW Push Project.
     """
 
-    template_name = 'Block - CW Push'
+    template_name = 'Block - CW Push v2'
 
     def __init__(self):
         super(CWPushBlock, self).__init__(self.template_name)

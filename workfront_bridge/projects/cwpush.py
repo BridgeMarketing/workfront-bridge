@@ -20,7 +20,6 @@ class CWPushContainer(WFBlock):
             "Bridge_orderID",
             "Partner Name",
             "Industry",
-            "Target Volume",
             "Click Tier",
             "Open Tier",
         ]
@@ -29,6 +28,7 @@ class CWPushContainer(WFBlock):
             "Name",
             "HTML Link",
             "Banner Link",
+            "Target Volume",
             "Start Date",
             "Overage",
             "Geo Target",
@@ -36,7 +36,8 @@ class CWPushContainer(WFBlock):
             "Deployment File Link",
             "Deployment File Segment",
             "CW Tool Link",
-            "Duration"
+            "Duration",
+            "PURL Processing Enabled",
         ]
         self._add_optional_parameters(opt)
 
@@ -58,6 +59,7 @@ class CWPushContainer(WFBlock):
         self._open_tier = None
         self._cw_tool_link = None
         self._duration = None
+        self._purl_processing_enabled = None
 
     @property
     def duration(self):
@@ -213,3 +215,13 @@ class CWPushContainer(WFBlock):
     def cw_tool_link(self, v):
         self._cw_tool_link = v
         self.set_parameter("", "CW Tool Link", v)
+
+    @property
+    def purl_processing_enabled(self):
+        return self._purl_processing_enabled
+
+    @purl_processing_enabled.setter
+    def purl_processing_enabled(self, v):
+        self._purl_processing_enabled = v
+        self.set_parameter("", "PURL Processing Enabled", str(v))
+
