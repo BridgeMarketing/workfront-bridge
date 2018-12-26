@@ -13,13 +13,13 @@ class WFSocialCreativeImageBlock(WFBlock):
         super(WFSocialCreativeImageBlock, self).__init__(self.template_name)
 
         self._add_required_parameters([
-            'Social Creative Message',
             'Social Advertiser Website URL',
             'Social Image S3 URI',
         ])
         self._add_optional_parameters([
             'type',
             'Social Title',
+            'Social Creative Message',
             'Social Description',
             'FB/Instagram Call to Action',
         ])
