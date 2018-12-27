@@ -13,8 +13,6 @@ b.add_ad_group(
             'creative_name': 'Test Creative 6',
             'clickthrough_url': 'http://dummy.com',
             'landing_page_url': 'http://dummy.com',
-            'image_s3_url': 's3://bridge-file-assets/API_files/orderID_10000129/Channel_2/mobile_banner.png',
-            'creative_size': '300x250',
             'third_party_impression_tracking_url': 'http://dummy.com',
             'native_text_asset_title_long': 'native_text_asset_title_long',
             'native_text_asset_title_short': 'native_text_asset_title_short',

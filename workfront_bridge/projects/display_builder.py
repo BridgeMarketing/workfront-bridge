@@ -74,6 +74,10 @@ class DisplayProjectBuilder(object):
         "ae_excluder",
         "creatives",  # Nested
     ]
+    native_restricted_params = [
+        "image_s3_url",
+        "creative_size",
+    ]
 
     def __init__(self, wf, project_name):
         """
@@ -168,12 +172,13 @@ class DisplayProjectBuilder(object):
             elif k == 'creatives':
                 ad_group['creatives'] = []
                 for creative in v:
+                    creative_type = creative['creative_type']
                     ad_group_creative = {}
                     for creative_key, creative_value in creative.items():
-                        if creative_key in self.creative_native_params and creative['creative_type'] != 'Image Native':
-                            raise WFBrigeException('Invalid key {} for non-native. '
-                                                   '"creative_type" should be "Image Native"'
-                                                   .format(creative_key))
+                        invalid_regular = creative_key in self.creative_native_params and creative_type != 'Image Native'
+                        invalid_native = creative_key in self.native_restricted_params and creative_type == 'Image Native'
+                        if invalid_regular or invalid_native:
+                            raise WFBrigeException('Invalid key {} for type {}'.format(creative_key, creative_type))
                         if creative_key not in creative_kwargs:
                             raise WFBrigeException('Invalid Key {}'.format(creative_key))
                         ad_group_creative[creative_key] = creative_value

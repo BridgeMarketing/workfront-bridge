@@ -13,12 +13,12 @@ class WFDisplayCreativeQABlock(WFBlock):
         super(WFDisplayCreativeQABlock, self).__init__(self.template_name)
         self._add_required_parameters([
             "Creative Name",
-            "ImageS3URL",
-            "Creative Size",
             "ClickthroughUrl",
             "LandingPageUrl",
         ])
         self._add_optional_parameters([
+            "ImageS3URL",
+            "Creative Size",
             "ThirdPartyTags",
             "ThirdPartyImpressionTrackingUrl",
             # Native
