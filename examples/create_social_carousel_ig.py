@@ -33,23 +33,16 @@ ad_group_1 = {
                 {
                     'asset_type': 'image',
                     'title': 'Test Asset 1',
-                    's3_uri': S3_PATH + 'dog.jpeg',
+                    's3_uri': S3_PATH + 'high_res_dog.jpg',
                     'description': 'Test Description 1',
                     'advertiser_website_url': 'https://www.catgifpage.com/dont-fall'
                 },
                 {
                     'asset_type': 'image',
                     'title': 'Test Asset 2',
-                    's3_uri': S3_PATH + 'cat.jpeg',
+                    's3_uri': S3_PATH + 'high_res_cat.jpg',
                     'description': 'Test Description 2',
                     'advertiser_website_url': 'https://www.catgifpage.com/hug-me'
-                },
-                {
-                    'asset_type': 'image',
-                    'title': 'Test Asset 3',
-                    's3_uri': S3_PATH + 'angry_lion.jpg',
-                    'description': 'Test Description 3',
-                    'advertiser_website_url': 'https://www.catgifpage.com/lovely-bubbles'
                 },
             ],
         },
