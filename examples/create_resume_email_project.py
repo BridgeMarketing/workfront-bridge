@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from workfront.workfront import Workfront
 
 
@@ -11,6 +13,8 @@ wf.login()
 
 b = ResumeProjectBuilder(wf)
 b.set_project_to_resume(WF_EMAIL_PROJECT_ID)
+b.set_datetime_to_update(datetime.now())
+
 prj = b.build()
 
 print prj

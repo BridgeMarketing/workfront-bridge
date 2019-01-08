@@ -96,7 +96,7 @@ class UpdateProjectBuilder(object):
         # Set dependencies to Avoid race conditions
         try:
             # Get Audience Live Setup Push to Provider Task
-            tasks = prj_being_updateled.get_tasks()
+            tasks = prj_being_updated.get_tasks()
             aud_tsk = [t for t in tasks if t.name == "Audience Live Setup"][0]
             aud_tasks = tasks[tasks.index(aud_tsk):]
             ptp_task = [t for t in aud_tasks if t.name == "Push to provider"][0]

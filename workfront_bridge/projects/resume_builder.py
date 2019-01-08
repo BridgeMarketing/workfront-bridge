@@ -22,6 +22,7 @@ class ResumeProjectBuilder(object):
         self.wf = wf
 
         self.wf_project_id = None
+        self.deploy_datetime = None
         self.project_type = None  # Project type being resumed
 
     def get_supported_project_types(self):
@@ -36,6 +37,13 @@ class ResumeProjectBuilder(object):
         @param wf_project_id: id of the wf project to resume
         '''
         self.wf_project_id = wf_project_id
+        return self
+
+    def set_datetime_to_update(self, dt):
+        '''
+        @param dt: deploy datetime to update
+        '''
+        self.deploy_datetime = dt
         return self
 
     def _check_viability(self):
@@ -64,7 +72,7 @@ class ResumeProjectBuilder(object):
             WFBrigeException("Unknown Project Type - {} is missing Project "
                              "Type custom form field".format(prj))
         if params["Project Type"] not in self.supported_project_types:
-            WFBrigeException("Project Type {} not supported for pausing "
+            WFBrigeException("Project Type {} not supported for resuming "
                              "project {}".format(prj))
         self.project_type = params["Project Type"]
 
@@ -72,15 +80,13 @@ class ResumeProjectBuilder(object):
         '''
         @return: a resume wf project to resume an email project.
         '''
-        # Mark the project as resume
-        # TODO: isCancel ???
         prj_being_resumed = WFProject(self.wf, self.wf_project_id)
-        prj_being_resumed.set_param_values({"isCancel": "yes"})
 
         prj_name = "Resume - {}".format(prj_being_resumed.name)
         project = WFProjectResumeContainer(prj_name)
         resume_block = WFResumeEmailDeployBlock()
         resume_block.project_id = self.wf_project_id
+        resume_block.deploy_datetime = self.deploy_datetime
         project.append(resume_block)
 
         parser = WFBlockParser(self.wf)

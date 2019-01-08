@@ -72,10 +72,8 @@ class PauseProjectBuilder(object):
         '''
         @return: a pause wf project to pause an email project.
         '''
-        # Mark the project as pause
-        # TODO: isCancel ???
+
         prj_being_paused = WFProject(self.wf, self.wf_project_id)
-        prj_being_paused.set_param_values({"isCancel": "yes"})
 
         prj_name = "Pause - {}".format(prj_being_paused.name)
         project = WFProjectPauseContainer(prj_name)
