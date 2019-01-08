@@ -41,6 +41,10 @@ class WFProjectDataContainer(WFBlock):
         self.project_type = "Match Export"
         self.set_parameter("", "Project Type", self._project_type)
 
+    def set_10x_data(self):
+        self.project_type = "Data 10x"
+        self.set_parameter("", "Project Type", self._project_type)
+
     @property
     def project_type(self):
         return self._project_type

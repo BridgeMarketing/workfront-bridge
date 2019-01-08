@@ -101,6 +101,8 @@ class WFBlockParser(object):
 
     def __init__(self, wf):
         self.wf = wf
+        self._indented_tasks = []
+        self._starter_task_base_level = 2
 
     def _get_temporal_project_name(self, prefix="Generic"):
         '''
@@ -127,26 +129,35 @@ class WFBlockParser(object):
         return prj
 
     def attach_to_project(self, project, block_to_attach, indent=False):
+        """Attach block to project"""
+
         prj_tasks = project.get_tasks()
         predecessor_task = None
         if len(prj_tasks) > 0:
             predecessor_task = prj_tasks[len(prj_tasks) - 1]
-
         block_project = self.__create_project_from(block_to_attach)
         if block_to_attach.blocks:
+            # Sub-block indentation
+            starter_task = self._starter_task_base_level
+            first_block_blocks = block_to_attach.blocks[0].blocks
+            while first_block_blocks:
+                starter_task += 1
+                if not first_block_blocks[0].blocks:
+                    break
+                first_block_blocks = first_block_blocks[0].blocks
+            block_to_attach._set_starter_task(starter_task)
             [self.attach_to_project(block_project, child_block, indent=True) for child_block in block_to_attach.blocks]
-            # As the block is empty, the first task is the title,
-            # but we have to set the starter task after appending the sub-blocks
-            block_to_attach._set_starter_task(2)
 
         block_tasks = block_project.get_tasks()
         project.move_into(block_tasks)
         if indent:
             first_task_id = prj_tasks[0].wf_id
-            [task.set_fields({"parentID": first_task_id}) for task in block_tasks]
-
+            for task in block_tasks:
+                if task.wf_id not in self._indented_tasks:
+                    task.set_fields({"parentID": first_task_id})
+                    self._indented_tasks.append(task.wf_id)
         if predecessor_task:
-            # get the first task that need to have a predecessor, this is to
+            # get the first task that needs to have a predecessor, this is to
             # avoid non automatic block task not starting. So in general, you
             # would like to have the first automatic task as a starter task
             task = self.__task_from_name(block_to_attach.starter_task_identifier,
@@ -202,4 +213,6 @@ class WFBlockParser(object):
         '''
 
         r = self.wf.search_objects(WFObjCode.templat_project, {"name": name})
+        if len(r.json()["data"]) != 1: # not found
+            raise WFBrigeException("WF Template '{}' not found".format(name))
         return r.json()["data"][0]["ID"]
