@@ -141,7 +141,7 @@ class EmailProjectBuilder(object):
         block.provider_password = provider.password
         block.provider_token = provider.token
 
-    def _crt_audience_block(self):
+    def _crt_audience_block(self, live_setup=True):
         audb = WFEmailAudienceLiveSetupBlock()
         audb.campaign_name = self.project_name
 
@@ -154,7 +154,8 @@ class EmailProjectBuilder(object):
 
         audb.deployment_datetime = deployment_datetime_to_local.astimezone(tz.tzutc())
 
-        audb.seed_list_s3_path = self.live_seed_list
+        if live_setup:
+            audb.seed_list_s3_path = self.live_seed_list
         self._configure_provider_in_setup_block(audb, self.audience_provider)
         return audb
 
@@ -244,7 +245,9 @@ class EmailProjectBuilder(object):
                 email_seed_block.seed_list_s3_path = self.live_seed_list
                 project.append(email_seed_block)
 
-        audb = self._crt_audience_block()
+        livb = self._crt_audience_block()
+        project.append(livb)
+        audb = self._crt_audience_block(live_setup=False)
         project.append(audb)
 
         if self.review_deployment:
