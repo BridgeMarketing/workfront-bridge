@@ -172,6 +172,19 @@ class EmailProjectBuilder(object):
             slb.seed_list_s3_path = test_list
         return slb
 
+    def _crt_live_list_block(self, live_list):
+        slb = None
+        if self.test_sl_send_emails:
+            slb = WFEmailTestSeedBlock()
+            slb.seed_list_s3_path = live_list
+            slb.campaign_name = "Live List - " + self.project_name
+            slb.deployment_datetime = datetime.utcnow().replace(tzinfo=pytz.utc)
+            self._configure_provider_in_setup_block(slb, self.seeds_provider)
+        else:
+            slb = WFEmailTestSeedNoEmailSentBlock()
+            slb.seed_list_s3_path = live_list
+        return slb
+
     def _check_viability(self):
 
         def check_not_none(name, value):
@@ -241,12 +254,9 @@ class EmailProjectBuilder(object):
                 project.append(slb)
 
             if self.live_seed_list is not None:
-                email_seed_block = WFEmailLiveSeedBlock()
-                email_seed_block.seed_list_s3_path = self.live_seed_list
+                email_seed_block = self._crt_live_list_block(self.live_seed_list)
                 project.append(email_seed_block)
 
-        livb = self._crt_audience_block()
-        project.append(livb)
         audb = self._crt_audience_block(live_setup=False)
         project.append(audb)
 

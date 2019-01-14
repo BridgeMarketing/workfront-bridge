@@ -262,11 +262,11 @@ class WFEmailAudienceLiveSetupBlock(WFBlock):
     def __init__(self):
         super(WFEmailAudienceLiveSetupBlock, self).__init__(self.template_name)
 
-        req = ["cm_aud_s3_path", "Campaign Name", "Sender Name",
+        req = ["Campaign Name", "Sender Name",
                "Deployment Date/Time", "Sender Email"]
         self._add_required_parameters(req)
 
-        opt = ["SelectedProvider", "Email Provider User",
+        opt = ["cm_aud_s3_path", "SelectedProvider", "Email Provider User",
                "Email Provider Password", "Email Provider Token"]
         self._add_optional_parameters(opt)
 
