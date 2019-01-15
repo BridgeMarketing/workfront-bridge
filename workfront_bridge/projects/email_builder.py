@@ -52,6 +52,7 @@ class EmailProjectBuilder(object):
 
         self.audience_provider = ProviderConfig()
         self.seeds_provider = ProviderConfig()
+        self.live_seeds_provider = ProviderConfig()
 
         self.exclude_html_validation = False
         self.ecm_html = None
@@ -120,6 +121,22 @@ class EmailProjectBuilder(object):
         self.seeds_provider.token = token
         return self
 
+    def set_live_seeds_sender_email(self, email):
+        self.live_seeds_provider.sender_email = email
+        return self
+
+    def set_live_seeds_sender_name(self, name):
+        self.live_seeds_provider.sender_name = name
+        return self
+
+    def set_live_seeds_provider(self, esp_name, esp_user=None, password=None,
+                           token=None):
+        self.live_seeds_provider.name = esp_name
+        self.live_seeds_provider.user = esp_user
+        self.live_seeds_provider.password = password
+        self.live_seeds_provider.token = token
+        return self
+
     def set_email_creative_id(self, id):
         self.email_creative_id = id
         return self
@@ -178,7 +195,7 @@ class EmailProjectBuilder(object):
         slb.seed_list_s3_path = live_list
         slb.campaign_name = "Live List - " + self.project_name
         slb.deployment_datetime = datetime.utcnow().replace(tzinfo=pytz.utc)
-        self._configure_provider_in_setup_block(slb, self.seeds_provider)
+        self._configure_provider_in_setup_block(slb, self.live_seeds_provider)
         return slb
 
     def _check_viability(self):
