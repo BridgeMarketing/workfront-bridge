@@ -85,25 +85,16 @@ class WFEmailGenHtmlFromZipBlock(WFBlock):
         self.set_parameter("Generate HTML from zip", "ecm_zip", v)
 
 
-class WFEmailTestSeedBlock(WFBlock):
+class WFEmailSeedBlock(WFBlock):
     '''
-    @summary: Use this block to validate seed lists using the CCM and send test
-    emails (wiht the seed list) using the CM.
-    This block contains a Test Setup block that has this tasks:
-    - Validate Seed List (CCM)
-    - Upload Audience (CM)
-    - Upload Creative (CM)
-    - Create Flight (CM)
-    - Push to provider (CM)
-    - Seed List Approval (CCM)
+    @summary: Common elements for test/live seed block.
+    Please, check WFEmailTestSeedBlock and WFEmailLiveSeedBlock for more details
     '''
 
-    template_name = 'Block - Email Test Setup'
+    def __init__(self, wf_template_name):
+        super(WFEmailSeedBlock, self).__init__(wf_template_name)
 
-    def __init__(self):
-        super(WFEmailTestSeedBlock, self).__init__(self.template_name)
-
-        req = ["cm_test_aud_s3_path", "Campaign Name", "Sender Name",
+        req = ["Campaign Name", "Sender Name",
                "Deployment Date/Time", "Sender Email"]
         self._add_required_parameters(req)
 
@@ -112,7 +103,6 @@ class WFEmailTestSeedBlock(WFBlock):
         self._add_optional_parameters(opt)
 
         # Block Fields:
-        self._seed_list_path = None
         self._campaign_name = None
         self._sender_name = None
         self._sender_email = None
@@ -122,19 +112,8 @@ class WFEmailTestSeedBlock(WFBlock):
         self._provider_password = None
         self._provider_token = None
 
-        self._set_starter_task(2)  # Skip Test Setup
+        self._set_starter_task(2)  # Skip Setup
 
-        self.set_parameter("Push to provider", "isTest", "yes")
-
-
-    @property
-    def seed_list_s3_path(self):
-        return self._seed_list_path
-
-    @seed_list_s3_path.setter
-    def seed_list_s3_path(self, sl):
-        self._seed_list_path = sl
-        self.set_parameter("Test Setup", "cm_test_aud_s3_path", sl)
 
     @property
     def campaign_name(self):
@@ -215,15 +194,56 @@ class WFEmailTestSeedBlock(WFBlock):
                            provider_token)
 
 
-class WFEmailLiveSeedBlock(WFBlock):
+class WFEmailTestSeedBlock(WFEmailSeedBlock):
     '''
-    @summary: Use this block to validate live seed lists using the CCM (without
-    sending emails).
-    This block contains a Live Setup block that has validate seed
-    list task and seed list approval task.
+    @summary: Use this block to validate seed lists using the CCM and send test
+    emails (with the seed list) using the CM.
+    This block contains a Test Setup block that has this tasks:
+    - Validate Seed List (CCM)
+    - Upload Audience (CM)
+    - Upload Creative (CM)
+    - Create Flight (CM)
+    - Push to provider (CM)
+    - Seed List Approval (CCM)
     '''
 
-    template_name = 'Block - Email Live Setup'
+    template_name = 'Block - Email Test Setup'
+
+    def __init__(self):
+        super(WFEmailTestSeedBlock, self).__init__(self.template_name)
+
+        req = ["cm_test_aud_s3_path"]
+        self._add_required_parameters(req)
+
+        # Block Fields:
+        self._seed_list_path = None
+
+        self.set_parameter("Push to provider", "isTest", "yes")
+
+    @property
+    def seed_list_s3_path(self):
+        return self._seed_list_path
+
+    @seed_list_s3_path.setter
+    def seed_list_s3_path(self, sl):
+        self._seed_list_path = sl
+        self.set_parameter("Test Setup", "cm_test_aud_s3_path", sl)
+
+
+class WFEmailLiveSeedBlock(WFEmailSeedBlock):
+    '''
+    @summary: Use this block to validate seed lists using the CCM and send test
+    emails (with the seed list) using the CM.
+    This block contains a Live Setup block that has this tasks:
+    - Validate Seed List (CCM)
+    - Upload Audience (CM)
+    - Upload Creative (CM)
+    - Create Flight (CM)
+    - Push to provider (CM)
+    - Seed List Approval (CCM)
+    '''
+
+    template_name = 'Block - Email Live Setup V2'
 
     def __init__(self):
         super(WFEmailLiveSeedBlock, self).__init__(self.template_name)
@@ -233,8 +253,6 @@ class WFEmailLiveSeedBlock(WFBlock):
 
         # Block Fields :
         self._seed_list_path = None
-
-        self._set_starter_task(2)  # Skip Live Setup
 
     @property
     def seed_list_s3_path(self):

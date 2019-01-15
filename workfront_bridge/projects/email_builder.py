@@ -174,15 +174,11 @@ class EmailProjectBuilder(object):
 
     def _crt_live_list_block(self, live_list):
         slb = None
-        if self.test_sl_send_emails:
-            slb = WFEmailTestSeedBlock()
-            slb.seed_list_s3_path = live_list
-            slb.campaign_name = "Live List - " + self.project_name
-            slb.deployment_datetime = datetime.utcnow().replace(tzinfo=pytz.utc)
-            self._configure_provider_in_setup_block(slb, self.seeds_provider)
-        else:
-            slb = WFEmailTestSeedNoEmailSentBlock()
-            slb.seed_list_s3_path = live_list
+        slb = WFEmailLiveSeedBlock()
+        slb.seed_list_s3_path = live_list
+        slb.campaign_name = "Live List - " + self.project_name
+        slb.deployment_datetime = datetime.utcnow().replace(tzinfo=pytz.utc)
+        self._configure_provider_in_setup_block(slb, self.seeds_provider)
         return slb
 
     def _check_viability(self):
