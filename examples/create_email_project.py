@@ -30,8 +30,8 @@ b.set_seeds_sender_email("seedssender@email.com")
 b.set_seeds_sender_name("Seed Name")
 
 b.set_live_seeds_provider("Jango")
-b.set_seeds_sender_email("seedssender@email.com")
-b.set_seeds_sender_name("Seed Name")
+b.set_live_seeds_sender_email("liveseedssender@email.com")
+b.set_live_seeds_sender_name("Live Seed Name")
 
 b.set_email_creative_id("10")
 
