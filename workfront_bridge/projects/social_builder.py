@@ -81,7 +81,7 @@ class SocialProjectBuilder(object):
         """
         Ad Group kwargs:
         {}
-        
+
         Creative common kwargs:
         {}
         """.format(self.ad_group_fields, self.creative_common_fields)
@@ -135,7 +135,7 @@ class SocialProjectBuilder(object):
         launch_block.provider = self._provider
 
         project_blocks = [
-            order_review_block,
+            # order_review_block,
             data_block,
             setup_block
         ]

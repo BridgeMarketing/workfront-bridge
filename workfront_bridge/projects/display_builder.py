@@ -271,7 +271,7 @@ class DisplayProjectBuilder(object):
         launch_block = WFDisplayLaunchBlock()   # Manual
 
         project_blocks = [
-            order_review_block,
+            # order_review_block,
             data_block,
             campaign_block,
         ]
