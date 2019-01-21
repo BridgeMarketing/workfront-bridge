@@ -4,6 +4,7 @@ from workfront_bridge.blocks.base import WFBlockParser
 from workfront_bridge.blocks.resume import WFResumeEmailDeployBlock
 from workfront_bridge.exceptions import WFBrigeException
 from workfront_bridge.projects.resume import WFProjectResumeContainer
+from workfront_bridge.tools import datetime_to_wf_format
 
 
 class ResumeProjectBuilder(object):
@@ -102,7 +103,7 @@ class ResumeProjectBuilder(object):
         resume_task = wf_project.get_tasks()[0]
         resume_task.add_predecessor(ptp_task)
 
-        # Update "Deployment Date/Time" parameter with the new deploy_datetime
+        # Update "Deployment Date/Time" parameter with the new deploy_datetime (this update is for CW project that has not been running at this point)
         create_flight_task = [t for t in aud_tasks if t.name == "Create Flight"][0]
         create_flight_task.set_param_values({"Deployments Date/Time": datetime_to_wf_format(self.deploy_datetime)})
 
