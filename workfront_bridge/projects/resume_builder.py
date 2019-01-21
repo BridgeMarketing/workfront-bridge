@@ -105,7 +105,7 @@ class ResumeProjectBuilder(object):
 
         # Update "Deployment Date/Time" parameter with the new deploy_datetime (this update is for CW project that has not been running at this point)
         create_flight_task = [t for t in aud_tasks if t.name == "Create Flight"][0]
-        create_flight_task.set_param_values({"Deployments Date/Time": datetime_to_wf_format(self.deploy_datetime)})
+        create_flight_task.set_param_values({"Deployment Date/Time": datetime_to_wf_format(self.deploy_datetime)})
 
         return wf_project
 
