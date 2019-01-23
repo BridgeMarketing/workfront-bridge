@@ -83,6 +83,11 @@ class ResumeProjectBuilder(object):
         '''
         prj_being_resumed = WFProject(self.wf, self.wf_project_id)
 
+        program = prj_being_resumed.get_program()
+        all_project = program.get_projects()
+
+        cw_tool_project = [p for p in all_project if p.name.startswith("CW tool")][0]
+
         prj_name = "Resume - {}".format(prj_being_resumed.name)
         project = WFProjectResumeContainer(prj_name)
         resume_block = WFResumeEmailDeployBlock()
@@ -103,9 +108,12 @@ class ResumeProjectBuilder(object):
         resume_task = wf_project.get_tasks()[0]
         resume_task.add_predecessor(ptp_task)
 
-        # Update "Deployment Date/Time" parameter with the new deploy_datetime (this update is for CW project that has not been running at this point)
+        # Update "Deployment Date/Time" parameter with the new deploy_datetime
         create_flight_task = [t for t in aud_tasks if t.name == "Create Flight"][0]
         create_flight_task.set_param_values({"Deployment Date/Time": datetime_to_wf_format(self.deploy_datetime)})
+
+        #Update "Start Date" in CW tools project
+        cw_tool_project.set_param_values({"Start Date": datetime_to_wf_format(self.deploy_datetime)})
 
         return wf_project
 

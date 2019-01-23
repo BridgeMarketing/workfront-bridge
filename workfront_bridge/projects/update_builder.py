@@ -5,6 +5,7 @@ from workfront_bridge.exceptions import WFBrigeException
 from workfront_bridge.projects.update import WFProjectUpdateContainer
 
 from workfront_bridge.blocks.update import WFUpdateEmailDeployBlock
+from workfront_bridge.tools import datetime_to_wf_format
 
 
 class UpdateProjectBuilder(object):
@@ -83,6 +84,12 @@ class UpdateProjectBuilder(object):
         @return: a update wf project to update an email project.
         '''
         prj_being_updated = WFProject(self.wf, self.wf_project_id)
+
+        program = prj_being_updated.get_program()
+        all_project = program.get_projects()
+
+        cw_tool_project = [p for p in all_project if p.name.startswith("CW tool")][0]
+
         prj_name = "Update - {}".format(prj_being_updated.name)
         project = WFProjectUpdateContainer(prj_name)
         update_block = WFUpdateEmailDeployBlock()
@@ -93,19 +100,22 @@ class UpdateProjectBuilder(object):
         parser = WFBlockParser(self.wf)
         wf_project = parser.create(project)
 
-        # Set dependencies to Avoid race conditions
-        try:
-            # Get Audience Live Setup Push to Provider Task
-            tasks = prj_being_updated.get_tasks()
-            aud_tsk = [t for t in tasks if t.name == "Audience Live Setup"][0]
-            aud_tasks = tasks[tasks.index(aud_tsk):]
-            ptp_task = [t for t in aud_tasks if t.name == "Push to provider"][0]
+        # Get Audience Live Setup Push to Provider Task
+        tasks = prj_being_updated.get_tasks()
+        aud_tsk = [t for t in tasks if t.name == "Audience Live Setup"][0]
+        aud_tasks = tasks[tasks.index(aud_tsk):]
+        ptp_task = [t for t in aud_tasks if t.name == "Push to provider"][0]
 
-            # Now link the update task to the push to proivder one
-            update_task = wf_project.get_tasks()[0]
-            update_task.add_predecessor(ptp_task)
-        except:
-            pass
+        # Now link the update task to the push to proivder one
+        update_task = wf_project.get_tasks()[0]
+        update_task.add_predecessor(ptp_task)
+
+        # Update "Deployment Date/Time" parameter with the new deploy_datetime
+        create_flight_task = [t for t in aud_tasks if t.name == "Create Flight"][0]
+        create_flight_task.set_param_values({"Deployment Date/Time": datetime_to_wf_format(self.deploy_datetime)})
+
+        # Update "Start Date" in CW tools project
+        cw_tool_project.set_param_values({"Start Date": datetime_to_wf_format(self.deploy_datetime)})
 
         return wf_project
 
