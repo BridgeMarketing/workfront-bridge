@@ -1,6 +1,6 @@
 from workfront.workfront import Workfront
 from workfront_bridge.projects import targeted_bonus_media_builder
-from datetime import date
+from datetime import datetime
 
 wf = Workfront('notifications@wf.bridgemarketing.com',
                'beef6060',
@@ -17,7 +17,7 @@ b.set_curve_type(1)
 b.set_project_type('Display - Desktop & Mobile')
 b.set_total_click_goal(20)
 b.set_ttd_advertiser_id('xc7votu')
-b.set_start_date_inclusive_utc(date.today())
+b.set_start_date_inclusive_utc(datetime.utcnow())
 b.set_image_s3_url('s3://bridge-file-assets/API_files/orderID_10000129/Channel_2/mobile_banner.png')
 b.set_landing_page_url('http://dummy.com')
 b.set_adg_base_bid_amount(1.5)
@@ -32,6 +32,6 @@ b.set_campaign_type("CPM Deployment")  # Options are: Match and Deploy | Reblast
 prj = b.build()
 
 prj.set_fields({"portfolioID": "5b45ff9b000aa3a5db15b2e269976a4c"})
-prj.set_fields({"programID": "5bc777f90014f1e7b86f4e7c38dbf31a"})
+prj.set_fields({"programID": "5c4629f700440656e233af5c28a1bc99"})
 
 print prj

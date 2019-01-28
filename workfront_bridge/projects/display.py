@@ -29,8 +29,8 @@ class WFProjectDisplayContainer(WFBlock):
             "curve type",
             "links",
             "weights",
-            "StartDateInclusiveUTC",
-            "EndDateExclusiveUTC",
+            "StartDateTimeInclusiveUTC",
+            "EndDateTimeExclusiveUTC",
             "Click Tier",
             "Click Tier Value",
             "Open Tier",
@@ -235,7 +235,7 @@ class WFProjectDisplayContainer(WFBlock):
     @start_date_inclusive_utc.setter
     def start_date_inclusive_utc(self, v):
         self._start_date_inclusive_utc = v
-        self.set_parameter("", "StartDateInclusiveUTC", datetime_to_wf_format(v))
+        self.set_parameter("", "StartDateTimeInclusiveUTC", datetime_to_wf_format(v))
 
     @property
     def end_date_exclusive_utc(self):
@@ -244,4 +244,4 @@ class WFProjectDisplayContainer(WFBlock):
     @end_date_exclusive_utc.setter
     def end_date_exclusive_utc(self, v):
         self._end_date_exclusive_utc = v
-        self.set_parameter("", "EndDateExclusiveUTC", datetime_to_wf_format(v))
+        self.set_parameter("", "EndDateTimeExclusiveUTC", datetime_to_wf_format(v))
