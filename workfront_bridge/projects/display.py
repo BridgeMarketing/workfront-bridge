@@ -9,7 +9,7 @@ class WFProjectDisplayContainer(WFBlock):
     The container has no preset tasks, but it has the project level fields.
     """
 
-    template_name = "Base Project Container - Display Channel"
+    template_name = "Base Project Container - Display Channel v2"
 
     def __init__(self, prj_name):
         super(WFProjectDisplayContainer, self).__init__(self.template_name, name=prj_name)

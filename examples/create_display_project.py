@@ -41,7 +41,7 @@ b.add_ad_group(
     ad_group_name='Test AdGroup 2',
     creatives=[
         {
-            'creative_type': 'Image Native',
+            'creative_type': 'Image Banner or Interstitial',
             'creative_name': 'Test Creative 4',
             'clickthrough_url': 'http://dummy.com',
             'landing_page_url': 'http://dummy.com',
@@ -50,7 +50,7 @@ b.add_ad_group(
             'third_party_impression_tracking_url': 'http://dummy.com'
         },
         {
-            'creative_type': 'Image Native',
+            'creative_type': 'Image Banner or Interstitial',
             'creative_name': 'Test Creative 5',
             'clickthrough_url': 'http://dummy.com',
             'landing_page_url': 'http://dummy.com',
@@ -59,21 +59,20 @@ b.add_ad_group(
             'third_party_impression_tracking_url': 'http://dummy.com'
         },
         {
-            'creative_type': 'Image Native',
+            'creative_type': 'Image Banner or Interstitial',
             'creative_name': 'Test Creative 6',
             'clickthrough_url': 'http://dummy.com',
             'landing_page_url': 'http://dummy.com',
             'image_s3_url': 's3://bridge-file-assets/API_files/orderID_10000129/Channel_2/mobile_banner.png',
             'creative_size': '300x250',
             'third_party_impression_tracking_url': 'http://dummy.com',
-            'native_text_asset_price': '4.99',
         },
     ]
 )
 (b.set_ttd_advertiser_id('xc7votu')
  .set_audience_name('audience_name')
  .set_start_date_inclusive_utc(datetime.datetime.utcnow())
- .set_end_date_exclusive_utc(datetime.datetime.utcnow() + datetime.timedelta(day=3))
+ .set_end_date_exclusive_utc(datetime.datetime.utcnow() + datetime.timedelta(days=3))
  .set_campaign_name('Test Campaign')
  .set_multiple_ad_groups(True)
  .set_project_type('Display - Desktop & Mobile'))

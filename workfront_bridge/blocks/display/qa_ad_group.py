@@ -6,14 +6,14 @@ class WFDisplayQAAdGroupBlock(WFBlock):
     """
     @summary: Display QA Ad Group block
     """
-    template_name = 'Block - Display QA Ad Group'
+    template_name = 'Block - Display QA Ad Group v2'
     ad_group_qa_task_name = 'Ad Group QA'
 
     def __init__(self):
         super(WFDisplayQAAdGroupBlock, self).__init__(self.template_name)
         self._add_required_parameters([
-            "StartDateInclusiveUTC",
-            "EndDateExclusiveUTC",
+            "StartDateTimeInclusiveUTC",
+            "EndDateTimeExclusiveUTC",
             "Campaign Name",
             "AdGroupName",
         ])
@@ -91,7 +91,7 @@ class WFDisplayQAAdGroupBlock(WFBlock):
     @start_date_inclusive_utc.setter
     def start_date_inclusive_utc(self, v):
         self._start_date_inclusive_utc = v
-        self.set_parameter(self.ad_group_qa_task_name, "StartDateInclusiveUTC", datetime_to_wf_format(v))
+        self.set_parameter(self.ad_group_qa_task_name, "StartDateTimeInclusiveUTC", datetime_to_wf_format(v))
 
     @property
     def end_date_exclusive_utc(self):
@@ -100,7 +100,7 @@ class WFDisplayQAAdGroupBlock(WFBlock):
     @end_date_exclusive_utc.setter
     def end_date_exclusive_utc(self, v):
         self._end_date_exclusive_utc = v
-        self.set_parameter(self.ad_group_qa_task_name, "EndDateExclusiveUTC", datetime_to_wf_format(v))
+        self.set_parameter(self.ad_group_qa_task_name, "EndDateTimeExclusiveUTC", datetime_to_wf_format(v))
 
     @property
     def campaign_name(self):

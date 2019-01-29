@@ -7,7 +7,7 @@ class WFDisplayCampaignBlock(WFBlock):
     @summary: Display Campaign block
     """
 
-    template_name = 'Block - Display Campaign'
+    template_name = 'Block - Display Campaign v2'
 
     def __init__(self):
         super(WFDisplayCampaignBlock, self).__init__(self.template_name)
@@ -15,8 +15,8 @@ class WFDisplayCampaignBlock(WFBlock):
             "Campaign Name",
         ])
         self._add_optional_parameters([
-            "StartDateInclusiveUTC",
-            "EndDateExclusiveUTC",
+            "StartDateTimeInclusiveUTC",
+            "EndDateTimeExclusiveUTC",
             "Campaign Overview",
             "PartnerCostPercentageFee",
             "Availability",
@@ -59,7 +59,7 @@ class WFDisplayCampaignBlock(WFBlock):
     @start_date_inclusive_utc.setter
     def start_date_inclusive_utc(self, v):
         self._start_date_inclusive_utc = v
-        self.set_parameter("Create Campaign & Flight", "StartDateInclusiveUTC", datetime_to_wf_format(v))
+        self.set_parameter("Create Campaign & Flight", "StartDateTimeInclusiveUTC", datetime_to_wf_format(v))
 
     @property
     def end_date_exclusive_utc(self):
@@ -68,7 +68,7 @@ class WFDisplayCampaignBlock(WFBlock):
     @end_date_exclusive_utc.setter
     def end_date_exclusive_utc(self, v):
         self._end_date_exclusive_utc = v
-        self.set_parameter("Create Campaign & Flight", "EndDateExclusiveUTC", datetime_to_wf_format(v))
+        self.set_parameter("Create Campaign & Flight", "EndDateTimeExclusiveUTC", datetime_to_wf_format(v))
 
     @property
     def campaign_name(self):

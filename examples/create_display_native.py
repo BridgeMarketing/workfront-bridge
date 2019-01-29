@@ -25,7 +25,7 @@ b.add_ad_group(
 (b.set_ttd_advertiser_id('xc7votu')
  .set_audience_name('audience_name')
  .set_start_date_inclusive_utc(datetime.datetime.utcnow())
- .set_end_date_exclusive_utc(datetime.datetime.utcnow() + datetime.timedelta(day=3))
+ .set_end_date_exclusive_utc(datetime.datetime.utcnow() + datetime.timedelta(days=3))
  .set_campaign_name('Test Campaign')
  .set_multiple_ad_groups(True)
  .set_project_type('Display - Desktop & Mobile'))
