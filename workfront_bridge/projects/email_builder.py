@@ -8,7 +8,7 @@ from workfront_bridge.blocks.base import WFBlockParser
 from workfront_bridge.exceptions import WFBrigeException
 from workfront_bridge.projects.email import WFProjectEmailContainer
 from workfront_bridge.blocks.email import WFEmailTestSeedNoEmailSentBlock, \
-    WFEmailAudienceLiveSetupBlock, WFEmailReviewDeploymentBlock
+    WFEmailAudienceLiveSetupBlock, WFEmailReviewDeploymentBlock, WFEmailApproveCWTaggingBlock
 from workfront_bridge.blocks.email import WFEmailLiveSeedBlock
 from workfront_bridge.blocks.email import WFEmailTestSeedBlock
 from workfront_bridge.blocks.email import WFEmailGenHtmlFromZipBlock
@@ -56,6 +56,7 @@ class EmailProjectBuilder(object):
 
         self.exclude_html_validation = False
         self.ecm_html = None
+        self.add_tags_weight_approval_step = False
 
     def set_html(self, s3_path):
         self.html = s3_path
@@ -149,6 +150,9 @@ class EmailProjectBuilder(object):
         self.ecm_html = s3_path
         return self
 
+
+
+
     def _configure_provider_in_setup_block(self, block, provider):
         block.sender_email = provider.sender_email
         block.sender_name = provider.sender_name
@@ -231,6 +235,9 @@ class EmailProjectBuilder(object):
         check_not_none("audience_sender_email",
                        self.audience_provider.sender_email)
 
+        check_not_none("add_tags_weight_approval_step", self.add_tags_weight_approval_step)
+        check_not_none("add_tags_weight_approval_step", self.add_tags_weight_approval_step)
+
     def build(self):
         '''
         @summary: According to all the parameters set to the builder, build a
@@ -261,6 +268,10 @@ class EmailProjectBuilder(object):
             bval_html = WFEmailValidateHtmlBlock()
             bval_html.email_subject = self.subject
             project.append(bval_html)
+
+            if self.add_tags_weight_approval_step:
+                block_approve_cw_tags = WFEmailApproveCWTaggingBlock()
+                project.append(block_approve_cw_tags)
 
             for test_list in self.test_seed_lists:
                 slb = self._crt_test_list_block(test_list)

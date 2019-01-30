@@ -403,3 +403,15 @@ class WFEmailReviewDeploymentBlock(WFBlock):
         super(WFEmailReviewDeploymentBlock, self).__init__(self.template_name)
 
         self._set_starter_task(2)  # Skip Deploy group tast
+
+
+class WFEmailApproveCWTaggingBlock(WFBlock):
+    '''
+    @summary: Use this block to add a non automatic task to Approve the
+    CW Tagging by a human.
+    '''
+
+    template_name = 'Block - Email - Approve CW Tagging'
+
+    def __init__(self):
+        super(WFEmailApproveCWTaggingBlock, self).__init__(self.template_name)
