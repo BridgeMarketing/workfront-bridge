@@ -236,7 +236,6 @@ class EmailProjectBuilder(object):
                        self.audience_provider.sender_email)
 
         check_not_none("add_tags_weight_approval_step", self.add_tags_weight_approval_step)
-        check_not_none("add_tags_weight_approval_step", self.add_tags_weight_approval_step)
 
     def build(self):
         '''
