@@ -81,7 +81,7 @@ class SocialProjectBuilder(object):
         """
         Ad Group kwargs:
         {}
-        
+
         Creative common kwargs:
         {}
         """.format(self.ad_group_fields, self.creative_common_fields)
