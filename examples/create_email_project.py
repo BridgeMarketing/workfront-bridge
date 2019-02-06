@@ -1,5 +1,5 @@
 from workfront.workfront import Workfront
-from datetime import datetime
+from datetime import datetime, timedelta
 from workfront_bridge.projects import email_builder
 
 wf = Workfront("notifications@wf.bridgemarketing.com", 'beef6060', 'thebridgecorp.sb01.workfront.com')
@@ -15,7 +15,7 @@ b.add_test_list("s3://some/testlist2.csv")
 
 b.set_html("s3://some/creative.html")
 
-b.set_deployment_datetime(datetime.now())
+b.set_deployment_datetime(datetime.now() + timedelta(hours=4))
 b.set_seed_list("s3://some/seed.csv")
 
 b.set_subject("asuntoooo")

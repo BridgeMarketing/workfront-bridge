@@ -150,9 +150,6 @@ class EmailProjectBuilder(object):
         self.ecm_html = s3_path
         return self
 
-
-
-
     def _configure_provider_in_setup_block(self, block, provider):
         block.sender_email = provider.sender_email
         block.sender_name = provider.sender_name
@@ -162,22 +159,28 @@ class EmailProjectBuilder(object):
         block.provider_password = provider.password
         block.provider_token = provider.token
 
+    def _deployment_date_to_local(self, date):
+        deployment_datetime_to_local = date
+
+        # if the datetime is Naive (hasn't timezone) assume that the tz is the current env tz
+        if deployment_datetime_to_local.tzinfo is None or deployment_datetime_to_local.tzinfo.utcoffset(
+                deployment_datetime_to_local) is None:
+            deployment_datetime_to_local = date.replace(tzinfo=tz.tzlocal())
+
+        return deployment_datetime_to_local
+
     def _crt_audience_block(self, live_setup=True):
         audb = WFEmailAudienceLiveSetupBlock()
         audb.campaign_name = self.project_name
 
-        deployment_datetime_to_local = self.deployment_time
-
-        # if the datetime is Naive (hasnt timezone) assume that the tz is the current env tz
-        if deployment_datetime_to_local.tzinfo is None or deployment_datetime_to_local.tzinfo.utcoffset(
-                deployment_datetime_to_local) is None:
-            deployment_datetime_to_local = self.deployment_time.replace(tzinfo=tz.tzlocal())
+        deployment_datetime_to_local = self._deployment_date_to_local(self.deployment_time)
 
         audb.deployment_datetime = deployment_datetime_to_local.astimezone(tz.tzutc())
 
         if live_setup:
             audb.seed_list_s3_path = self.live_seed_list
         self._configure_provider_in_setup_block(audb, self.audience_provider)
+
         return audb
 
     def _crt_test_list_block(self, test_list):
@@ -198,7 +201,7 @@ class EmailProjectBuilder(object):
         slb = WFEmailLiveSeedBlock()
         slb.seed_list_s3_path = live_list
         slb.campaign_name = "Live List - " + self.project_name
-        slb.deployment_datetime = datetime.utcnow().replace(tzinfo=pytz.utc)
+        slb.deployment_datetime = self._deployment_date_to_local(self.deployment_time)
         self._configure_provider_in_setup_block(slb, self.live_seeds_provider)
         return slb
 
