@@ -269,13 +269,14 @@ class WFEmailAudienceLiveSetupBlock(WFBlock):
     @summary: Use this block to send emails to the audience in the program of
     the project using the CM
     This block contains a Audience Live Setup block that has this tasks:
+    - Validate Start Date (OMS)
     - Upload Audience (CM)
     - Upload Creative (CM)
     - Create Flight (CM)
     - Push to provider (CM)
     '''
 
-    template_name = 'Block - Email Audience Live Setup'
+    template_name = 'Block - Email Audience Live Setup v2'
 
     def __init__(self):
         super(WFEmailAudienceLiveSetupBlock, self).__init__(self.template_name)
@@ -299,7 +300,8 @@ class WFEmailAudienceLiveSetupBlock(WFBlock):
         self._provider_password = None
         self._provider_token = None
 
-        self._set_starter_task(2)  # Skip Test Setup
+        # Skip Test Setup and Validate Start Date
+        self._set_starter_task(3)
 
     @property
     def seed_list_s3_path(self):
