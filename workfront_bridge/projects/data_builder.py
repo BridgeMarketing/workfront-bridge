@@ -15,11 +15,9 @@ class DataProjectBuilder(object):
     """
 
     SUPPRESSION_TYPES = set(["one_per_person", "one_per_household"])
-
-    SUPPRESSION_FILE_TYPES = set(["bridge_id", "email", "maid", "md5",
-                                  "postal"])
-
-    AUDIENCE_FILE_INDENTIFIERS = set(["oneAudienceID", "email", "deviceID"])
+    IDENTIFIER_FIELDS = set(["bridge_id", "email", "maid", "md5", "postal"])
+    SUPPRESSION_FILE_TYPES = IDENTIFIER_FIELDS
+    AUDIENCE_FILE_IDENTIFIERS = IDENTIFIER_FIELDS
 
     def __init__(self, wf, project_name):
         """
@@ -80,10 +78,10 @@ class DataProjectBuilder(object):
         return self
 
     def set_audience_identifier(self, audience_identifier):
-        if audience_identifier not in self.AUDIENCE_FILE_INDENTIFIERS:
+        if audience_identifier not in self.AUDIENCE_FILE_IDENTIFIERS:
             m = "Invalid audience identifier {}. Possible values are {}"
             err = m.format(audience_identifier,
-                           ",".join(self.AUDIENCE_FILE_INDENTIFIERS))
+                           ",".join(self.AUDIENCE_FILE_IDENTIFIERS))
             raise WFBrigeException(err)
 
         self.audience_identifier = audience_identifier
