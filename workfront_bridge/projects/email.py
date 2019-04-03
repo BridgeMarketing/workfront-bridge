@@ -18,7 +18,7 @@ class WFProjectEmailContainer(WFBlock):
         self._add_required_parameters(req)
 
         opt = ["tags", "input_html_s3_path", "ecm_from_line", "Suppression File Path", "Category", "ecm_live_seed_list",
-               "ecm_test_seed_lists", "ecm_html"]
+               "ecm_test_seed_lists", "ecm_html", "subject_test_prefix"]
         self._add_optional_parameters(opt)
 
         # Project Container fields:
@@ -33,6 +33,7 @@ class WFProjectEmailContainer(WFBlock):
         self._tags = None
         self._email_creative_id = None
         self._ecm_html = None
+        self._subject_test_prefix = None
 
 
     @property
@@ -124,3 +125,12 @@ class WFProjectEmailContainer(WFBlock):
     def ecm_html(self, v):
         self._ecm_html = v
         self.set_parameter("", "ecm_html", v)
+
+    @property
+    def subject_test_prefix(self):
+        return self._subject_test_prefix
+
+    @subject_test_prefix.setter
+    def subject_test_prefix(self, v):
+        self._subject_test_prefix = v
+        self.set_parameter("", "subject_test_prefix", v)

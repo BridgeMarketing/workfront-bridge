@@ -43,6 +43,7 @@ class EmailProjectBuilder(object):
         self.live_seed_list = None
         self.test_seed_lists = []
         self.subject = None
+        self.subject_test_prefix = None
         self.html = None
         self.html_zip = None
         self.provider = None
@@ -80,6 +81,10 @@ class EmailProjectBuilder(object):
 
     def set_subject(self, subject):
         self.subject = subject
+        return self
+
+    def set_subject_test_prefix(self, subject_test_prefix):
+        self.subject_test_prefix = subject_test_prefix
         return self
 
     def set_review_deployment(self, val=True):
@@ -250,6 +255,7 @@ class EmailProjectBuilder(object):
         project = WFProjectEmailContainer(self.project_name)
 
         project.email_subject = self.subject
+        project.subject_test_prefix = self.subject_test_prefix
         project.email_creative_id = self.email_creative_id
         project.from_line = self.audience_provider.sender_name
 
@@ -454,6 +460,7 @@ class EmailOnBoardingProjectBuilder(object):
 
         project.tags = "onboarding"
         project.email_subject = self.subject
+        project.subject_test_prefix = self.subject_test_prefix
         project.from_line = self.from_line
         project.suppression_file_path = self.suppression_file_path
         project.client_id = self.client_id
