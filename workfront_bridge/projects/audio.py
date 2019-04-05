@@ -15,5 +15,13 @@ class WFProjectAudioContainer(WFBlock):
         self._add_optional_parameters([
             'Project Type',
         ])
-        self._project_type = 'Audio'
-        self.set_parameter('', 'Project Type', 'Audio')
+        self.project_type = 'Audio'
+
+    @property
+    def project_type(self):
+        return self._project_type
+
+    @project_type.setter
+    def project_type(self, value):
+        self._project_type = value
+        self.set_parameter('', 'Project Type', value)
