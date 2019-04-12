@@ -301,7 +301,7 @@ class WFEmailAudienceLiveSetupBlock(WFBlock):
         self._provider_token = None
 
         # Skip Test Setup and Validate Start Date
-        self._set_starter_task(3)
+        self._set_starter_task(2)
 
     @property
     def seed_list_s3_path(self):
