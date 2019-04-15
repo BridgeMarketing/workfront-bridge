@@ -13,6 +13,7 @@ class WFDisplayCampaignBlock(WFBlock):
         super(WFDisplayCampaignBlock, self).__init__(self.template_name)
         self._add_required_parameters([
             "Campaign Name",
+            "type",
         ])
         self._add_optional_parameters([
             "StartDateTimeInclusiveUTC",
@@ -51,6 +52,18 @@ class WFDisplayCampaignBlock(WFBlock):
         self._daily_target_in_impressions = None
 
         self._set_starter_task(2)
+
+        # setting default value to Display
+        self.automation_type = 'DigitalCampaignCreate'
+
+    @property
+    def automation_type(self):
+        return self._automation_type
+
+    @automation_type.setter
+    def automation_type(self, v):
+        self._automation_type = v
+        self.set_parameter("Create Campaign & Flight", "type", v)
 
     @property
     def start_date_inclusive_utc(self):

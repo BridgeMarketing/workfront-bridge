@@ -12,6 +12,7 @@ class WFDisplayCreateAdGroupBlock(WFBlock):
         super(WFDisplayCreateAdGroupBlock, self).__init__(self.template_name)
         self._add_required_parameters([
             "AdGroupName",
+            "type",
         ])
         self._add_optional_parameters([
             "ADGDescription",
@@ -48,6 +49,17 @@ class WFDisplayCreateAdGroupBlock(WFBlock):
         self._country = None
         self._category = None
         self._ae_excluder = None
+
+        self.automation_type = 'DigitalDisplayAdGroupCreate'
+
+    @property
+    def automation_type(self):
+        return self._automation_type
+
+    @automation_type.setter
+    def automation_type(self, v):
+        self._automation_type = v
+        self.set_parameter("Create Ad Group", "type", v)
 
     @property
     def ad_group_name(self):

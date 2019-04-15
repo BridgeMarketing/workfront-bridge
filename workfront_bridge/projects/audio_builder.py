@@ -1,13 +1,16 @@
-from workfront_bridge.blocks.display.campaign import WFDisplayCampaignBlock
-from workfront_bridge.blocks.display.data import WFDisplayDataBlock
+from workfront_bridge.blocks.audio.campaign import WFAudioCampaignBlock
+from workfront_bridge.blocks.audio.data import WFAudioDataBlock
+from workfront_bridge.blocks.audio.ad_group_create import WFAudioCreateAdGroupBlock
+from workfront_bridge.blocks.audio.ad_group_creative_upload import WFAudioCreativeUploadBlock
+from workfront_bridge.blocks.audio.qa_creative import WFAudioCreativeQABlock
 from workfront_bridge.blocks.display.launch import WFDisplayLaunchBlock
 from workfront_bridge.blocks.display.ad_group_setup import WFDisplayAdGroupSetupBlock
 from workfront_bridge.blocks.display.qa import WFDisplayQABlock
-from workfront_bridge.blocks.audio.ad_group_creative_upload import WFAudioCreativeUploadBlock
-from workfront_bridge.blocks.audio.qa_creative import WFAudioCreativeQABlock
 from workfront_bridge.projects.audio import WFProjectAudioContainer
 from workfront_bridge.exceptions import WFBrigeException
 from workfront_bridge.blocks.base import WFBlockParser
+
+
 
 
 class AudioProjectBuilder(object):
@@ -129,10 +132,10 @@ class AudioProjectBuilder(object):
 
         # order_review_block = WFDisplayOrderReviewBlock()
 
-        data_block = WFDisplayDataBlock()
+        data_block = WFAudioDataBlock()
         data_block.audience_name = self._audience_name
 
-        campaign_block = WFDisplayCampaignBlock()
+        campaign_block = WFAudioCampaignBlock()
         campaign_block.start_date_inclusive_utc = self._start_date_inclusive_utc
         campaign_block.end_date_exclusive_utc = self._end_date_exclusive_utc
         campaign_block.campaign_name = self._campaign_name
@@ -165,7 +168,7 @@ class AudioProjectBuilder(object):
                                     for k in self.creative_qa_params
                                     if k in creative}
                 qa_block.add_creative(block_class=WFAudioCreativeQABlock, **creative_qa_dict)
-            ad_group_setup_block.add_ad_group(**ad_group)
+            ad_group_setup_block.add_ad_group(block_class=WFAudioCreateAdGroupBlock, **ad_group)
             ad_group_setup_blocks.append(ad_group_setup_block)
             ad_group.update({
                 'start_date_inclusive_utc': self._start_date_inclusive_utc,

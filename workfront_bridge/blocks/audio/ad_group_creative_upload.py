@@ -13,6 +13,7 @@ class WFAudioCreativeUploadBlock(WFBlock):
         super(WFAudioCreativeUploadBlock, self).__init__(self.template_name)
         self._add_required_parameters([
             "Creative Name",
+            "type",
         ])
         self._add_optional_parameters([
             "ClickthroughUrl",
@@ -25,6 +26,17 @@ class WFAudioCreativeUploadBlock(WFBlock):
         self._audio_s3_url = None
         self._third_party_impression_tracking_url = None
         self._duration = None
+
+        self.automation_type = ' AudioCreativeUpload'
+
+    @property
+    def automation_type(self):
+        return self._automation_type
+
+    @automation_type.setter
+    def automation_type(self, v):
+        self._automation_type = v
+        self.set_parameter(self.creative_upload_task_name, "type", v)
 
     @property
     def creative_name(self):

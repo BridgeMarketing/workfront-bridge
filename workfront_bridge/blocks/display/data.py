@@ -13,10 +13,23 @@ class WFDisplayDataBlock(WFBlock):
 
         self._add_required_parameters([
             "Audience Name",
+            "type",
         ])
         self._audience_name = None
 
         self._set_starter_task(2)
+
+        # setting default value to Display
+        self.automation_type = 'DigitalAudienceCreate'
+
+    @property
+    def automation_type(self):
+        return self._automation_type
+
+    @automation_type.setter
+    def automation_type(self, v):
+        self._automation_type = v
+        self.set_parameter("Create Audience", "type", v)
 
     @property
     def audience_name(self):

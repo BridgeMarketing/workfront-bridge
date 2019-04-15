@@ -13,11 +13,11 @@ class WFAudioCreativeQABlock(WFBlock):
         super(WFAudioCreativeQABlock, self).__init__(self.template_name)
         self._add_required_parameters([
             "Creative Name",
+        ])
+        self._add_optional_parameters([
             "AudioS3URL",
             "ThirdPartyImpressionTrackingUrl",
             "Duration",
-        ])
-        self._add_optional_parameters([
         ])
         self._creative_name = None
         self._audio_s3_url = None
