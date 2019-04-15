@@ -1,16 +1,14 @@
 from workfront_bridge.blocks.audio.campaign import WFAudioCampaignBlock
-from workfront_bridge.blocks.audio.data import WFAudioDataBlock
 from workfront_bridge.blocks.audio.ad_group_create import WFAudioCreateAdGroupBlock
 from workfront_bridge.blocks.audio.ad_group_creative_upload import WFAudioCreativeUploadBlock
 from workfront_bridge.blocks.audio.qa_creative import WFAudioCreativeQABlock
+from workfront_bridge.blocks.display.data import WFDisplayDataBlock
 from workfront_bridge.blocks.display.launch import WFDisplayLaunchBlock
 from workfront_bridge.blocks.display.ad_group_setup import WFDisplayAdGroupSetupBlock
 from workfront_bridge.blocks.display.qa import WFDisplayQABlock
 from workfront_bridge.projects.audio import WFProjectAudioContainer
 from workfront_bridge.exceptions import WFBrigeException
 from workfront_bridge.blocks.base import WFBlockParser
-
-
 
 
 class AudioProjectBuilder(object):
@@ -132,7 +130,7 @@ class AudioProjectBuilder(object):
 
         # order_review_block = WFDisplayOrderReviewBlock()
 
-        data_block = WFAudioDataBlock()
+        data_block = WFDisplayDataBlock()
         data_block.audience_name = self._audience_name
 
         campaign_block = WFAudioCampaignBlock()
