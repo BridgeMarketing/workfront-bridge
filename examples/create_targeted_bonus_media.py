@@ -20,7 +20,10 @@ b.set_ttd_advertiser_id('xc7votu')
 b.set_start_date_inclusive_utc(datetime.utcnow())
 b.set_image_s3_url('s3://bridge-file-assets/API_files/orderID_10000129/Channel_2/mobile_banner.png')
 b.set_landing_page_url('http://dummy.com')
-b.set_adg_base_bid_amount(1.5)
+
+b.set_adg_base_bid_amount(1.12)
+b.set_adg_max_bid_amount(2.25)
+
 b.set_budget_in_impressions_pre_calc(80000)
 b.set_open_tier('O1')
 b.set_open_tier_value(0.10)
