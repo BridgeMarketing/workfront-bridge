@@ -13,6 +13,8 @@ b.add_ad_group(
             'creative_name': 'Test Creative 1',
             'audio_s3_url': 's3://bridge-file-assets/API_files/orderID_10000129/Channel_2/sound.mp3',
             'duration': 15,
+            'clickthrough_url': 'http://a.com/',
+            'landing_page_url': 'http://a.com/',
             'third_party_impression_tracking_url': 'http://dummy.com'
         },
     ]
