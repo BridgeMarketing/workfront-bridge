@@ -6,7 +6,8 @@ class WFReviewDataBlock(WFBlock):
     @summary: Use this block to add a Review Data task in a data project.
     """
 
-    template_name = 'Block - Data - Review Data'
+    template_name = 'Block - Data - Review Data V2'
+    
 
     def __init__(self):
         super(WFReviewDataBlock, self).__init__(self.template_name)
