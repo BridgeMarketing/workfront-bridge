@@ -10,6 +10,4 @@ class WFProjectResumeContainer(WFBlock):
     template_name = "Base Project Container - Resume"
 
     def __init__(self, prj_name):
-        super(WFProjectResumeContainer, self).__init__(self.template_name,
-                                                       name=prj_name)
-
+        super(WFProjectResumeContainer, self).__init__(self.template_name, name=prj_name)

@@ -8,6 +8,4 @@ class WFAudioCampaignBlock(WFDisplayCampaignBlock):
 
     def __init__(self):
         super(WFAudioCampaignBlock, self).__init__()
-
-        # setting default value to Audio
         self.automation_type = 'AudioCampaignCreate'

@@ -2,7 +2,6 @@ from workfront_bridge.projects.display import WFProjectDisplayContainer
 from workfront_bridge.blocks.display.campaign import WFDisplayCampaignBlock
 from workfront_bridge.blocks.display.data import WFDisplayDataBlock
 from workfront_bridge.blocks.display.launch import WFDisplayLaunchBlock
-from workfront_bridge.blocks.display.order_review import WFDisplayOrderReviewBlock
 from workfront_bridge.blocks.display.ad_group_setup import WFDisplayAdGroupSetupBlock
 from workfront_bridge.blocks.display.qa import WFDisplayQABlock
 from workfront_bridge.exceptions import WFBrigeException
@@ -162,9 +161,9 @@ class DisplayProjectBuilder(object):
         * [Native Params]
         """
         allowed_kwargs = self.ad_group_params
-        creative_kwargs = set(self.creative_upload_params
-                              + self.creative_qa_params
-                              + self.creative_native_params)
+        creative_kwargs = set(self.creative_upload_params +
+                              self.creative_qa_params +
+                              self.creative_native_params)
         ad_group = {}
         for k, v in kwargs.items():
             if k not in allowed_kwargs:
@@ -206,7 +205,7 @@ class DisplayProjectBuilder(object):
         project.multiple_ad_groups = self._multiple_ad_groups
         project.project_type = self._project_type
 
-        order_review_block = WFDisplayOrderReviewBlock()    # Manual
+        # order_review_block = WFDisplayOrderReviewBlock()    # Manual
 
         data_block = WFDisplayDataBlock()
         data_block.audience_name = self._audience_name

@@ -11,23 +11,8 @@ class WFPauseEmailDeployBlock(WFBlock):
 
     template_name = 'Block - Pause Email Deploy'
 
-    def __init__(self):
-        super(WFPauseEmailDeployBlock, self).__init__(self.template_name)
-
-        req = ["wf_email_project_id"]
-        self._add_required_parameters(req)
-
-        # Block Fields :
-        self._wf_project_id = None
-
-    @property
-    def project_id(self):
-        return self._wf_project_id
-
-    @project_id.setter
-    def project_id(self, wpid):
-        '''
-        @summary: WF id of the project being paused
-        '''
-        self._wf_project_id = wpid
-        self.set_parameter("Pause Email Deploy", "wf_email_project_id", wpid)
+    block_params = {
+        'Pause Email Deploy': [
+            ('wf_email_project_id', 'project_id', True),
+        ],
+    }

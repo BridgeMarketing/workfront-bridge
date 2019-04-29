@@ -22,7 +22,7 @@ def set_kwargs(obj, kwargs, exclude=[]):
         try:
             getattr(obj, k)
         except AttributeError:
-            raise WFBrigeException('Invalid Key: {}'.format(k))
+            raise WFBrigeException('Invalid Key: {} for {}'.format(k, type(obj).__name__))
         else:
             setattr(obj, k, v)
     return obj

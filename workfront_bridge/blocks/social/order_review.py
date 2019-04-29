@@ -7,6 +7,3 @@ class WFSocialOrderReviewBlock(WFBlock):
     """
 
     template_name = 'Block - Social Order Review'
-
-    def __init__(self):
-        super(WFSocialOrderReviewBlock, self).__init__(self.template_name)

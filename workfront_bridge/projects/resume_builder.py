@@ -112,7 +112,7 @@ class ResumeProjectBuilder(object):
         create_flight_task = [t for t in aud_tasks if t.name == "Create Flight"][0]
         create_flight_task.set_param_values({"Deployment Date/Time": datetime_to_wf_format(self.deploy_datetime)})
 
-        #Update "Start Date" in CW tools project
+        # Update "Start Date" in CW tools project
         cw_tool_project.set_param_values({"Start Date": datetime_to_wf_format(self.deploy_datetime)})
 
         return wf_project

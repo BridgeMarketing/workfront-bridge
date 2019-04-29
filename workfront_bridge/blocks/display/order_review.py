@@ -7,6 +7,3 @@ class WFDisplayOrderReviewBlock(WFBlock):
     """
 
     template_name = 'Block - Display Order Review'
-
-    def __init__(self):
-        super(WFDisplayOrderReviewBlock, self).__init__(self.template_name)

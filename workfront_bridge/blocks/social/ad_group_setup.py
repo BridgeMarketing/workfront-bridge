@@ -13,9 +13,6 @@ class WFSocialAdGroupSetupBlock(WFBlock):
 
     template_name = 'Block - Social Ad Group Setup'
 
-    def __init__(self):
-        super(WFSocialAdGroupSetupBlock, self).__init__(self.template_name)
-
     def add_creative(self, **kwargs):
         type_to_block = {
             'image': WFSocialCreativeImageBlock,

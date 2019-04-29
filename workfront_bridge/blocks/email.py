@@ -11,24 +11,15 @@ class WFEmailTestSeedNoEmailSentBlock(WFBlock):
 
     template_name = 'Block - Email Test Setup (no emails sent)'
 
+    block_params = {
+        'Test Setup': [
+            ('cm_test_aud_s3_path', 'seed_list_s3_path', True),
+        ],
+    }
+
     def __init__(self):
         super(WFEmailTestSeedNoEmailSentBlock, self).__init__(self.template_name)
-
-        req = ["cm_test_aud_s3_path"]
-        self._add_required_parameters(req)
-
-        # Block Fields :
-        self._seed_list_path = None
         self._set_starter_task(2)
-
-    @property
-    def seed_list_s3_path(self):
-        return self._seed_list_path
-
-    @seed_list_s3_path.setter
-    def seed_list_s3_path(self, sl):
-        self._seed_list_path = sl
-        self.set_parameter("Test Setup", "cm_test_aud_s3_path", sl)
 
 
 class WFEmailValidateHtmlBlock(WFBlock):
@@ -39,23 +30,11 @@ class WFEmailValidateHtmlBlock(WFBlock):
 
     template_name = 'Block - Email Validate Html'
 
-    def __init__(self):
-        super(WFEmailValidateHtmlBlock, self).__init__(self.template_name)
-
-        req = ["ecm_email_subject"]
-        self._add_required_parameters(req)
-
-        # Block Fields :
-        self._email_subject = None
-
-    @property
-    def email_subject(self):
-        return self._email_subject
-
-    @email_subject.setter
-    def email_subject(self, v):
-        self._email_subject = v
-        self.set_parameter("Validate HTML", "ecm_email_subject", v)
+    block_params = {
+        'Validate HTML': [
+            ('ecm_email_subject', 'email_subject', True),
+        ],
+    }
 
 
 class WFEmailGenHtmlFromZipBlock(WFBlock):
@@ -66,23 +45,11 @@ class WFEmailGenHtmlFromZipBlock(WFBlock):
 
     template_name = 'Block - Email Generate Html from zip'
 
-    def __init__(self):
-        super(WFEmailGenHtmlFromZipBlock, self).__init__(self.template_name)
-
-        req = ["ecm_zip"]
-        self._add_required_parameters(req)
-
-        # Block Fields:
-        self._zip_s3_path = None
-
-    @property
-    def zip_s3_path(self):
-        return self._zip_s3_path
-
-    @zip_s3_path.setter
-    def zip_s3_path(self, v):
-        self._zip_s3_path = v
-        self.set_parameter("Generate HTML from zip", "ecm_zip", v)
+    block_params = {
+        'Generate HTML from zip': [
+            ('ecm_zip', 'zip_s3_path', True),
+        ],
+    }
 
 
 class WFEmailSeedBlock(WFBlock):
@@ -91,107 +58,25 @@ class WFEmailSeedBlock(WFBlock):
     Please, check WFEmailTestSeedBlock and WFEmailLiveSeedBlock for more details
     '''
 
+    block_params = {
+        'Create Flight': [
+            ('Campaign Name', 'campaign_name', True),
+            ('Sender Name', 'sender_name', True),
+            ('Deployment Date/Time', 'deployment_datetime', True, lambda v: v.strftime("%Y-%m-%dT%H:%M:%S.000%z")),
+            ('Sender Email', 'sender_email', True),
+        ],
+        'Push to provider': [
+            ('SelectedProvider', 'provider', False),
+            ('Email Provider User', 'provider_user', False),
+            ('Email Provider Password', 'provider_password', False),
+            ('Email Provider Token', 'provider_token', False),
+            ('isTest', 'is_test', False),
+        ],
+    }
+
     def __init__(self, wf_template_name):
         super(WFEmailSeedBlock, self).__init__(wf_template_name)
-
-        req = ["Campaign Name", "Sender Name",
-               "Deployment Date/Time", "Sender Email"]
-        self._add_required_parameters(req)
-
-        opt = ["SelectedProvider", "Email Provider User",
-               "Email Provider Password", "Email Provider Token", "isTest"]
-        self._add_optional_parameters(opt)
-
-        # Block Fields:
-        self._campaign_name = None
-        self._sender_name = None
-        self._sender_email = None
-        self._deployment_datetime = None
-        self._provider = None
-        self._provider_user = None
-        self._provider_password = None
-        self._provider_token = None
-
         self._set_starter_task(2)  # Skip Setup
-
-
-    @property
-    def campaign_name(self):
-        return self._campaign_name
-
-    @campaign_name.setter
-    def campaign_name(self, name):
-        self._campaign_name = name
-        self.set_parameter("Create Flight", "Campaign Name", name)
-
-    @property
-    def sender_email(self):
-        return self._sender_email
-
-    @sender_email.setter
-    def sender_email(self, email):
-        self._sender_email = email
-        self.set_parameter("Create Flight", "Sender Email", email)
-
-    @property
-    def sender_name(self):
-        return self._sender_name
-
-    @sender_name.setter
-    def sender_name(self, name):
-        self._sender_name = name
-        self.set_parameter("Create Flight", "Sender Name", name)
-
-    @property
-    def deployment_datetime(self):
-        return self._deployment_datetime
-
-    @deployment_datetime.setter
-    def deployment_datetime(self, date_time):
-        '''
-        @param date_time: datetime object.
-        '''
-        self._deployment_datetime = date_time
-        self.set_parameter("Create Flight", "Deployment Date/Time",
-                           date_time.strftime("%Y-%m-%dT%H:%M:%S.000%z"))
-    @property
-    def provider(self):
-        return self._provider
-
-    @provider.setter
-    def provider(self, provider):
-        self._provider = provider
-        self.set_parameter("Push to provider", "SelectedProvider", provider)
-
-    @property
-    def provider_user(self):
-        return self._provider_user
-
-    @provider_user.setter
-    def provider_user(self, provider_user):
-        self._provider_user = provider_user
-        self.set_parameter("Push to provider", "Email Provider User",
-                           provider_user)
-
-    @property
-    def provider_password(self):
-        return self._provider_password
-
-    @provider_password.setter
-    def provider_password(self, provider_pass):
-        self._provider_password = provider_pass
-        self.set_parameter("Push to provider", "Email Provider Password",
-                           provider_pass)
-
-    @property
-    def provider_token(self):
-        return self._provider_token
-
-    @provider_token.setter
-    def provider_token(self, provider_token):
-        self._provider_token = provider_token
-        self.set_parameter("Push to provider", "Email Provider Token",
-                           provider_token)
 
 
 class WFEmailTestSeedBlock(WFEmailSeedBlock):
@@ -209,25 +94,15 @@ class WFEmailTestSeedBlock(WFEmailSeedBlock):
 
     template_name = 'Block - Email Test Setup'
 
+    block_params = {
+        'Test Setup': [
+            ('cm_test_aud_s3_path', 'seed_list_s3_path', True),
+        ],
+    }
+
     def __init__(self):
         super(WFEmailTestSeedBlock, self).__init__(self.template_name)
-
-        req = ["cm_test_aud_s3_path"]
-        self._add_required_parameters(req)
-
-        # Block Fields:
-        self._seed_list_path = None
-
-        self.set_parameter("Push to provider", "isTest", "yes")
-
-    @property
-    def seed_list_s3_path(self):
-        return self._seed_list_path
-
-    @seed_list_s3_path.setter
-    def seed_list_s3_path(self, sl):
-        self._seed_list_path = sl
-        self.set_parameter("Test Setup", "cm_test_aud_s3_path", sl)
+        self.is_test = "yes"
 
 
 class WFEmailLiveSeedBlock(WFEmailSeedBlock):
@@ -245,23 +120,11 @@ class WFEmailLiveSeedBlock(WFEmailSeedBlock):
 
     template_name = 'Block - Email Live Setup V2'
 
-    def __init__(self):
-        super(WFEmailLiveSeedBlock, self).__init__(self.template_name)
-
-        req = ["live_seed_list_s3_path"]
-        self._add_required_parameters(req)
-
-        # Block Fields :
-        self._seed_list_path = None
-
-    @property
-    def seed_list_s3_path(self):
-        return self._seed_list_path
-
-    @seed_list_s3_path.setter
-    def seed_list_s3_path(self, sl):
-        self._seed_list_path = sl
-        self.set_parameter("Live Setup", "live_seed_list_s3_path", sl)
+    block_params = {
+        'Live Setup': [
+            ('live_seed_list_s3_path', 'seed_list_s3_path', True),
+        ],
+    }
 
 
 class WFEmailAudienceLiveSetupBlock(WFBlock):
@@ -278,119 +141,28 @@ class WFEmailAudienceLiveSetupBlock(WFBlock):
 
     template_name = 'Block - Email Audience Live Setup v2'
 
+    block_params = {
+        'Audience Live Setup': [
+            ('cm_aud_s3_path', 'seed_list_s3_path', False),
+        ],
+        'Create Flight': [
+            ('Campaign Name', 'campaign_name', True),
+            ('Sender Name', 'sender_name', True),
+            ('Deployment Date/Time', 'deployment_datetime', True, lambda v: v.strftime("%Y-%m-%dT%H:%M:%S.000%z")),
+            ('Sender Email', 'sender_email', True),
+        ],
+        'Push to provider': [
+            ('SelectedProvider', 'provider', False),
+            ('Email Provider User', 'provider_user', False),
+            ('Email Provider Password', 'provider_password', False),
+            ('Email Provider Token', 'provider_token', False),
+        ],
+    }
+
     def __init__(self):
         super(WFEmailAudienceLiveSetupBlock, self).__init__(self.template_name)
-
-        req = ["Campaign Name", "Sender Name",
-               "Deployment Date/Time", "Sender Email"]
-        self._add_required_parameters(req)
-
-        opt = ["cm_aud_s3_path", "SelectedProvider", "Email Provider User",
-               "Email Provider Password", "Email Provider Token"]
-        self._add_optional_parameters(opt)
-
-        # Block Fields:
-        self._seed_list_path = None
-        self._campaign_name = None
-        self._sender_name = None
-        self._sender_email = None
-        self._deployment_datetime = None
-        self._provider = None
-        self._provider_user = None
-        self._provider_password = None
-        self._provider_token = None
-
         # Skip Test Setup and Validate Start Date
         self._set_starter_task(3)
-
-    @property
-    def seed_list_s3_path(self):
-        return self._seed_list_path
-
-    @seed_list_s3_path.setter
-    def seed_list_s3_path(self, sl):
-        self._seed_list_path = sl
-        self.set_parameter("Audience Live Setup", "cm_aud_s3_path", sl)
-
-    @property
-    def campaign_name(self):
-        return self._campaign_name
-
-    @campaign_name.setter
-    def campaign_name(self, name):
-        self._campaign_name = name
-        self.set_parameter("Create Flight", "Campaign Name", name)
-
-    @property
-    def sender_email(self):
-        return self._sender_email
-
-    @sender_email.setter
-    def sender_email(self, email):
-        self._sender_email = email
-        self.set_parameter("Create Flight", "Sender Email", email)
-
-    @property
-    def sender_name(self):
-        return self._sender_name
-
-    @sender_name.setter
-    def sender_name(self, name):
-        self._sender_name = name
-        self.set_parameter("Create Flight", "Sender Name", name)
-
-    @property
-    def deployment_datetime(self):
-        return self._deployment_datetime
-
-    @deployment_datetime.setter
-    def deployment_datetime(self, date_time):
-        '''
-        @param date_time: datetime object.
-        '''
-        self._deployment_datetime = date_time
-
-        self.set_parameter("Create Flight", "Deployment Date/Time",
-                           date_time.strftime("%Y-%m-%dT%H:%M:%S.000%z"))
-
-    @property
-    def provider(self):
-        return self._provider
-
-    @provider.setter
-    def provider(self, provider):
-        self._provider = provider
-        self.set_parameter("Push to provider", "SelectedProvider", provider)
-
-    @property
-    def provider_user(self):
-        return self._provider_user
-
-    @provider_user.setter
-    def provider_user(self, provider_user):
-        self._provider_user = provider_user
-        self.set_parameter("Push to provider", "Email Provider User",
-                           provider_user)
-
-    @property
-    def provider_password(self):
-        return self._provider_password
-
-    @provider_password.setter
-    def provider_password(self, provider_pass):
-        self._provider_password = provider_pass
-        self.set_parameter("Push to provider", "Email Provider Password",
-                           provider_pass)
-
-    @property
-    def provider_token(self):
-        return self._provider_token
-
-    @provider_token.setter
-    def provider_token(self, provider_token):
-        self._provider_token = provider_token
-        self.set_parameter("Push to provider", "Email Provider Token",
-                           provider_token)
 
 
 class WFEmailReviewDeploymentBlock(WFBlock):
@@ -403,7 +175,6 @@ class WFEmailReviewDeploymentBlock(WFBlock):
 
     def __init__(self):
         super(WFEmailReviewDeploymentBlock, self).__init__(self.template_name)
-
         self._set_starter_task(2)  # Skip Deploy group tast
 
 
@@ -414,6 +185,3 @@ class WFEmailApproveCWTaggingBlock(WFBlock):
     '''
 
     template_name = 'Block - Email - Approve CW Tagging'
-
-    def __init__(self):
-        super(WFEmailApproveCWTaggingBlock, self).__init__(self.template_name)

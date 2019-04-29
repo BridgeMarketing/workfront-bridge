@@ -7,6 +7,3 @@ class WFReviewDataBlock(WFBlock):
     """
 
     template_name = 'Block - Data - Review Data'
-
-    def __init__(self):
-        super(WFReviewDataBlock, self).__init__(self.template_name)

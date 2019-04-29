@@ -11,23 +11,8 @@ class WFCancelEmailDeployBlock(WFBlock):
 
     template_name = 'Block - Cancel Email Deploy'
 
-    def __init__(self):
-        super(WFCancelEmailDeployBlock, self).__init__(self.template_name)
-
-        req = ["wf_email_project_id"]
-        self._add_required_parameters(req)
-
-        # Block Fields :
-        self._wf_project_id = None
-
-    @property
-    def project_id(self):
-        return self._wf_project_id
-
-    @project_id.setter
-    def project_id(self, wpid):
-        '''
-        @summary: WF id of the project being cancelled
-        '''
-        self._wf_project_id = wpid
-        self.set_parameter("Cancel Email Deploy", "wf_email_project_id", wpid)
+    block_params = {
+        'Cancel Email Deploy': [
+            ('wf_email_project_id', 'project_id', True),
+        ],
+    }

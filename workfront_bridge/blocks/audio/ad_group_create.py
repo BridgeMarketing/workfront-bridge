@@ -8,5 +8,4 @@ class WFAudioCreateAdGroupBlock(WFDisplayCreateAdGroupBlock):
 
     def __init__(self):
         super(WFAudioCreateAdGroupBlock, self).__init__()
-
         self.automation_type = 'AudioAdGroupCreate'

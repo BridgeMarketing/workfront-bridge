@@ -130,8 +130,7 @@ class EmailProjectBuilder(object):
         self.live_seeds_provider.sender_name = name
         return self
 
-    def set_live_seeds_provider(self, esp_name, esp_user=None, password=None,
-                           token=None):
+    def set_live_seeds_provider(self, esp_name, esp_user=None, password=None, token=None):
         self.live_seeds_provider.name = esp_name
         self.live_seeds_provider.user = esp_user
         self.live_seeds_provider.password = password
@@ -149,9 +148,6 @@ class EmailProjectBuilder(object):
     def set_ecm_html(self, s3_path):
         self.ecm_html = s3_path
         return self
-
-
-
 
     def _configure_provider_in_setup_block(self, block, provider):
         block.sender_email = provider.sender_email

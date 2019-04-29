@@ -11,9 +11,6 @@ class WFDisplayQABlock(WFBlock):
 
     template_name = 'Block - Display QA'
 
-    def __init__(self):
-        super(WFDisplayQABlock, self).__init__(self.template_name)
-
     def add_creative(self, **kwargs):
         block_class = kwargs.pop('block_class', WFDisplayCreativeQABlock)
         creative = block_class()
