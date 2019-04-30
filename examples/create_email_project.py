@@ -6,7 +6,6 @@ wf = Workfront("notifications@wf.bridgemarketing.com", 'beef6060', 'thebridgecor
 
 wf.login()
 
-
 b = email_builder.EmailProjectBuilder(wf, "Test pablo email project builder 1")
 
 b.add_test_list("s3://some/testlist1.csv")
@@ -15,7 +14,7 @@ b.add_test_list("s3://some/testlist2.csv")
 
 b.set_html("s3://some/creative.html")
 
-b.set_deployment_datetime(datetime.now())
+b.set_deployment_datetime(datetime(2020, 2, 3, 14, 29, 22))
 b.set_seed_list("s3://some/seed.csv")
 
 b.set_subject("asuntoooo")

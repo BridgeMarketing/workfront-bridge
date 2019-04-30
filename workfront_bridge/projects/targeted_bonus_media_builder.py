@@ -41,6 +41,7 @@ class TargetedBonusMediaProjectBuilder(object):
         self._landing_page_url = None
         self._image_s3_url = None
         self._adg_base_bid_amount = None
+        self._adg_max_bid_amount = None
 
     def set_open_tier(self, v):
         self._open_tier = v
@@ -93,6 +94,9 @@ class TargetedBonusMediaProjectBuilder(object):
     def set_adg_base_bid_amount(self, v):
         self._adg_base_bid_amount = v
 
+    def set_adg_max_bid_amount(self, v):
+        self._adg_max_bid_amount = v
+
     def build(self):
         """
         @summary: Build the WF project.
@@ -135,6 +139,7 @@ class TargetedBonusMediaProjectBuilder(object):
         ad_group_setup_block.add_ad_group(
             ad_group_name='{} AdGroup'.format(self.project_name),
             adg_base_bid_amount=self._adg_base_bid_amount,
+            adg_max_bid_amount=self._adg_max_bid_amount
         )
         project.append(ad_group_setup_block)
 

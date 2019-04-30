@@ -17,7 +17,7 @@ def mye_with_suppressions(wf):
     prj = b.set_match_and_export()\
            .set_audience_name('Sarlanga')\
            .set_audience_file_path('s3://some/ids.txt')\
-           .set_audience_identifier("oneAudienceID")\
+           .set_audience_identifier("bridge_id")\
            .set_suppression_type("one_per_person")\
            .add_suppression_file("s3://some/emails.txt", "email")\
            .build()

@@ -7,6 +7,7 @@ from workfront_bridge.blocks.data.create_and_export_audience import WFCreatExpor
 from workfront_bridge.blocks.data.review_data import WFReviewDataBlock
 from workfront_bridge.blocks.data.suppression import WFSuppressionGroupBlock
 from workfront_bridge.blocks.data.suppression import WFSuppressionBlock
+from workfront_bridge.blocks.data.hygiene import HygieneDataBlock
 
 
 class DataProjectBuilder(object):
@@ -199,6 +200,8 @@ class DataProjectBuilder(object):
             b.audience_identifier = self.audience_identifier
             b.audience_name = self.audience_name
             project.append(b)
+            hygiene_block = HygieneDataBlock()
+            project.append(hygiene_block)
         elif self.project_type == "10x":
             project.set_10x_data()
             b = WFPull10xDataBlock()
