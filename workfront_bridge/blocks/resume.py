@@ -12,38 +12,9 @@ class WFResumeEmailDeployBlock(WFBlock):
 
     template_name = 'Block - Resume Email Deploy'
 
-    def __init__(self):
-        super(WFResumeEmailDeployBlock, self).__init__(self.template_name)
-
-        req = ["wf_email_project_id", "Deployment Date/Time"]
-        self._add_required_parameters(req)
-
-        # Block Fields :
-        self._wf_project_id = None
-        self._deploy_datetime = None
-
-    @property
-    def project_id(self):
-        return self._wf_project_id
-
-    @project_id.setter
-    def project_id(self, wpid):
-        '''
-        @summary: WF id of the project being resumed
-        '''
-        self._wf_project_id = wpid
-        self.set_parameter("Resume Email Deploy", "wf_email_project_id", wpid)
-
-    @property
-    def deploy_datetime(self):
-        return self._deploy_datetime
-
-    @deploy_datetime.setter
-    def deploy_datetime(self, dt):
-        '''
-        @summary: deploy datetime of the project being updated
-        '''
-        self._deploy_datetime = dt
-        self.set_parameter('Resume Email Deploy',
-                           'Deployment Date/Time',
-                           datetime_to_wf_format(dt))
+    block_params = {
+        'Resume Email Deploy': [
+            ('wf_email_project_id', 'project_id', True),
+            ('Deployment Date/Time', 'deploy_datetime', True, datetime_to_wf_format),
+        ],
+    }

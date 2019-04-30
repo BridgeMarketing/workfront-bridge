@@ -95,7 +95,7 @@ class PauseProjectBuilder(object):
             # Now link the pause task to the push to proivder one
             pause_task = wf_project.get_tasks()[0]
             pause_task.add_predecessor(ptp_task)
-        except:
+        except Exception:
             pass
 
         return wf_project

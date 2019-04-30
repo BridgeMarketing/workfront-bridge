@@ -97,7 +97,7 @@ class CancelProjectBuilder(object):
             # Now link the cancel task to the push to proivder one
             cancel_task = wf_project.get_tasks()[0]
             cancel_task.add_predecessor(ptp_task)
-        except:
+        except Exception:
             pass
 
         return wf_project

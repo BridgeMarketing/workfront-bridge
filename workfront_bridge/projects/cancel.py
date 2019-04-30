@@ -10,7 +10,4 @@ class WFProjectCancelContainer(WFBlock):
     template_name = "Base Project Container - Cancel"
 
     def __init__(self, prj_name):
-        super(WFProjectCancelContainer, self).__init__(self.template_name,
-                                                       name=prj_name)
-        #self._add_required_parameters([])
-        #self._add_optional_parameters([])
+        super(WFProjectCancelContainer, self).__init__(self.template_name, name=prj_name)

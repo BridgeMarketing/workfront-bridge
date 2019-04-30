@@ -1,58 +1,21 @@
-from workfront_bridge.projects.display import WFProjectDisplayContainer
-from workfront_bridge.blocks.display.campaign import WFDisplayCampaignBlock
+from workfront_bridge.blocks.audio.campaign import WFAudioCampaignBlock
+from workfront_bridge.blocks.audio.ad_group_create import WFAudioCreateAdGroupBlock
+from workfront_bridge.blocks.audio.ad_group_creative_upload import WFAudioCreativeUploadBlock
+from workfront_bridge.blocks.audio.qa_creative import WFAudioCreativeQABlock
 from workfront_bridge.blocks.display.data import WFDisplayDataBlock
 from workfront_bridge.blocks.display.launch import WFDisplayLaunchBlock
 from workfront_bridge.blocks.display.ad_group_setup import WFDisplayAdGroupSetupBlock
 from workfront_bridge.blocks.display.qa import WFDisplayQABlock
+from workfront_bridge.projects.audio import WFProjectAudioContainer
 from workfront_bridge.exceptions import WFBrigeException
 from workfront_bridge.blocks.base import WFBlockParser
 
 
-class DisplayProjectBuilder(object):
+class AudioProjectBuilder(object):
     """
-    @summary: Display project builder
+    @summary: Audio project builder
     """
-    creative_upload_params = [
-        "creative_type",
-        "creative_name",
-        "image_s3_url",
-        "clickthrough_url",
-        "landing_page_url",
-        "third_party_tags",
-        "third_party_impression_tracking_url",
-        "third_party_impression_tracking_url2",
-        "third_party_impression_tracking_url3",
-        "securable",
-        "availability",
-        "third_party_tag",
-        "width",
-        "height",
-    ]
-    creative_qa_params = [
-        "creative_type",
-        "creative_name",
-        "image_s3_url",
-        "creative_size",
-        "clickthrough_url",
-        "landing_page_url",
-        "third_party_tags",
-        "third_party_impression_tracking_url",
-    ]
-    creative_native_params = [
-        "native_text_asset_title_long",
-        "native_text_asset_title_short",
-        "native_text_asset_sponsor",
-        "native_text_asset_description_long",
-        "native_text_asset_description_short",
-        "native_text_asset_call_to_action",
-        "native_text_asset_opt_out_url",
-        "native_text_asset_opt_out_text",
-        "native_image_asset_main",
-        "native_image_asset_logo",
-        "native_image_asset_icon",
-        "native_decimal_asset_rating",
-        "native_text_asset_price",
-    ]
+
     ad_group_params = [
         "ad_group_name",
         "adg_base_bid_amount",
@@ -73,9 +36,21 @@ class DisplayProjectBuilder(object):
         "ae_excluder",
         "creatives",  # Nested
     ]
-    native_restricted_params = [
-        "image_s3_url",
-        "creative_size",
+    creative_upload_params = [
+        "creative_name",
+        "audio_s3_url",
+        "third_party_impression_tracking_url",
+        "clickthrough_url",
+        "landing_page_url",
+        "duration",
+    ]
+    creative_qa_params = [
+        "creative_name",
+        "audio_s3_url",
+        "third_party_impression_tracking_url",
+        "clickthrough_url",
+        "landing_page_url",
+        "duration",
     ]
 
     def __init__(self, wf, project_name):
@@ -120,50 +95,9 @@ class DisplayProjectBuilder(object):
         self._daily_target_in_impressions = None
 
     def add_ad_group(self, **kwargs):
-        """
-        Ad Group allowed kwargs:
-        * ad_group_name
-        * adg_base_bid_amount
-        * ad_group_name
-        * adg_base_bid_amount
-        * adg_description
-        * adg_daily_budget
-        * adg_daily_budget_in_impressions
-        * adg_budget_in_impressions_pre_calc
-        * adg_pacing_mode
-        * adg_auto_allocator_priority
-        * adg_max_bid_amount
-        * adg_frequency_period_in_minutes
-        * adg_frequency_cap
-        * adg_frequency_pricing_slope_cpm
-        * adg_ctr_in_percent
-        * device_type
-        * country
-        * category
-        * ae_excluder
-        * creatives
-
-        Creative allowed kwargs:
-        * creative_name - required
-        * creative_size - required
-        * image_s3_url - required
-        * clickthrough_url - required
-        * landing_page_url - required
-        * third_party_tags
-        * third_party_impression_tracking_url
-        * third_party_impression_tracking_url2
-        * third_party_impression_tracking_url3
-        * securable
-        * availability
-        * third_party_tag
-        * width
-        * height
-        * [Native Params]
-        """
         allowed_kwargs = self.ad_group_params
-        creative_kwargs = set(self.creative_upload_params +
-                              self.creative_qa_params +
-                              self.creative_native_params)
+        creative_kwargs = set(self.creative_upload_params + self.creative_qa_params)
+
         ad_group = {}
         for k, v in kwargs.items():
             if k not in allowed_kwargs:
@@ -171,13 +105,8 @@ class DisplayProjectBuilder(object):
             elif k == 'creatives':
                 ad_group['creatives'] = []
                 for creative in v:
-                    creative_type = creative['creative_type']
                     ad_group_creative = {}
                     for creative_key, creative_value in creative.items():
-                        invalid_regular = creative_key in self.creative_native_params and creative_type != 'Image Native'
-                        invalid_native = creative_key in self.native_restricted_params and creative_type == 'Image Native'
-                        if invalid_regular or invalid_native:
-                            raise WFBrigeException('Invalid key {} for type {}'.format(creative_key, creative_type))
                         if creative_key not in creative_kwargs:
                             raise WFBrigeException('Invalid Key {}'.format(creative_key))
                         ad_group_creative[creative_key] = creative_value
@@ -192,10 +121,8 @@ class DisplayProjectBuilder(object):
         @raise WFBrigeException
         @return: WFProject object
         """
-        if not self.ad_groups:
-            raise WFBrigeException('The project does not have any Ad Groups. Please use add_ad_group to add them.')
 
-        project = WFProjectDisplayContainer(self.project_name)
+        project = WFProjectAudioContainer(self.project_name)
         project.ttd_audience_id = self._ttd_audience_id
         project.ttd_campaign_id = self._ttd_campaign_id
         project.ttd_flight_id = self._ttd_flight_id
@@ -205,12 +132,12 @@ class DisplayProjectBuilder(object):
         project.multiple_ad_groups = self._multiple_ad_groups
         project.project_type = self._project_type
 
-        # order_review_block = WFDisplayOrderReviewBlock()    # Manual
+        # order_review_block = WFDisplayOrderReviewBlock()
 
         data_block = WFDisplayDataBlock()
         data_block.audience_name = self._audience_name
 
-        campaign_block = WFDisplayCampaignBlock()
+        campaign_block = WFAudioCampaignBlock()
         campaign_block.start_date_inclusive_utc = self._start_date_inclusive_utc
         campaign_block.end_date_exclusive_utc = self._end_date_exclusive_utc
         campaign_block.campaign_name = self._campaign_name
@@ -235,15 +162,15 @@ class DisplayProjectBuilder(object):
             ad_group_setup_block = WFDisplayAdGroupSetupBlock()
             qa_block = WFDisplayQABlock()
             for creative in ad_group['creatives']:
-                creative_upload_dict = {k: creative[k] for k in
-                                        (self.creative_upload_params + self.creative_native_params)
+                creative_upload_dict = {k: creative[k]
+                                        for k in self.creative_upload_params
                                         if k in creative}
-                ad_group_setup_block.add_creative(**creative_upload_dict)
-                creative_qa_dict = {k: creative[k] for k in
-                                    (self.creative_qa_params + self.creative_native_params)
+                ad_group_setup_block.add_creative(block_class=WFAudioCreativeUploadBlock, **creative_upload_dict)
+                creative_qa_dict = {k: creative[k]
+                                    for k in self.creative_qa_params
                                     if k in creative}
-                qa_block.add_creative(**creative_qa_dict)
-            ad_group_setup_block.add_ad_group(**ad_group)
+                qa_block.add_creative(block_class=WFAudioCreativeQABlock, **creative_qa_dict)
+            ad_group_setup_block.add_ad_group(block_class=WFAudioCreateAdGroupBlock, **ad_group)
             ad_group_setup_blocks.append(ad_group_setup_block)
             ad_group.update({
                 'start_date_inclusive_utc': self._start_date_inclusive_utc,
@@ -267,7 +194,7 @@ class DisplayProjectBuilder(object):
             qa_block.add_ad_group(**ad_group)
             qa_blocks.append(qa_block)
 
-        launch_block = WFDisplayLaunchBlock()   # Manual
+        launch_block = WFDisplayLaunchBlock()
 
         project_blocks = [
             # order_review_block,
@@ -278,11 +205,11 @@ class DisplayProjectBuilder(object):
         project_blocks.extend(qa_blocks)
         project_blocks.append(launch_block)
         [project.append(block) for block in project_blocks]
+
         parser = WFBlockParser(self.wf)
         wf_project = parser.create(project)
         return wf_project
 
-    # Setters so Pablo doesn't go mad
     def set_ttd_audience_id(self, v):
         self._ttd_audience_id = v
         return self

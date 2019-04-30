@@ -1,5 +1,4 @@
 from workfront_bridge.projects.social import WFProjectSocialContainer
-from workfront_bridge.blocks.social.order_review import WFSocialOrderReviewBlock
 from workfront_bridge.blocks.social.audience import WFSocialDataBlock
 from workfront_bridge.blocks.social.campaign import WFSocialSetupBlock
 from workfront_bridge.blocks.social.ad_group_setup import WFSocialAdGroupSetupBlock
@@ -109,7 +108,7 @@ class SocialProjectBuilder(object):
         project = WFProjectSocialContainer(self.project_name)
 
         # Blocks
-        order_review_block = WFSocialOrderReviewBlock()
+        # order_review_block = WFSocialOrderReviewBlock()
         data_block = WFSocialDataBlock()
 
         setup_block = WFSocialSetupBlock()

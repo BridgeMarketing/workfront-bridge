@@ -11,18 +11,16 @@ class WFDisplayQABlock(WFBlock):
 
     template_name = 'Block - Display QA'
 
-    def __init__(self):
-        super(WFDisplayQABlock, self).__init__(self.template_name)
-
     def add_creative(self, **kwargs):
-        creative = WFDisplayCreativeQABlock()
+        block_class = kwargs.pop('block_class', WFDisplayCreativeQABlock)
+        creative = block_class()
         creative = set_kwargs(creative,
                               kwargs,
                               exclude=['creative_type'])
         self.append(creative)
 
     def add_ad_group(self, **kwargs):
-        ad_group = WFDisplayQAAdGroupBlock()
+        block_class = kwargs.pop('block_class', WFDisplayQAAdGroupBlock)
+        ad_group = block_class()
         ad_group = set_kwargs(ad_group, kwargs, exclude=['creatives'])
         self.append(ad_group)
-

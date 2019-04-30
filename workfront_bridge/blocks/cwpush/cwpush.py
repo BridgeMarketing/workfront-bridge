@@ -7,6 +7,3 @@ class CWPushBlock(WFBlock):
     """
 
     template_name = 'Block - CW Push v2'
-
-    def __init__(self):
-        super(CWPushBlock, self).__init__(self.template_name)

@@ -11,5 +11,4 @@ class WFProjectPauseContainer(WFBlock):
 
     def __init__(self, prj_name):
         super(WFProjectPauseContainer, self).__init__(self.template_name,
-                                                       name=prj_name)
-
+                                                      name=prj_name)

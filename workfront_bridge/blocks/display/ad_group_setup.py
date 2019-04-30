@@ -11,15 +11,14 @@ class WFDisplayAdGroupSetupBlock(WFBlock):
 
     template_name = 'Block - Display Ad Group Setup'
 
-    def __init__(self):
-        super(WFDisplayAdGroupSetupBlock, self).__init__(self.template_name)
-
     def add_creative(self, **kwargs):
-        creative = WFDisplayCreativeUploadBlock()
+        block_class = kwargs.pop('block_class', WFDisplayCreativeUploadBlock)
+        creative = block_class()
         creative = set_kwargs(creative, kwargs)
         self.append(creative)
 
     def add_ad_group(self, **kwargs):
-        ad_group = WFDisplayCreateAdGroupBlock()
+        block_class = kwargs.pop('block_class', WFDisplayCreateAdGroupBlock)
+        ad_group = block_class()
         ad_group = set_kwargs(ad_group, kwargs, exclude=['creatives'])
         self.append(ad_group)

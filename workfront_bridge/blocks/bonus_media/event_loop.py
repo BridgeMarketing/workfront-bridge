@@ -7,6 +7,3 @@ class EventLoopSetupBlock(WFBlock):
     """
 
     template_name = 'Block - Event Loop Setup'
-
-    def __init__(self):
-        super(EventLoopSetupBlock, self).__init__(self.template_name)

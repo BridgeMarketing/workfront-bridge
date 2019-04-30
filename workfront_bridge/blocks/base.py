@@ -1,16 +1,92 @@
 from workfront.objects import project as wf_project
 from workfront.objects.codes import WFObjCode
-from workfront.exceptions import WFException
 from workfront_bridge.exceptions import WFBrigeException
 import uuid
+
+
+class WFBlockAttrib(object):
+    def __init__(self, task_identifier, field, alias, formatter=None):
+        self.task_identifier = task_identifier
+        self.field = field
+        self.alias = '_' + alias
+        self.formatter = formatter or str
+
+    def check_is_block(self, instance):
+        if instance is None or not isinstance(instance, WFBlock):
+            raise AttributeError('WFBlockAttrib must be '
+                                 'exeucte on a WFBlock instance level')
+
+    def __get__(self, block, _):
+        self.check_is_block(block)
+        return getattr(
+            self,
+            self.alias,
+            block.parameters.get(
+                self.task_identifier,
+                {},
+            ).get(
+                self.field,
+                None
+            )
+        )
+
+    def __set__(self, block, value):
+        self.check_is_block(block)
+        if value is not None:
+            setattr(self, self.alias, value)
+            block.set_parameter(self.task_identifier, self.field, self.formatter(value))
+
+
+class WFBlockMeta(type):
+    '''
+    Metaclass helper to create getter/setter for a given mapping of workfront attributes
+
+    class MyBlock(WFBlock):
+        block_params = {
+            # taks name or an emtpy string for block attributes
+            '': (
+                # list of mapping attributes (WF field, class property name, requried[, formatter])
+                ('Project Type', 'project_type', True),
+            ),
+            'task 1': (
+                ('S3 Path', 'path', False, lambda l: ','.join(l)),
+            ),
+        }
+    '''
+    def __new__(cls, name, bases, dct):
+        block_cls = super(WFBlockMeta, cls).__new__(cls, name, bases, dct)
+
+        # create block properties based on the given alias
+        block_params = getattr(block_cls, 'block_params', {})
+        if block_params:
+            for task_name, parameters in block_params.iteritems():
+                for group in parameters:
+                    formatter = str
+                    param, alias, _ = group[:3]
+                    formatter = group[3] if len(group) > 3 else str
+                    setattr(block_cls, alias, WFBlockAttrib(task_name, param, alias, formatter))
+
+        # extend block_params attribute with the base classes
+        for base in bases:
+            base_parameters = getattr(base, 'block_params', None)
+            if base_parameters:
+                for task_name, parameters in base_parameters.iteritems():
+                    if task_name in block_params:
+                        block_params[task_name] = tuple(block_params[task_name]) + tuple(parameters)
+                    else:
+                        block_params[task_name] = parameters
+        block_cls.block_params = block_params
+
+        return block_cls
 
 
 class WFBlock(object):
     '''
     @summary: Workfront Base Block class
     '''
+    __metaclass__ = WFBlockMeta
 
-    def __init__(self, wf_template_name, name=None):
+    def __init__(self, wf_template_name=None, name=None):
         '''
         @param wf: a Workfront service object.
         @param wf_template_id: workfront template id that will be instantiated
@@ -18,12 +94,13 @@ class WFBlock(object):
         '''
         self.name = name
         self.blocks = []
-        self.wf_template_name = wf_template_name
+        self.wf_template_name = wf_template_name or getattr(self, 'template_name', None)
         self.parameters = {}
-        self.required_parameters = []
-        self.optional_parameters = []
         self.starter_task_identifier = None
         self._set_starter_task(1)  # default to first task
+
+        assert self.wf_template_name, ('wf_template_name and/or template_name '
+                                       'missing on {}'.format(self.__class__.__name__))
 
     def set_parameter(self, task_identifier, field, value):
         '''
@@ -45,17 +122,31 @@ class WFBlock(object):
             self.parameters[task_identifier] = {}
         self.parameters[task_identifier][field] = value
 
-    def _add_required_parameters(self, fields):
-        '''
-        @param fields: The given fields are marked as mandatory for this block.
-        '''
-        self.required_parameters.extend(fields)
+    def iter_block_params(self):
+        all_params = getattr(self, 'block_params', None)
+        if not all_params:
+            return
 
-    def _add_optional_parameters(self, fields):
-        '''
-        @param fields: The given fields are marked as optional for this block.
-        '''
-        self.optional_parameters.extend(fields)
+        for task_name, task_params in all_params.iteritems():
+            for parms in task_params:
+                name, alias, required = parms[:3]
+                yield task_name, name, alias, required
+
+    @property
+    def required_parameters(self):
+        return [
+            name
+            for _, name, _, required in self.iter_block_params()
+            if required
+        ]
+
+    @property
+    def optional_parameters(self):
+        return [
+            name
+            for _, name, _, required in self.iter_block_params()
+            if not required
+        ]
 
     def check_parameters(self):
         '''
@@ -63,10 +154,11 @@ class WFBlock(object):
         required and optional for this block.
         @raise WFBridgeException: if there is a mismatch with the parameters.
         '''
-        all_params = []
-        for pv in self.parameters.itervalues():
-            all_params.extend(pv.keys())
-        all_params = set(all_params)
+        all_params = set(
+            param
+            for pv in self.parameters.itervalues()
+            for param in pv.iterkeys()
+        )
 
         req = set(self.required_parameters)
         opt = set(self.optional_parameters)
@@ -74,14 +166,18 @@ class WFBlock(object):
         # Check all required parameters are set
         if not req.issubset(all_params):
             missing = ",".join(req - all_params)
-            err = "Missing required parameters {}".format(missing)
+            err = "Missing required parameters {} for {}".format(
+                missing, type(self).__name__,
+            )
             raise WFBrigeException(err)
 
         # Now check that the parameters that are not required are optional
         if not (all_params - req).issubset(opt):
             unused_parameters = ",".join(all_params - req - opt)
-            err = "{} have been specified but are not required nor optional"
-            raise WFBrigeException(err.format(unused_parameters))
+            err = "{} have been specified but are not required nor optional for {}".format(
+                unused_parameters, type(self).__name__,
+            )
+            raise WFBrigeException(err)
 
         for block in self.blocks:
             block.check_parameters()
@@ -213,6 +309,6 @@ class WFBlockParser(object):
         '''
 
         r = self.wf.search_objects(WFObjCode.templat_project, {"name": name})
-        if len(r.json()["data"]) != 1: # not found
+        if len(r.json()["data"]) != 1:  # not found
             raise WFBrigeException("WF Template '{}' not found".format(name))
         return r.json()["data"][0]["ID"]
