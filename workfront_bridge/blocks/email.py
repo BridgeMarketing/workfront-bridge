@@ -74,7 +74,7 @@ class WFEmailSeedBlock(WFBlock):
         ],
     }
 
-    def __init__(self, wf_template_name):
+    def __init__(self, wf_template_name=None):
         super(WFEmailSeedBlock, self).__init__(wf_template_name)
         self._set_starter_task(2)  # Skip Setup
 

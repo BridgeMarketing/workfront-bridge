@@ -70,7 +70,7 @@ class WFBlockMeta(type):
         for base in bases:
             base_parameters = getattr(base, 'block_params', None)
             if base_parameters:
-                for task_name, parameters in block_params.iteritems():
+                for task_name, parameters in base_parameters.iteritems():
                     if task_name in block_params:
                         block_params[task_name] = tuple(block_params[task_name]) + tuple(parameters)
                     else:

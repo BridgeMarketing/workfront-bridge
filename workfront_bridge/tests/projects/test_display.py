@@ -52,26 +52,22 @@ class Test_Display_Builder(BaseBuilderTest):
                 {
                     'wf_template_name': 'Block - Display Data',
                     'Create Audience': {
-                        'Audience Name': 'audience_name'
+                        'Audience Name': 'audience_name',
+                        'type': 'DigitalAudienceCreate',
                     },
                 },
                 {
                     'wf_template_name': 'Block - Display Campaign v2',
                     'Create Campaign & Flight': {
                         'Campaign Name': 'Test Campaign',
-                        'EndDateTimeExclusiveUTC': '2019-05-02T20:50:35.000+0000',
-                        'StartDateTimeInclusiveUTC': '2019-04-29T20:50:35.000+0000'
+                        'EndDateTimeExclusiveUTC': '2019-05-02T00:00:00.000+0000',
+                        'StartDateTimeInclusiveUTC': '2019-04-29T00:00:00.000+0000',
+                        'type': 'DigitalCampaignCreate',
                     },
                 },
                 {
                     'wf_template_name': 'Block - Display Ad Group Setup',
                     'blocks': [
-                        {
-                            'wf_template_name': 'Block - Display Create Ad Group',
-                            'Create Ad Group': {
-                                'AdGroupName': 'Test AdGroup 1'
-                            }
-                        },
                         {
                             'wf_template_name': 'Block - Display Creative Upload v2',
                             'Creative Upload': {
@@ -87,20 +83,18 @@ class Test_Display_Builder(BaseBuilderTest):
                                 'ThirdPartyImpressionTrackingUrl': 'http://dummy.com'
                             }
                         },
+                        {
+                            'wf_template_name': 'Block - Display Create Ad Group',
+                            'Create Ad Group': {
+                                'AdGroupName': 'Test AdGroup 1',
+                                'type': 'DigitalDisplayAdGroupCreate',
+                            }
+                        },
                     ]
                 },
                 {
                     'wf_template_name': 'Block - Display QA',
                     'blocks': [
-                        {
-                            'wf_template_name': 'Block - Display QA Ad Group v2',
-                            'Ad Group QA': {
-                                'AdGroupName': 'Test AdGroup 1',
-                                'Campaign Name': 'Test Campaign',
-                                'EndDateTimeExclusiveUTC': '2019-05-02T20:50:35.000+0000',
-                                'StartDateTimeInclusiveUTC': '2019-04-29T20:50:35.000+0000'
-                            }
-                        },
                         {
                             'wf_template_name': 'Block - Display QA Creative v2',
                             'Creative QA': {
@@ -115,6 +109,15 @@ class Test_Display_Builder(BaseBuilderTest):
                                 'ThirdPartyImpressionTrackingUrl': 'http://dummy.com'
                             }
                         },
+                        {
+                            'wf_template_name': 'Block - Display QA Ad Group v2',
+                            'Ad Group QA': {
+                                'AdGroupName': 'Test AdGroup 1',
+                                'Campaign Name': 'Test Campaign',
+                                'EndDateTimeExclusiveUTC': '2019-05-02T00:00:00.000+0000',
+                                'StartDateTimeInclusiveUTC': '2019-04-29T00:00:00.000+0000'
+                            }
+                        },
                     ]
                 },
                 {
@@ -123,7 +126,7 @@ class Test_Display_Builder(BaseBuilderTest):
             ]
         }
 
-        self.assertItemsEqual(expected, prj)
+        self.assertDeepEquals(expected, prj)
 
     def test_display_multi(self):
         self.builder.add_ad_group(
@@ -185,7 +188,8 @@ class Test_Display_Builder(BaseBuilderTest):
                 {
                     'wf_template_name': 'Block - Display Data',
                     'Create Audience': {
-                        'Audience Name': 'audience_name'
+                        'Audience Name': 'audience_name',
+                        'type': 'DigitalAudienceCreate',
                     },
                 },
                 {
@@ -193,7 +197,8 @@ class Test_Display_Builder(BaseBuilderTest):
                     'Create Campaign & Flight': {
                         'Campaign Name': 'Test Campaign',
                         'EndDateTimeExclusiveUTC': '2019-05-02T00:00:00.000+0000',
-                        'StartDateTimeInclusiveUTC': '2019-04-29T00:00:00.000+0000'
+                        'StartDateTimeInclusiveUTC': '2019-04-29T00:00:00.000+0000',
+                        'type': 'DigitalCampaignCreate',
                     },
                 },
                 {
@@ -224,7 +229,8 @@ class Test_Display_Builder(BaseBuilderTest):
                         {
                             'wf_template_name': 'Block - Display Create Ad Group',
                             'Create Ad Group': {
-                                'AdGroupName': 'Test AdGroup 1'
+                                'AdGroupName': 'Test AdGroup 1',
+                                'type': 'DigitalDisplayAdGroupCreate',
                             }
                         },
                     ]
@@ -246,7 +252,8 @@ class Test_Display_Builder(BaseBuilderTest):
                         {
                             'wf_template_name': 'Block - Display Create Ad Group',
                             'Create Ad Group': {
-                                'AdGroupName': 'Test AdGroup 2'
+                                'AdGroupName': 'Test AdGroup 2',
+                                'type': 'DigitalDisplayAdGroupCreate',
                             }
                         },
                     ]

@@ -51,28 +51,63 @@ class WFBlockTestCase(unittest.TestCase):
         })
 
     def test_set_required_parameters(self):
-        obj = WFBlock("1234")
+        class TestBlock(WFBlock):
+            block_params = {
+                '': (
+                    ('required1', 'required1', True),
+                    ('required2', 'required2', True),
+                )
+            }
 
-        obj._add_required_parameters(["required1", "required2"])
+        obj = TestBlock("1234")
         self.assertEqual(obj.required_parameters, ["required1", "required2"])
 
-        obj._add_required_parameters(["required3", "required4"])
-        self.assertEqual(obj.required_parameters, ["required1", "required2", "required3", "required4"])
+        class TestBlockChild(TestBlock):
+            block_params = {
+                '': (
+                    ('required3', 'required3', True),
+                    ('required4', 'required4', True),
+                )
+            }
+
+        obj = TestBlockChild("123")
+        self.assertItemsEqual(obj.required_parameters, ["required1", "required2", "required3", "required4"])
 
     def test_set_optional_parameters(self):
-        obj = WFBlock("1234")
+        class TestBlock(WFBlock):
+            block_params = {
+                '': (
+                    ('optionalfield1', 'optionalfield1', False),
+                    ('optionalfield2', 'optionalfield2', False),
+                )
+            }
 
-        obj._add_optional_parameters(["optionalfield1", "optionalfield2"])
+        obj = TestBlock("1234")
         self.assertEqual(obj.optional_parameters, ["optionalfield1", "optionalfield2"])
 
-        obj._add_optional_parameters(["optionalfield3", "optionalfield4"])
-        self.assertEqual(obj.optional_parameters, ["optionalfield1", "optionalfield2", "optionalfield3", "optionalfield4"])
+        class TestBlockChild(TestBlock):
+            block_params = {
+                '': (
+                    ('optionalfield3', 'optionalfield3', False),
+                    ('optionalfield4', 'optionalfield4', False),
+                )
+            }
+
+        obj = TestBlockChild("123")
+        self.assertItemsEqual(obj.optional_parameters, ["optionalfield1", "optionalfield2", "optionalfield3", "optionalfield4"])
 
     def test_check_parameters(self):
-        obj = WFBlock("1234")
+        class TestBlock(WFBlock):
+            block_params = {
+                '': (
+                    ('requiredfield1', 'requiredfield1', True),
+                    ('requiredfield2', 'requiredfield2', True),
+                    ('optionalfield1', 'optionalfield1', True),
+                    ('optionalfield2', 'optionalfield2', True),
+                )
+            }
 
-        obj._add_required_parameters(["requiredfield1", "requiredfield2"])
-        obj._add_optional_parameters(["optionalfield1", "optionalfield2"])
+        obj = TestBlock("1234")
         self.assertRaises(WFBrigeException, obj.check_parameters)
 
         obj.set_parameter("Task 1", "requiredfield1", "a")

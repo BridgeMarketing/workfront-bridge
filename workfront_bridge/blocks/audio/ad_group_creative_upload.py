@@ -24,4 +24,4 @@ class WFAudioCreativeUploadBlock(WFBlock):
 
     def __init__(self):
         super(WFAudioCreativeUploadBlock, self).__init__(self.template_name)
-        self.automation_type = ' AudioCreativeUpload'
+        self.automation_type = 'AudioCreativeUpload'
