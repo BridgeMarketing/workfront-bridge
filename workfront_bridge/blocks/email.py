@@ -110,16 +110,16 @@ class WFEmailLiveSeedBlock(WFEmailSeedBlock):
     @summary: Use this block to validate seed lists using the CCM and send test
     emails (with the seed list) using the CM.
     This block contains a Live Setup block that has this tasks:
-    - Validate Start Date (OMS)
     - Validate Seed List (CCM)
+    - Seed List Approval (CCM)
+    - Validate Start Date (OMS)
     - Upload Audience (CM)
     - Upload Creative (CM)
     - Create Flight (CM)
     - Push to provider (CM)
-    - Seed List Approval (CCM)
     '''
 
-    template_name = 'Block - Email Live Setup v3'
+    template_name = 'Block - Email Live Setup v4'
 
     block_params = {
         'Live Setup': [
@@ -133,14 +133,13 @@ class WFEmailAudienceLiveSetupBlock(WFBlock):
     @summary: Use this block to send emails to the audience in the program of
     the project using the CM
     This block contains a Audience Live Setup block that has this tasks:
-    - Validate Start Date (OMS)
     - Upload Audience (CM)
     - Upload Creative (CM)
     - Create Flight (CM)
     - Push to provider (CM)
     '''
 
-    template_name = 'Block - Email Audience Live Setup v2'
+    template_name = 'Block - Email Audience Live Setup'
 
     block_params = {
         'Audience Live Setup': [
