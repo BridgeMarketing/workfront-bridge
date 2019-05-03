@@ -12,6 +12,8 @@ b.overage = False
 b.click_tier = 'CL'
 b.open_tier = 'O1'
 b.purl_processing_enabled = True
+b.geo_target = "State"
+b.geo_target_state = []
 prj = b.build()
 prj.set_fields({"portfolioID": "5b45ff9b000aa3a5db15b2e269976a4c"})
 print(prj)

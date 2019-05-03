@@ -27,7 +27,7 @@ class CWPushContainer(WFBlock):
             ('Overage', 'overage', False),
             ('Target Volume', 'target_volume', False),
             ('Geo Target', 'geo_target', False),
-            ('Geo Target State', 'geo_target_state', False),
+            ('Geo Target State', 'geo_target_state', False, lambda l: l),
             ('Deployment File Link', 'deployment_file_link', False),
             ('Deployment File Segment', 'deployment_file_segment', False),
             ('CW Tool Link', 'cw_tool_link', False),
