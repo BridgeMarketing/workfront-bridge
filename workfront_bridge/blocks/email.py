@@ -32,7 +32,7 @@ class WFEmailValidateHtmlBlock(WFBlock):
 
     block_params = {
         'Validate HTML': [
-            ('ecm_email_subject', 'email_subject', True, lambda x: x),
+            ('ecm_email_subject', 'email_subject', True, lambda x: str(x.encode('utf-8'))),
         ],
     }
 
