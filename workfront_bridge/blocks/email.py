@@ -105,6 +105,32 @@ class WFEmailTestSeedBlock(WFEmailSeedBlock):
         self.is_test = "yes"
 
 
+class WFEmailTestSeedBlockV2(WFEmailSeedBlock):
+    '''
+    @summary: Use this block to validate seed lists using the CCM and send test
+    emails (with the seed list) using the CM.
+    This block contains a Test Setup block that has this tasks:
+    - Validate Seed List (CCM)
+    - Upload Audience (CM)
+    - Upload Creative (CM)
+    - Create Flight (CM)
+    - Push to provider (CM)
+    - Seed List Approval (CCM)
+    '''
+
+    template_name = 'Block - Email Test List Setup'
+
+    block_params = {
+        'Test Setup': [
+            ('cm_test_aud_s3_path', 'seed_list_s3_path', True),
+        ],
+    }
+
+    def __init__(self):
+        super(WFEmailTestSeedBlockV2, self).__init__(self.template_name)
+        self.is_test = "yes"
+
+
 class WFEmailLiveSeedBlock(WFEmailSeedBlock):
     '''
     @summary: Use this block to validate seed lists using the CCM and send test
