@@ -138,14 +138,13 @@ class WFEmailLiveSeedBlock(WFEmailSeedBlock):
     This block contains a Live Setup block that has this tasks:
     - Validate Seed List (CCM)
     - Seed List Approval (CCM)
-    - Validate Start Date (OMS)
     - Upload Audience (CM)
     - Upload Creative (CM)
     - Create Flight (CM)
     - Push to provider (CM)
     '''
 
-    template_name = 'Block - Email Live Setup v4'
+    template_name = 'Block - Email Live Setup V2'
 
     block_params = {
         'Live Setup': [
