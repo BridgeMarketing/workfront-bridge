@@ -101,6 +101,7 @@ class ResumeProjectBuilder(object):
         # Get Audience Live Setup Push to Provider Task
         tasks = prj_being_resumed.get_tasks()
         aud_tsk = [t for t in tasks if t.name == "Audience Live Setup"][0]
+
         aud_tasks = tasks[tasks.index(aud_tsk):]
         ptp_task = [t for t in aud_tasks if t.name == "Push to provider"][0]
 
@@ -111,6 +112,14 @@ class ResumeProjectBuilder(object):
         # Update "Deployment Date/Time" parameter with the new deploy_datetime
         create_flight_task = [t for t in aud_tasks if t.name == "Create Flight"][0]
         create_flight_task.set_param_values({"Deployment Date/Time": datetime_to_wf_format(self.deploy_datetime)})
+
+        # Update Live Setup "Deployment Date/Time" parameter with the new deploy_datetime
+        live_setup_task = [t for t in tasks if t.name == "Live Setup"][0]
+        live_setup_task_tasks = tasks[tasks.index(live_setup_task):]
+
+        live_setup_create_flight_task = [t for t in live_setup_task_tasks if t.name == "Create Flight"][0]
+        live_setup_create_flight_task.set_param_values(
+            {"Deployment Date/Time": datetime_to_wf_format(self.deploy_datetime)})
 
         # Update "Start Date" in CW tools project
         cw_tool_project.set_param_values({"Start Date": datetime_to_wf_format(self.deploy_datetime)})
