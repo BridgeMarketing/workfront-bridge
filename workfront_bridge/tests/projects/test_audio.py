@@ -18,7 +18,7 @@ class Test_Audio_Builder(BaseBuilderTest):
             creatives=[
                 {
                     'creative_name': 'Test Creative 1',
-                    'audio_s3_url': 's3://bridge-file-assets/API_files/orderID_10000129/Channel_2/sound.mp3',
+                    'media_s3_url': 's3://bridge-file-assets/API_files/orderID_10000129/Channel_2/sound.mp3',
                     'duration': 15,
                     'clickthrough_url': 'http://a.com/',
                     'landing_page_url': 'http://a.com/',
@@ -65,13 +65,13 @@ class Test_Audio_Builder(BaseBuilderTest):
                     'wf_template_name': 'Block - Display Ad Group Setup',
                     'blocks': [
                         {
-                            'wf_template_name': 'Block - Audio Creative Upload',
+                            'wf_template_name': 'Block - Media Creative Upload',
                             'Creative Upload': {
                                 'ClickthroughUrl': 'http://a.com/',
                                 'Creative Name': 'Test Creative 1',
                                 'LandingPageUrl': 'http://a.com/',
                                 'ThirdPartyImpressionTrackingUrl': 'http://dummy.com',
-                                'AudioS3URL': 's3://bridge-file-assets/API_files/orderID_10000129/Channel_2/sound.mp3',
+                                'MediaS3URL': 's3://bridge-file-assets/API_files/orderID_10000129/Channel_2/sound.mp3',
                                 'Duration': '15',
                                 'type': 'AudioCreativeUpload',
                             }
@@ -89,13 +89,13 @@ class Test_Audio_Builder(BaseBuilderTest):
                     'wf_template_name': 'Block - Display QA',
                     'blocks': [
                         {
-                            'wf_template_name': 'Block - Audio QA Creative',
+                            'wf_template_name': 'Block - Media QA Creative',
                             'Creative QA': {
                                 'ClickthroughUrl': 'http://a.com/',
                                 'Creative Name': 'Test Creative 1',
                                 'LandingPageUrl': 'http://a.com/',
                                 'ThirdPartyImpressionTrackingUrl': 'http://dummy.com',
-                                'AudioS3URL': 's3://bridge-file-assets/API_files/orderID_10000129/Channel_2/sound.mp3',
+                                'MediaS3URL': 's3://bridge-file-assets/API_files/orderID_10000129/Channel_2/sound.mp3',
                                 'Duration': '15',
                             }
                         },

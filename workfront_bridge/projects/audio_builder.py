@@ -38,7 +38,7 @@ class AudioProjectBuilder(object):
     ]
     creative_upload_params = [
         "creative_name",
-        "audio_s3_url",
+        "media_s3_url",
         "third_party_impression_tracking_url",
         "clickthrough_url",
         "landing_page_url",
@@ -46,7 +46,7 @@ class AudioProjectBuilder(object):
     ]
     creative_qa_params = [
         "creative_name",
-        "audio_s3_url",
+        "media_s3_url",
         "third_party_impression_tracking_url",
         "clickthrough_url",
         "landing_page_url",

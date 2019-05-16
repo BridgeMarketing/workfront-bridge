@@ -6,14 +6,14 @@ class WFAudioCreativeQABlock(WFBlock):
     @summary: Audio QA Creative block
     """
 
-    template_name = 'Block - Audio QA Creative'
+    template_name = 'Block - Media QA Creative'
 
     block_params = {
         'Creative QA': [
             ('Creative Name', 'creative_name', True),
             ('ClickthroughUrl', 'clickthrough_url', True),
             ('LandingPageUrl', 'landing_page_url', True),
-            ('AudioS3URL', 'audio_s3_url', False),
+            ('MediaS3URL', 'media_s3_url', False),
             ('ThirdPartyImpressionTrackingUrl', 'third_party_impression_tracking_url', False),
             ('Duration', 'duration', False),
         ],
