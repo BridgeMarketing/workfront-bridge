@@ -115,14 +115,8 @@ class AudioProjectBuilder(object):
                 ad_group[k] = v
         self.ad_groups.append(ad_group)
 
-    def build(self):
-        """
-        @summary: build the Workfront project.
-        @raise WFBrigeException
-        @return: WFProject object
-        """
-
-        project = WFProjectAudioContainer(self.project_name)
+    def build_project(self, container_class=WFProjectAudioContainer):
+        project = container_class(self.project_name)
         project.ttd_audience_id = self._ttd_audience_id
         project.ttd_campaign_id = self._ttd_campaign_id
         project.ttd_flight_id = self._ttd_flight_id
@@ -131,13 +125,15 @@ class AudioProjectBuilder(object):
         project.is_targeted_bonus_media = self._is_targeted_bonus_media
         project.multiple_ad_groups = self._multiple_ad_groups
         project.project_type = self._project_type
+        return project
 
-        # order_review_block = WFDisplayOrderReviewBlock()
-
+    def build_data_block(self):
         data_block = WFDisplayDataBlock()
         data_block.audience_name = self._audience_name
+        return data_block
 
-        campaign_block = WFAudioCampaignBlock()
+    def build_campaign_block(self, campaign_block_class=WFAudioCampaignBlock):
+        campaign_block = campaign_block_class()
         campaign_block.start_date_inclusive_utc = self._start_date_inclusive_utc
         campaign_block.end_date_exclusive_utc = self._end_date_exclusive_utc
         campaign_block.campaign_name = self._campaign_name
@@ -155,21 +151,29 @@ class AudioProjectBuilder(object):
         campaign_block.budget_in_impressions_pre_calc = self._budget_in_impressions_pre_calc
         campaign_block.daily_target_in_advertiser_currency = self._daily_target_in_advertiser_currency
         campaign_block.daily_target_in_impressions = self._daily_target_in_impressions
+        return campaign_block
 
+    def build_ad_groups(self,
+                        create_ad_group_class=WFAudioCreateAdGroupBlock,
+                        creative_upload_class=WFAudioCreativeUploadBlock,
+                        creative_qa_class=WFAudioCreativeQABlock):
         ad_group_setup_blocks = []
         qa_blocks = []
+
         for ad_group in self.ad_groups:
             ad_group_setup_block = WFDisplayAdGroupSetupBlock()
             qa_block = WFDisplayQABlock()
+
             for creative in ad_group['creatives']:
                 creative_upload_dict = {k: creative[k]
                                         for k in self.creative_upload_params
                                         if k in creative}
-                ad_group_setup_block.add_creative(block_class=WFAudioCreativeUploadBlock, **creative_upload_dict)
+                ad_group_setup_block.add_creative(block_class=creative_upload_class, **creative_upload_dict)
                 creative_qa_dict = {k: creative[k]
                                     for k in self.creative_qa_params
                                     if k in creative}
-                qa_block.add_creative(block_class=WFAudioCreativeQABlock, **creative_qa_dict)
+                qa_block.add_creative(block_class=creative_qa_class, **creative_qa_dict)
+
             ad_group_setup_block.add_ad_group(block_class=WFAudioCreateAdGroupBlock, **ad_group)
             ad_group_setup_blocks.append(ad_group_setup_block)
             ad_group.update({
@@ -191,13 +195,27 @@ class AudioProjectBuilder(object):
                 'daily_target_in_advertiser_currency': self._daily_target_in_advertiser_currency,
                 'daily_target_in_impressions': self._daily_target_in_impressions,
             })
+
             qa_block.add_ad_group(**ad_group)
             qa_blocks.append(qa_block)
+
+        return ad_group_setup_blocks, qa_blocks
+
+    def build(self):
+        """
+        @summary: build the Workfront project.
+        @raise WFBrigeException
+        @return: WFProject object
+        """
+
+        project = self.build_project()
+        data_block = self.build_data_block()
+        campaign_block = self.build_campaign_block()
+        ad_group_setup_blocks, qa_blocks = self.build_ad_groups()
 
         launch_block = WFDisplayLaunchBlock()
 
         project_blocks = [
-            # order_review_block,
             data_block,
             campaign_block,
         ]
