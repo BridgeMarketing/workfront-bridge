@@ -7,5 +7,5 @@ class WFVideoCreativeUploadBlock(WFAudioCreativeUploadBlock):
     """
 
     def __init__(self):
-        super(WFVideoCreativeUploadBlock, self).__init__(self.template_name)
+        super(WFVideoCreativeUploadBlock, self).__init__()
         self.automation_type = 'VideoCreativeUpload'
