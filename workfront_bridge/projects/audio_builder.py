@@ -174,7 +174,7 @@ class AudioProjectBuilder(object):
                                     if k in creative}
                 qa_block.add_creative(block_class=creative_qa_class, **creative_qa_dict)
 
-            ad_group_setup_block.add_ad_group(block_class=WFAudioCreateAdGroupBlock, **ad_group)
+            ad_group_setup_block.add_ad_group(block_class=create_ad_group_class, **ad_group)
             ad_group_setup_blocks.append(ad_group_setup_block)
             ad_group.update({
                 'start_date_inclusive_utc': self._start_date_inclusive_utc,
