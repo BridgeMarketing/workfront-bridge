@@ -7,10 +7,9 @@ from workfront.objects.template_project import WFTemplateProject
 from workfront_bridge.blocks.base import WFBlockParser
 from workfront_bridge.exceptions import WFBrigeException
 from workfront_bridge.projects.email import WFProjectEmailContainer
-from workfront_bridge.blocks.email import WFEmailTestSeedNoEmailSentBlock, \
-    WFEmailAudienceLiveSetupBlock, WFEmailReviewDeploymentBlock, WFEmailApproveCWTaggingBlock
+from workfront_bridge.blocks.email import WFEmailAudienceLiveSetupBlock, \
+    WFEmailReviewDeploymentBlock, WFEmailApproveCWTaggingBlock
 from workfront_bridge.blocks.email import WFEmailLiveSeedBlock
-from workfront_bridge.blocks.email import WFEmailTestSeedBlock
 from workfront_bridge.blocks.email import WFEmailGenHtmlFromZipBlock
 from workfront_bridge.blocks.email import WFEmailValidateHtmlBlock
 from datetime import datetime
@@ -41,9 +40,7 @@ class EmailProjectBuilder(object):
         self.project_name = project_name
         self.wf = wf
         self.live_seed_list = None
-        self.test_seed_lists = []
         self.subject = None
-        self.subject_test_prefix = None
         self.html = None
         self.html_zip = None
         self.provider = None
@@ -67,10 +64,6 @@ class EmailProjectBuilder(object):
         self.html_zip = s3_path
         return self
 
-    def add_test_list(self, s3_path):
-        self.test_seed_lists.append(s3_path)
-        return self
-
     def set_seed_list(self, s3_path):
         self.live_seed_list = s3_path
         return self
@@ -81,10 +74,6 @@ class EmailProjectBuilder(object):
 
     def set_subject(self, subject):
         self.subject = subject
-        return self
-
-    def set_subject_test_prefix(self, subject_test_prefix):
-        self.subject_test_prefix = subject_test_prefix
         return self
 
     def set_review_deployment(self, val=True):
@@ -109,22 +98,6 @@ class EmailProjectBuilder(object):
         self.audience_provider.user = esp_user
         self.audience_provider.password = password
         self.audience_provider.token = token
-        return self
-
-    def set_seeds_sender_email(self, email):
-        self.seeds_provider.sender_email = email
-        return self
-
-    def set_seeds_sender_name(self, name):
-        self.seeds_provider.sender_name = name
-        return self
-
-    def set_seeds_provider(self, esp_name, esp_user=None, password=None,
-                           token=None):
-        self.seeds_provider.name = esp_name
-        self.seeds_provider.user = esp_user
-        self.seeds_provider.password = password
-        self.seeds_provider.token = token
         return self
 
     def set_live_seeds_sender_email(self, email):
@@ -172,19 +145,6 @@ class EmailProjectBuilder(object):
         self._configure_provider_in_setup_block(audb, self.audience_provider)
         return audb
 
-    def _crt_test_list_block(self, test_list):
-        slb = None
-        if self.test_sl_send_emails:
-            slb = WFEmailTestSeedBlock()
-            slb.seed_list_s3_path = test_list
-            slb.campaign_name = "Test List - " + self.project_name
-            slb.deployment_datetime = datetime.utcnow().replace(tzinfo=pytz.utc)
-            self._configure_provider_in_setup_block(slb, self.seeds_provider)
-        else:
-            slb = WFEmailTestSeedNoEmailSentBlock()
-            slb.seed_list_s3_path = test_list
-        return slb
-
     def _crt_live_list_block(self, live_list):
         slb = None
         slb = WFEmailLiveSeedBlock()
@@ -220,13 +180,6 @@ class EmailProjectBuilder(object):
                 err = "Only a zip or an html should be provided"
                 raise WFBrigeException(err)
 
-            if len(self.test_seed_lists) > 0:
-                check_not_none("seeds_provider", self.seeds_provider.name)
-                check_not_none("seeds_sender_name",
-                               self.seeds_provider.sender_name)
-                check_not_none("seeds_sender_email",
-                               self.seeds_provider.sender_email)
-
         check_not_none("subject", self.subject)
         check_not_none("email_creative_id", self.email_creative_id)
 
@@ -251,7 +204,6 @@ class EmailProjectBuilder(object):
         project = WFProjectEmailContainer(self.project_name)
 
         project.email_subject = self.subject
-        project.subject_test_prefix = self.subject_test_prefix
         project.email_creative_id = self.email_creative_id
         project.from_line = self.audience_provider.sender_name
 
@@ -273,10 +225,6 @@ class EmailProjectBuilder(object):
             if self.add_tags_weight_approval_step:
                 block_approve_cw_tags = WFEmailApproveCWTaggingBlock()
                 project.append(block_approve_cw_tags)
-
-            for test_list in self.test_seed_lists:
-                slb = self._crt_test_list_block(test_list)
-                project.append(slb)
 
             if self.live_seed_list is not None:
                 email_seed_block = self._crt_live_list_block(self.live_seed_list)
@@ -309,7 +257,6 @@ class EmailOnBoardingProjectBuilder(object):
         self.project_name = project_name
         self.wf = wf
         self.live_seed_list = None
-        self.test_seed_lists = []
         self.subject = None
         self.html = None
         self.category = None
@@ -324,10 +271,6 @@ class EmailOnBoardingProjectBuilder(object):
 
     def set_html(self, s3_path):
         self.html = s3_path
-        return self
-
-    def add_test_list(self, s3_path):
-        self.test_seed_lists.append(s3_path)
         return self
 
     def set_live_seed_list(self, s3_path):
@@ -354,22 +297,6 @@ class EmailOnBoardingProjectBuilder(object):
         self.email_creative_id = id
         return self
 
-    def set_seeds_sender_email(self, email):
-        self.seeds_provider.sender_email = email
-        return self
-
-    def set_seeds_sender_name(self, name):
-        self.seeds_provider.sender_name = name
-        return self
-
-    def set_seeds_provider(self, esp_name, esp_user=None, password=None,
-                           token=None):
-        self.seeds_provider.name = esp_name
-        self.seeds_provider.user = esp_user
-        self.seeds_provider.password = password
-        self.seeds_provider.token = token
-        return self
-
     def _check_viability(self):
 
         def check_not_none(name, value):
@@ -382,16 +309,6 @@ class EmailOnBoardingProjectBuilder(object):
                     "{}: {} file hasn't an allowed extensions ({})".format(name, file_name,
                                                                            ",".join(allowed_extensions)))
 
-        def check_files_extension(name, files_name=[], allowed_extensions=None):
-            for file_name in files_name:
-                check_file_extension(name, file_name, allowed_extensions)
-
-        def check_length(field_name, collection, min_length=0, max_length=sys.maxint):
-            if len(collection) < min_length or len(collection) > max_length:
-                raise WFBrigeException(
-                    "{}: length ({}) is not between {} to {}".format(field_name, len(collection), min_length,
-                                                                     max_length))
-
         check_not_none("subject", self.subject)
         check_not_none("email_creative_id", self.email_creative_id)
         check_not_none("html", self.html)
@@ -399,13 +316,6 @@ class EmailOnBoardingProjectBuilder(object):
         check_not_none("category", self.category)
         check_not_none("from_line", self.from_line)
         check_file_extension("live_seed_list", self.live_seed_list, (".csv",))
-
-        check_length("test_seed_lists", self.test_seed_lists, 1, 5)
-        check_files_extension("test_seed_lists", self.test_seed_lists, (".csv",))
-
-        check_not_none("seeds_provider", self.seeds_provider.name)
-        check_not_none("seeds_sender_name", self.seeds_provider.sender_name)
-        check_not_none("seeds_sender_email", self.seeds_provider.sender_email)
 
         if self.suppression_file_path is not None and self.suppression_file_path:
             check_file_extension("suppression_file_path", self.suppression_file_path, (".csv",))
@@ -421,14 +331,6 @@ class EmailOnBoardingProjectBuilder(object):
         template = WFTemplateProject.from_name(self.wf, self.__project.wf_template_name)
         parameters = template.get_param_values()
         return parameters["SelectedProvider"]
-
-    def _crt_test_list_block(self, test_list):
-        slb = WFEmailTestSeedBlock()
-        slb.seed_list_s3_path = test_list
-        slb.campaign_name = "Test List - " + self.project_name
-        slb.deployment_datetime = datetime.utcnow().replace(tzinfo=pytz.utc)
-        self._configure_provider_in_setup_block(slb, self.seeds_provider)
-        return slb
 
     def _configure_provider_in_setup_block(self, block, provider):
         block.sender_email = provider.sender_email
@@ -456,7 +358,6 @@ class EmailOnBoardingProjectBuilder(object):
 
         project.tags = "onboarding"
         project.email_subject = self.subject
-        project.subject_test_prefix = self.subject_test_prefix
         project.from_line = self.from_line
         project.suppression_file_path = self.suppression_file_path
         project.client_id = self.client_id
@@ -473,20 +374,6 @@ class EmailOnBoardingProjectBuilder(object):
         bval_html = WFEmailValidateHtmlBlock()
         bval_html.email_subject = self.subject
         project.append(bval_html)
-
-        # test_send_email = self._get_parameter_test_send_email()
-        #
-        # selected_provider = self._get_parameter_selected_provider()
-        #
-        # for index, test_list in enumerate(self.test_seed_lists, start=1):
-        #     slb = self._create_test_list_block(test_list, str(index), test_send_email, selected_provider)
-        #     project.append(slb)
-
-        for test_list in self.test_seed_lists:
-            slb = self._crt_test_list_block(test_list)
-            project.append(slb)
-
-        project.test_seed_lists = ",".join(self.test_seed_lists)
 
         email_live_seed_block = WFEmailLiveSeedBlock()
         email_live_seed_block.seed_list_s3_path = self.live_seed_list

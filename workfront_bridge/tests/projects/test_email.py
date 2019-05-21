@@ -18,10 +18,6 @@ class Test_Email_Builder(BaseBuilderTest):
         dt = datetime(2020, 2, 3, 14, 29, 22, 0, tz.tzutc())
         _datetime.utcnow = mock.Mock(return_value=dt)
 
-        self.builder.add_test_list("s3://some/testlist1.csv")
-        self.builder.add_test_list("s3://some/testlist2.csv")
-        self.builder.add_test_list("s3://some/testlist2.csv")
-
         self.builder.set_html("s3://some/creative.html")
 
         self.builder.set_deployment_datetime(dt)
@@ -33,10 +29,6 @@ class Test_Email_Builder(BaseBuilderTest):
         self.builder.set_audience_provider("ActOn")
         self.builder.set_audience_sender_email("audience_sender@email.com")
         self.builder.set_audience_sender_name("Sender NAME")
-
-        self.builder.set_seeds_provider("Jango")
-        self.builder.set_seeds_sender_email("seedssender@email.com")
-        self.builder.set_seeds_sender_name("Seed Name")
 
         self.builder.set_live_seeds_provider("Jango")
         self.builder.set_live_seeds_sender_email("liveseedssender@email.com")
@@ -59,54 +51,6 @@ class Test_Email_Builder(BaseBuilderTest):
                     "wf_template_name": "Block - Email Validate Html",
                     "Validate HTML": {
                         "ecm_email_subject": "asuntoooo",
-                    },
-                },
-                {
-                    "wf_template_name": "Block - Email Test Setup",
-                    "Test Setup": {
-                        "cm_test_aud_s3_path": "s3://some/testlist1.csv",
-                    },
-                    "Push to provider": {
-                        "SelectedProvider": "Jango",
-                        "isTest": "yes",
-                    },
-                    "Create Flight": {
-                        "Campaign Name": "Test List - Test pablo email project builder 1",
-                        "Sender Name": "Seed Name",
-                        "Deployment Date/Time": "2020-02-03T14:29:22.000+0000",
-                        "Sender Email": "seedssender@email.com",
-                    },
-                },
-                {
-                    "wf_template_name": "Block - Email Test Setup",
-                    "Test Setup": {
-                        "cm_test_aud_s3_path": "s3://some/testlist2.csv",
-                    },
-                    "Push to provider": {
-                        "SelectedProvider": "Jango",
-                        "isTest": "yes",
-                    },
-                    "Create Flight": {
-                        "Campaign Name": "Test List - Test pablo email project builder 1",
-                        "Sender Name": "Seed Name",
-                        "Deployment Date/Time": "2020-02-03T14:29:22.000+0000",
-                        "Sender Email": "seedssender@email.com",
-                    },
-                },
-                {
-                    "wf_template_name": "Block - Email Test Setup",
-                    "Test Setup": {
-                        "cm_test_aud_s3_path": "s3://some/testlist2.csv",
-                    },
-                    "Push to provider": {
-                        "SelectedProvider": "Jango",
-                        "isTest": "yes",
-                    },
-                    "Create Flight": {
-                        "Campaign Name": "Test List - Test pablo email project builder 1",
-                        "Sender Name": "Seed Name",
-                        "Deployment Date/Time": "2020-02-03T14:29:22.000+0000",
-                        "Sender Email": "seedssender@email.com",
                     },
                 },
                 {
