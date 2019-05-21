@@ -110,7 +110,7 @@ class Test_Email_Builder(BaseBuilderTest):
                     },
                 },
                 {
-                    "wf_template_name": "Block - Email Live Setup v3",
+                    "wf_template_name": "Block - Email Live Setup V2",
                     "Push to provider": {
                         "SelectedProvider": "Jango",
                     },
@@ -125,7 +125,7 @@ class Test_Email_Builder(BaseBuilderTest):
                     }
                 },
                 {
-                    "wf_template_name": "Block - Email Audience Live Setup v2",
+                    "wf_template_name": "Block - Email Audience Live Setup",
                     "Push to provider": {
                         "SelectedProvider": "ActOn",
                     },

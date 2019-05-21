@@ -2,23 +2,24 @@ import mock
 import datetime
 
 from workfront_bridge.tests.projects.base import BaseBuilderTest
-from workfront_bridge.projects import audio_builder
+from workfront_bridge.projects import video_builder
 
 
-class Test_Audio_Builder(BaseBuilderTest):
+class Test_Video_Builder(BaseBuilderTest):
     def setUp(self):
-        super(Test_Audio_Builder, self).setUp()
+        super(Test_Video_Builder, self).setUp()
 
         self.wf = mock.MagicMock()
-        self.builder = audio_builder.AudioProjectBuilder(self.wf, "Test - Audio project")
+        self.builder = video_builder.VideoProjectBuilder(self.wf, "Test - Video project")
 
-    def test_audio(self):
+    def test_video(self):
         self.builder.add_ad_group(
             ad_group_name='Test AdGroup 1',
+            device_type='ConnectedTV',
             creatives=[
                 {
                     'creative_name': 'Test Creative 1',
-                    'media_s3_url': 's3://bridge-file-assets/API_files/orderID_10000129/Channel_2/sound.mp3',
+                    'media_s3_url': 's3://bridge-file-assets/API_files/orderID_10000129/Channel_2/video.mp4',
                     'duration': 15,
                     'clickthrough_url': 'http://a.com/',
                     'landing_page_url': 'http://a.com/',
@@ -33,15 +34,15 @@ class Test_Audio_Builder(BaseBuilderTest):
                      .set_end_date_exclusive_utc(datetime.datetime.strptime('2019-05-02', '%Y-%m-%d'))
                      .set_campaign_name('Test Campaign')
                      .set_multiple_ad_groups(False)
-                     .set_project_type('Audio'))
+                     .set_project_type('Video'))
 
         prj = self.builder.build()
 
         expected = {
-            'wf_template_name': 'Base Project Container - Audio Channel',
+            'wf_template_name': 'Base Project Container - Video Channel',
             '': {
                 'MultipleAdGroups': 'False',
-                'Project Type': 'Audio',
+                'Project Type': 'Video',
                 'TTDAdvertiserID': 'xc7votu'
             },
             'blocks': [
@@ -58,7 +59,7 @@ class Test_Audio_Builder(BaseBuilderTest):
                         'Campaign Name': 'Test Campaign',
                         'EndDateTimeExclusiveUTC': '2019-05-02T00:00:00.000+0000',
                         'StartDateTimeInclusiveUTC': '2019-04-29T00:00:00.000+0000',
-                        'type': 'AudioCampaignCreate',
+                        'type': 'VideoCampaignCreate',
                     },
                 },
                 {
@@ -71,16 +72,17 @@ class Test_Audio_Builder(BaseBuilderTest):
                                 'Creative Name': 'Test Creative 1',
                                 'LandingPageUrl': 'http://a.com/',
                                 'ThirdPartyImpressionTrackingUrl': 'http://dummy.com',
-                                'MediaS3URL': 's3://bridge-file-assets/API_files/orderID_10000129/Channel_2/sound.mp3',
+                                'MediaS3URL': 's3://bridge-file-assets/API_files/orderID_10000129/Channel_2/video.mp4',
                                 'Duration': '15',
-                                'type': 'AudioCreativeUpload',
+                                'type': 'VideoCreativeUpload',
                             }
                         },
                         {
                             'wf_template_name': 'Block - Display Create Ad Group',
                             'Create Ad Group': {
                                 'AdGroupName': 'Test AdGroup 1',
-                                'type': 'AudioAdGroupCreate',
+                                'Device Type': 'ConnectedTV',
+                                'type': 'VideoAdGroupCreate',
                             }
                         },
                     ]
@@ -95,7 +97,7 @@ class Test_Audio_Builder(BaseBuilderTest):
                                 'Creative Name': 'Test Creative 1',
                                 'LandingPageUrl': 'http://a.com/',
                                 'ThirdPartyImpressionTrackingUrl': 'http://dummy.com',
-                                'MediaS3URL': 's3://bridge-file-assets/API_files/orderID_10000129/Channel_2/sound.mp3',
+                                'MediaS3URL': 's3://bridge-file-assets/API_files/orderID_10000129/Channel_2/video.mp4',
                                 'Duration': '15',
                             }
                         },
@@ -104,6 +106,7 @@ class Test_Audio_Builder(BaseBuilderTest):
                             'Ad Group QA': {
                                 'AdGroupName': 'Test AdGroup 1',
                                 'Campaign Name': 'Test Campaign',
+                                'Device Type': 'ConnectedTV',
                                 'EndDateTimeExclusiveUTC': '2019-05-02T00:00:00.000+0000',
                                 'StartDateTimeInclusiveUTC': '2019-04-29T00:00:00.000+0000'
                             }

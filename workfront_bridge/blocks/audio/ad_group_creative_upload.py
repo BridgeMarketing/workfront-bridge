@@ -6,7 +6,7 @@ class WFAudioCreativeUploadBlock(WFBlock):
     @summary: Audio Creative Upload block
     """
 
-    template_name = 'Block - Audio Creative Upload'
+    template_name = 'Block - Media Creative Upload'
 
     block_params = {
         'Creative Upload': [
@@ -15,7 +15,7 @@ class WFAudioCreativeUploadBlock(WFBlock):
             ('ClickthroughUrl', 'clickthrough_url', True),
             ('type', 'automation_type', True),
             ('ClickthroughUrl', 'clickthrough_url', False),
-            ('AudioS3URL', 'audio_s3_url', False),
+            ('MediaS3URL', 'media_s3_url', False),
             ('ThirdPartyImpressionTrackingUrl', 'third_party_impression_tracking_url', False),
             ('Duration', 'duration', False),
             ('Height', 'height', False),
