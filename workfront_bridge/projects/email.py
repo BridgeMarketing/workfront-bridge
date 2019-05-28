@@ -21,7 +21,9 @@ class WFProjectEmailContainer(WFBlock):
             ('Suppression File Path', 'suppression_file_path', False),
             ('Category', 'category', False),
             ('ecm_live_seed_list', 'live_seed_list', False),
+            ('ecm_test_seed_lists', 'test_seed_lists', False),
             ('ecm_html', 'ecm_html', False),
+            ('subject_test_prefix', 'subject_test_prefix', False),
         ],
     }
 

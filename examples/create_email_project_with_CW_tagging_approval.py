@@ -11,6 +11,10 @@ b = email_builder.EmailProjectBuilder(wf, "Test email project builder with CW Ta
 
 b.add_tags_weight_approval_step = True
 
+b.add_test_list("s3://some/testlist1.csv")
+b.add_test_list("s3://some/testlist2.csv")
+b.add_test_list("s3://some/testlist2.csv")
+
 b.set_html("s3://some/creative.html")
 
 b.set_deployment_datetime(datetime.now())
@@ -22,6 +26,10 @@ b.set_send_validate_test_seed_emails(True)
 b.set_audience_provider("ActOn")
 b.set_audience_sender_email("audience_sender@email.com")
 b.set_audience_sender_name("Sender NAME")
+
+b.set_seeds_provider("Jango")
+b.set_seeds_sender_email("seedssender@email.com")
+b.set_seeds_sender_name("Seed Name")
 
 b.set_live_seeds_provider("Jango")
 b.set_live_seeds_sender_email("liveseedssender@email.com")

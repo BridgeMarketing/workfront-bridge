@@ -1,6 +1,27 @@
 from workfront_bridge.blocks.base import WFBlock
 
 
+class WFEmailTestSeedNoEmailSentBlock(WFBlock):
+    '''
+    @summary: Use this block to validate seed lists using the CCM (without
+    sending emails).
+    This block contains a Test Setup block that has validate seed
+    list task and seed list approval task.
+    '''
+
+    template_name = 'Block - Email Test Setup (no emails sent)'
+
+    block_params = {
+        'Test Setup': [
+            ('cm_test_aud_s3_path', 'seed_list_s3_path', True),
+        ],
+    }
+
+    def __init__(self):
+        super(WFEmailTestSeedNoEmailSentBlock, self).__init__(self.template_name)
+        self._set_starter_task(2)
+
+
 class WFEmailValidateHtmlBlock(WFBlock):
     '''
     @summary: Use this block to validate an html with the CCM.
@@ -33,7 +54,7 @@ class WFEmailGenHtmlFromZipBlock(WFBlock):
 
 class WFEmailSeedBlock(WFBlock):
     '''
-    @summary: Common elements for live seed block.
+    @summary: Common elements for test/live seed block.
     Please, check WFEmailTestSeedBlock and WFEmailLiveSeedBlock for more details
     '''
 
@@ -49,12 +70,39 @@ class WFEmailSeedBlock(WFBlock):
             ('Email Provider User', 'provider_user', False),
             ('Email Provider Password', 'provider_password', False),
             ('Email Provider Token', 'provider_token', False),
+            ('isTest', 'is_test', False),
         ],
     }
 
     def __init__(self, wf_template_name=None):
         super(WFEmailSeedBlock, self).__init__(wf_template_name)
         self._set_starter_task(2)  # Skip Setup
+
+
+class WFEmailTestSeedBlock(WFEmailSeedBlock):
+    '''
+    @summary: Use this block to validate seed lists using the CCM and send test
+    emails (with the seed list) using the CM.
+    This block contains a Test Setup block that has this tasks:
+    - Validate Seed List (CCM)
+    - Upload Audience (CM)
+    - Upload Creative (CM)
+    - Create Flight (CM)
+    - Push to provider (CM)
+    - Seed List Approval (CCM)
+    '''
+
+    template_name = 'Block - Email Test Setup'
+
+    block_params = {
+        'Test Setup': [
+            ('cm_test_aud_s3_path', 'seed_list_s3_path', True),
+        ],
+    }
+
+    def __init__(self):
+        super(WFEmailTestSeedBlock, self).__init__(self.template_name)
+        self.is_test = "yes"
 
 
 class WFEmailTestSeedBlockV2(WFEmailSeedBlock):
