@@ -190,19 +190,6 @@ class WFEmailAudienceLiveSetupBlock(WFBlock):
         self._set_starter_task(2)
 
 
-class WFEmailReviewDeploymentBlock(WFBlock):
-    '''
-    @summary: Use this block to add a non automatic task to review the
-    deployment of the email by a human.
-    '''
-
-    template_name = 'Block - Email Review Deployment'
-
-    def __init__(self):
-        super(WFEmailReviewDeploymentBlock, self).__init__(self.template_name)
-        self._set_starter_task(2)  # Skip Deploy group tast
-
-
 class WFEmailApproveCWTaggingBlock(WFBlock):
     '''
     @summary: Use this block to add a non automatic task to Approve the

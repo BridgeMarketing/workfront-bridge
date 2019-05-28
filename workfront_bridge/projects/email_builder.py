@@ -8,7 +8,7 @@ from workfront_bridge.blocks.base import WFBlockParser
 from workfront_bridge.exceptions import WFBrigeException
 from workfront_bridge.projects.email import WFProjectEmailContainer
 from workfront_bridge.blocks.email import WFEmailTestSeedNoEmailSentBlock, \
-    WFEmailAudienceLiveSetupBlock, WFEmailReviewDeploymentBlock, WFEmailApproveCWTaggingBlock
+    WFEmailAudienceLiveSetupBlock, WFEmailApproveCWTaggingBlock
 from workfront_bridge.blocks.email import WFEmailLiveSeedBlock
 from workfront_bridge.blocks.email import WFEmailTestSeedBlock
 from workfront_bridge.blocks.email import WFEmailGenHtmlFromZipBlock
@@ -48,7 +48,6 @@ class EmailProjectBuilder(object):
         self.html_zip = None
         self.provider = None
         self.test_sl_send_emails = True
-        self.review_deployment = True
         self.email_creative_id = None
 
         self.audience_provider = ProviderConfig()
@@ -85,10 +84,6 @@ class EmailProjectBuilder(object):
 
     def set_subject_test_prefix(self, subject_test_prefix):
         self.subject_test_prefix = subject_test_prefix
-        return self
-
-    def set_review_deployment(self, val=True):
-        self.review_deployment = val
         return self
 
     def set_deployment_datetime(self, dt):
@@ -284,10 +279,6 @@ class EmailProjectBuilder(object):
 
         audb = self._crt_audience_block()
         project.append(audb)
-
-        if self.review_deployment:
-            reviewb = WFEmailReviewDeploymentBlock()
-            project.append(reviewb)
 
         parser = WFBlockParser(self.wf)
         wf_project = parser.create(project)
