@@ -37,6 +37,7 @@ class DataProjectBuilder(object):
 
         # Blocks
         self.count_id = None
+        self.count_type = None
 
         self.audience_file_path = None
         self.audience_identifier = None
@@ -63,6 +64,11 @@ class DataProjectBuilder(object):
     def set_count_id(self, count_id):
         self.count_id = count_id
         return self
+
+    def set_count_type(self, count_type):
+        self.count_type = count_type
+        return self
+
     #
     # END B2c & 10x Specific settings
     #
@@ -191,6 +197,7 @@ class DataProjectBuilder(object):
             project.set_b2c()
             b = WFPullAndHygieneDataBlock()
             b.count_id = self.count_id
+            b.count_type = self.count_type
             project.append(b)
         elif self.project_type == "m&e":
             project.set_match_and_export()
@@ -206,6 +213,7 @@ class DataProjectBuilder(object):
             project.set_10x_data()
             b = WFPull10xDataBlock()
             b.count_id = self.count_id
+            b.count_type = self.count_type
             project.append(b)
 
         # Suppressions

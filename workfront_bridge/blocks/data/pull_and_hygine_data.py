@@ -11,5 +11,6 @@ class WFPullAndHygieneDataBlock(WFBlock):
     block_params = {
         'Pull Data': [
             ('Count Id', 'count_id', True),
+            ('Count Type', 'count_type', False),
         ],
     }
