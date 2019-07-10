@@ -7,6 +7,7 @@ wf.login()
 b = display_builder.DisplayProjectBuilder(wf, "Test display project")
 b.add_ad_group(
     ad_group_name='Test AdGroup 1',
+    device_type=['PC'],
     creatives=[
         {
             'creative_type': 'Image Banner or Interstitial',

@@ -40,7 +40,7 @@ class WFDisplayQAAdGroupBlock(WFBlock):
             ('ADGFrequencyCap', 'adg_frequency_cap', False),
             ('ADGFrequencyPricingSlopeCPM', 'adg_frequency_pricing_slope_cpm', False),
             ('ADGCTRInPercent', 'adg_ctr_in_percent', False),
-            ('Device Type', 'device_type', False),
+            ('Device Type', 'device_type', False, lambda l: l),
             ('Country', 'country', False),
             ('Category', 'category', False),
             ('AEExcluder', 'ae_excluder', False),
