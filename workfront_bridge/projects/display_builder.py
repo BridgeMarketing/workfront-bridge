@@ -186,7 +186,7 @@ class DisplayProjectBuilder(object):
                 ad_group[k] = v
         self.ad_groups.append(ad_group)
 
-    def build(self):
+    def build(self, container_class=WFProjectDisplayContainer):
         """
         @summary: build the Workfront project.
         @raise WFBrigeException
@@ -195,7 +195,7 @@ class DisplayProjectBuilder(object):
         if not self.ad_groups:
             raise WFBrigeException('The project does not have any Ad Groups. Please use add_ad_group to add them.')
 
-        project = WFProjectDisplayContainer(self.project_name)
+        project = container_class(self.project_name)
         project.ttd_audience_id = self._ttd_audience_id
         project.ttd_campaign_id = self._ttd_campaign_id
         project.ttd_flight_id = self._ttd_flight_id
