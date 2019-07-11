@@ -25,7 +25,7 @@ class WFDisplayCreateAdGroupBlock(WFBlock):
             ('ADGCTRInPercent', 'adg_ctr_in_percent', False),
             ('ADGBaseBidAmount', 'adg_base_bid_amount', False),
             ('Device Type', 'device_type', False, lambda l: l),
-            ('Country', 'country', False),
+            ('Country', 'country', False, lambda l: l),
             ('Category', 'category', False),
             ('AEExcluder', 'ae_excluder', False),
         ],
