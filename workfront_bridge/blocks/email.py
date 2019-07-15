@@ -49,6 +49,7 @@ class WFEmailSeedBlock(WFBlock):
             ('Email Provider User', 'provider_user', False),
             ('Email Provider Password', 'provider_password', False),
             ('Email Provider Token', 'provider_token', False),
+            ('isTest', 'is_test', False)
         ],
     }
 

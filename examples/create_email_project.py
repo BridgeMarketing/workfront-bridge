@@ -14,6 +14,7 @@ b.set_deployment_datetime(datetime(2020, 2, 3, 14, 29, 22))
 b.set_seed_list("s3://some/seed.csv")
 
 b.set_subject("asuntoooo")
+b.set_subject_test_prefix("prefijooooo")
 b.set_send_validate_test_seed_emails(True)
 
 b.set_audience_provider("ActOn")

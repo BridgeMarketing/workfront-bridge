@@ -41,6 +41,7 @@ class EmailProjectBuilder(object):
         self.wf = wf
         self.live_seed_list = None
         self.subject = None
+        self.subject_test_prefix = None
         self.html = None
         self.html_zip = None
         self.provider = None
@@ -74,6 +75,10 @@ class EmailProjectBuilder(object):
 
     def set_subject(self, subject):
         self.subject = subject
+        return self
+
+    def set_subject_test_prefix(self, subject_test_prefix):
+        self.subject_test_prefix = subject_test_prefix
         return self
 
     def set_review_deployment(self, val=True):
@@ -206,6 +211,7 @@ class EmailProjectBuilder(object):
         project.email_subject = self.subject
         project.email_creative_id = self.email_creative_id
         project.from_line = self.audience_provider.sender_name
+        project.subject_test_prefix = self.subject_test_prefix
 
         if self.exclude_html_validation:
             project.ecm_html = self.ecm_html

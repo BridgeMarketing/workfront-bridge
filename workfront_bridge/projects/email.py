@@ -14,6 +14,7 @@ class WFProjectEmailContainer(WFBlock):
     block_params = {
         '': [
             ('ecm_subject', 'email_subject', True, lambda x: str(x.encode('utf-8'))),
+            ('subject_test_prefix', 'subject_test_prefix', False, lambda x: str(x.encode('utf-8'))),
             ('email_creative_id', 'email_creative_id', True),
             ('tags', 'tags', False),
             ('input_html_s3_path', 'html_s3_path', False),
