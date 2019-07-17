@@ -1,7 +1,9 @@
+import json
+
 from workfront.objects.project import WFProject
 
 from workfront_bridge.blocks.base import WFBlockParser
-from workfront_bridge.blocks.pause import WFPauseEmailDeployBlock
+from workfront_bridge.blocks.pause import WFPauseEmailDeployBlock, WFPauseDisplayDeployBlock
 from workfront_bridge.exceptions import WFBrigeException
 from workfront_bridge.projects.pause import WFProjectPauseContainer
 
@@ -18,6 +20,9 @@ class PauseProjectBuilder(object):
         '''
         self.supported_project_types = {
             "Email": self.__build_pause_email_deploy,
+            "Display - Desktop": self.__build_pause_display_deploy,
+            "Display - Mobile": self.__build_pause_display_deploy,
+            "Display - Desktop & Mobile": self.__build_pause_display_deploy,
         }
         self.wf = wf
 
@@ -95,6 +100,38 @@ class PauseProjectBuilder(object):
             # Now link the pause task to the push to proivder one
             pause_task = wf_project.get_tasks()[0]
             pause_task.add_predecessor(ptp_task)
+        except Exception:
+            pass
+
+        return wf_project
+
+    def __build_pause_display_deploy(self):
+        '''
+        @return: a pause wf project to pause an display project.
+        '''
+
+        prj_being_paused = WFProject(self.wf, self.wf_project_id)
+
+        prj_name = "Pause - {}".format(prj_being_paused.name)
+        project = WFProjectPauseContainer(prj_name)
+        pause_block = WFPauseDisplayDeployBlock()
+        pause_block.data = json.dumps({"to_pause_wf_project_id": self.wf_project_id})
+        project.append(pause_block)
+
+        parser = WFBlockParser(self.wf)
+        wf_project = parser.create(project)
+
+        # Set dependencies to Avoid raise conditions
+        try:
+            # Get Audience Live Setup Push to Provider Task
+            tasks = prj_being_paused.get_tasks()
+            last_adgroup_task = [t for t in tasks if t.name == "Ad Group Setup"][-1]
+            aud_tasks = tasks[tasks.index(last_adgroup_task):]
+            create_adgroup = [t for t in aud_tasks if t.name == "Create Ad Group"][0]
+
+            # Now link the pause task to the push to proivder one
+            pause_task = wf_project.get_tasks()[0]
+            pause_task.add_predecessor(create_adgroup)
         except Exception:
             pass
 
