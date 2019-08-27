@@ -10,6 +10,7 @@ from workfront_bridge.projects.email import WFProjectEmailContainer
 from workfront_bridge.blocks.email import WFEmailAudienceLiveSetupBlock, \
     WFEmailReviewDeploymentBlock, WFEmailApproveCWTaggingBlock
 from workfront_bridge.blocks.email import WFEmailLiveSeedBlock
+from workfront_bridge.blocks.email import WFEmailLiveSeedOnboardingBlock
 from workfront_bridge.blocks.email import WFEmailGenHtmlFromZipBlock
 from workfront_bridge.blocks.email import WFEmailValidateHtmlBlock
 from datetime import datetime
@@ -381,7 +382,7 @@ class EmailOnBoardingProjectBuilder(object):
         bval_html.email_subject = self.subject
         project.append(bval_html)
 
-        email_live_seed_block = WFEmailLiveSeedBlock()
+        email_live_seed_block = WFEmailLiveSeedOnboardingBlock()
         email_live_seed_block.seed_list_s3_path = self.live_seed_list
 
         project.live_seed_list = self.live_seed_list
