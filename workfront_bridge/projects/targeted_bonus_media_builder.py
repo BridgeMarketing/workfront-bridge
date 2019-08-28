@@ -43,6 +43,11 @@ class TargetedBonusMediaProjectBuilder(object):
         self._adg_base_bid_amount = None
         self._adg_max_bid_amount = None
 
+        self._ad_group_name = None
+
+    def set_ad_group_name(self, name):
+        self._ad_group_name = name
+
     def set_open_tier(self, v):
         self._open_tier = v
 
@@ -136,8 +141,11 @@ class TargetedBonusMediaProjectBuilder(object):
             landing_page_url=self._landing_page_url,
             image_s3_url=self._image_s3_url,
         )
+
+        ag_name = self._ad_group_name or '{} AdGroup'.format(self.project_name)
+
         ad_group_setup_block.add_ad_group(
-            ad_group_name='{} AdGroup'.format(self.project_name),
+            ad_group_name=ag_name,
             adg_base_bid_amount=self._adg_base_bid_amount,
             adg_max_bid_amount=self._adg_max_bid_amount
         )
