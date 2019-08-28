@@ -106,6 +106,31 @@ class WFEmailLiveSeedBlock(WFEmailSeedBlock):
     }
 
 
+class WFEmailLiveSeedOnboardingBlock(WFEmailLiveSeedBlock):
+    '''
+    @summary: This block requires only s3 path to live seed list since other
+    fields from the parent block's template are not accesibble at the moment
+    Onboarding project is created. Thus, all fields in the template must be set
+    as not-required except live_seed_list_s3_path.
+    '''
+
+    def __init__(self):
+        super(WFEmailLiveSeedOnboardingBlock, self).__init__()
+
+        is_required_flag_index = 2
+        for group_key, param_group in self.block_params.items():
+
+            updated_param_group = []
+            for param_tuple in param_group:
+                param_dict = [el for el in param_tuple]
+                if param_dict[0] != 'live_seed_list_s3_path':
+                    param_dict[is_required_flag_index] = False
+                updated_param_tuple = tuple(param_dict)
+                updated_param_group.append(updated_param_tuple)
+
+            self.block_params[group_key] = updated_param_group
+
+
 class WFEmailAudienceLiveSetupBlock(WFBlock):
     '''
     @summary: Use this block to send emails to the audience in the program of
