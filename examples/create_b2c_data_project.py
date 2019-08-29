@@ -5,7 +5,7 @@ from workfront_bridge.projects import data_builder
 def simple_b2c(wf):
     b = data_builder.DataProjectBuilder(wf, "Test B2C project builder")
     prj = b.set_b2c()\
-           .set_count_id("COUNTID_1234")\
+           .set_count_id(["COUNTID_12", "COUNTID_34", "COUNTID_56"]) \
            .build()
     return prj
 

@@ -1,13 +1,14 @@
 from workfront_bridge.blocks.base import WFBlockParser
 from workfront_bridge.exceptions import WFBrigeException
 from workfront_bridge.projects.data import WFProjectDataContainer
-from workfront_bridge.blocks.data.pull_and_hygine_data import WFPullAndHygieneDataBlock
 from workfront_bridge.blocks.data.pull_10x_data import WFPull10xDataBlock
 from workfront_bridge.blocks.data.create_and_export_audience import WFCreatExportAudienceBlock
 from workfront_bridge.blocks.data.review_data import WFReviewDataBlock
 from workfront_bridge.blocks.data.suppression import WFSuppressionGroupBlock
 from workfront_bridge.blocks.data.suppression import WFSuppressionBlock
+from workfront_bridge.blocks.data.count_id import WFCountIdGroupBlock, WFCountIdBlock
 from workfront_bridge.blocks.data.hygiene import HygieneDataBlock
+from workfront_bridge.blocks.data.merge import MergeDataBlock
 
 
 class DataProjectBuilder(object):
@@ -193,28 +194,38 @@ class DataProjectBuilder(object):
         project.suppression_task_ids = self.suppression_task_ids
 
         # Specific project blocks
-        if self.project_type == "b2c":
-            project.set_b2c()
-            b = WFPullAndHygieneDataBlock()
-            b.count_id = self.count_id
-            b.count_type = self.count_type
-            project.append(b)
-        elif self.project_type == "m&e":
+        if self.project_type == "m&e":
             project.set_match_and_export()
             project.audience_file_path = self.audience_file_path
-            b = WFCreatExportAudienceBlock()
-            b.audience_file_path = self.audience_file_path
-            b.audience_identifier = self.audience_identifier
-            b.audience_name = self.audience_name
-            project.append(b)
+            c = WFCreatExportAudienceBlock()
+            c.audience_file_path = self.audience_file_path
+            c.audience_identifier = self.audience_identifier
+            c.audience_name = self.audience_name
+            project.append(c)
             hygiene_block = HygieneDataBlock()
             project.append(hygiene_block)
-        elif self.project_type == "10x":
-            project.set_10x_data()
-            b = WFPull10xDataBlock()
-            b.count_id = self.count_id
-            b.count_type = self.count_type
-            project.append(b)
+        else:
+            count_group = None
+            if self.project_type == "b2c":
+                project.set_b2c()
+                count_group = WFCountIdGroupBlock()
+                project.append(count_group)
+            elif self.project_type == "10x":
+                project.set_10x_data()
+                # b = WFPull10xDataBlock()
+                count_group = WFCountIdGroupBlock()
+                project.append(count_group)
+
+            for count_id in self.count_id:
+                count_block = WFCountIdBlock()
+                count_block.count_id = count_id
+                count_block.count_type = self.count_type
+                count_group.append(count_block)
+
+            merge_block = MergeDataBlock()
+            project.append(merge_block)
+            hygiene_block = HygieneDataBlock()
+            project.append(hygiene_block)
 
         # Suppressions
         if self.suppression_type is not None or len(self.suppression_files) > 0:
