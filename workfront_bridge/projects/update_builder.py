@@ -53,6 +53,7 @@ class UpdateProjectBuilder(object):
         @summary: Check if all the requirement parameters of the builder are
         set in order to build a update project.
         '''
+
         def check_not_none(name, value):
             if value is None:
                 raise WFBrigeException("{} is required".format(name))
@@ -88,7 +89,9 @@ class UpdateProjectBuilder(object):
         program = prj_being_updated.get_program()
         all_project = program.get_projects()
 
-        cw_tool_project = [p for p in all_project if p.name.startswith("CW tool")][0]
+        cw_tool_projects = [p for p in all_project if p.name.startswith("CW tool")]
+
+        tarjeted_bonus_media_projects = [p for p in all_project if p.name.startswith("TBM - ")]
 
         prj_name = "Update - {}".format(prj_being_updated.name)
         project = WFProjectUpdateContainer(prj_name)
@@ -119,10 +122,19 @@ class UpdateProjectBuilder(object):
         live_setup_task_tasks = tasks[tasks.index(live_setup_task):]
 
         live_setup_create_flight_task = [t for t in live_setup_task_tasks if t.name == "Create Flight"][0]
-        live_setup_create_flight_task.set_param_values({"Deployment Date/Time": datetime_to_wf_format(self.deploy_datetime)})
+        live_setup_create_flight_task.set_param_values(
+            {"Deployment Date/Time": datetime_to_wf_format(self.deploy_datetime)})
 
-        # Update "Start Date" in CW tools project
-        cw_tool_project.set_param_values({"Start Date": datetime_to_wf_format(self.deploy_datetime)})
+        # Update "Start Date" in CW tools project if exists
+        if len(cw_tool_projects) > 0:
+            cw_tool_project = cw_tool_projects[0]
+            cw_tool_project.set_param_values({"Start Date": datetime_to_wf_format(self.deploy_datetime)})
+
+        # Update "StartDateTimeInclusiveUTC" in TBM project if exists
+        if len(tarjeted_bonus_media_projects) > 0:
+            tarjeted_bonus_media_project = tarjeted_bonus_media_projects[0]
+            tarjeted_bonus_media_project.set_param_values(
+                {"StartDateTimeInclusiveUTC": datetime_to_wf_format(self.deploy_datetime)})
 
         return wf_project
 
