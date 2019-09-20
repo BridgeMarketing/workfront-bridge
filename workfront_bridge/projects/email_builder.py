@@ -220,7 +220,9 @@ class EmailProjectBuilder(object):
             zipb = WFEmailGenHtmlFromZipBlock()
             if self.html_zip is not None:
                 zipb.zip_s3_path = self.html_zip
+                project.html_s3_path = '-'
             else:
+                zipb.zip_s3_path = '-'
                 project.html_s3_path = self.html
             project.append(zipb)
 
