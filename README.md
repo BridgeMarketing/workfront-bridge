@@ -195,7 +195,7 @@ builder.set_html("s3://some/s3/path/creative.html")
        .set_subject("This is the subject!")
 # In the case of email builder you can use a zip to construct the html. In that
 # case you will use this:
-# b.set_html_zip("s3://some/s3/path/creative.zip")
+# b.(set_html_zip"s3://some/s3/path/creative.zip")
 
 # Then, add two test list and a live seed list
 builder.add_test_list("s3://some/s3/test_list1.csv")

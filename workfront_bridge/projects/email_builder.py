@@ -218,12 +218,14 @@ class EmailProjectBuilder(object):
             project.ecm_html = self.ecm_html
 
         else:
+            zipb = WFEmailGenHtmlFromZipBlock()
             if self.html_zip is not None:
-                zipb = WFEmailGenHtmlFromZipBlock()
                 zipb.zip_s3_path = self.html_zip
-                project.append(zipb)
+                project.html_s3_path = '-'
             else:
+                zipb.zip_s3_path = '-'
                 project.html_s3_path = self.html
+            project.append(zipb)
 
             bval_html = WFEmailValidateHtmlBlock()
             bval_html.email_subject = self.subject
