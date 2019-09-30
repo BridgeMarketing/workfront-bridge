@@ -177,6 +177,7 @@ class EmailProjectBuilder(object):
 
         if self.exclude_html_validation:
             check_not_none("ecm_html", self.ecm_html)
+            check_not_none("html", self.html)
         else:
             if self.html is None and self.html_zip is None:
                 err = "At least a zip or an html should be provided"
@@ -216,7 +217,7 @@ class EmailProjectBuilder(object):
 
         if self.exclude_html_validation:
             project.ecm_html = self.ecm_html
-
+            project.html_s3_path = self.html
         else:
             zipb = WFEmailGenHtmlFromZipBlock()
             if self.html_zip is not None:
