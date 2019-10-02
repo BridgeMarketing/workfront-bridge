@@ -10,7 +10,7 @@ wf.login()
 b = email_builder.EmailProjectBuilder(wf, "Test peluca email project builder without html validation")
 
 
-b.set_exclude_html_validation(True)
+b.set_is_created_from_onboarding(True)
 b.set_ecm_html("s3://mtnmnz-prod-email-deployment-nty5nz/htmls/2018-09-18/5ba10c6c0043070842b08ca42a84e3d7/1432636334J5UC72.creative.html")
 
 b.set_seed_list("s3://some/seed.csv")

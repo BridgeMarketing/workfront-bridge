@@ -54,7 +54,7 @@ class EmailProjectBuilder(object):
         self.seeds_provider = ProviderConfig()
         self.live_seeds_provider = ProviderConfig()
 
-        self.exclude_html_validation = False
+        self.is_created_from_onboarding = False
         self.ecm_html = None
         self.add_tags_weight_approval_step = False
 
@@ -125,8 +125,8 @@ class EmailProjectBuilder(object):
         self.email_creative_id = id
         return self
 
-    def set_exclude_html_validation(self, exclude):
-        self.exclude_html_validation = exclude
+    def set_is_created_from_onboarding(self, is_from_onboarding):
+        self.is_created_from_onboarding = is_from_onboarding
         return self
 
     def set_ecm_html(self, s3_path):
@@ -175,7 +175,7 @@ class EmailProjectBuilder(object):
             if value is None:
                 raise WFBrigeException("{} is required".format(name))
 
-        if self.exclude_html_validation:
+        if self.is_created_from_onboarding:
             check_not_none("ecm_html", self.ecm_html)
             check_not_none("html", self.html)
         else:
@@ -215,7 +215,7 @@ class EmailProjectBuilder(object):
         project.from_line = self.audience_provider.sender_name
         project.subject_test_prefix = self.subject_test_prefix
 
-        if self.exclude_html_validation:
+        if self.is_created_from_onboarding:
             project.ecm_html = self.ecm_html
             project.html_s3_path = self.html
         else:
