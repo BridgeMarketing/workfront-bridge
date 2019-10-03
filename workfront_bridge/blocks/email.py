@@ -106,7 +106,7 @@ class WFEmailLiveSeedBlock(WFEmailSeedBlock):
     }
 
 
-class WFEmailLiveSeedValidateBlock(WFEmailLiveSeedBlock):
+class WFEmailLiveSeedValidateBlock(WFBlock):
     '''
     @summary: This block requires only s3 path to live seed list since other
     fields from the parent block's template are not accessible at the moment
@@ -114,6 +114,12 @@ class WFEmailLiveSeedValidateBlock(WFEmailLiveSeedBlock):
     '''
 
     template_name = 'Block - Onboarding Live Setup Validate'
+
+    block_params = {
+        'Live Setup': [
+            ('live_seed_list_s3_path', 'seed_list_s3_path', True),
+        ],
+    }
 
 
 class WFEmailLiveSeedSendBlock(WFEmailLiveSeedBlock):
