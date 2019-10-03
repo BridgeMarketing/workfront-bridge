@@ -1,6 +1,3 @@
-import sys
-
-import pytz
 from dateutil import tz
 from workfront.objects.template_project import WFTemplateProject
 
@@ -10,10 +7,10 @@ from workfront_bridge.projects.email import WFProjectEmailContainer
 from workfront_bridge.blocks.email import WFEmailAudienceLiveSetupBlock, \
     WFEmailReviewDeploymentBlock, WFEmailApproveCWTaggingBlock
 from workfront_bridge.blocks.email import WFEmailLiveSeedBlock
-from workfront_bridge.blocks.email import WFEmailLiveSeedOnboardingBlock
+from workfront_bridge.blocks.email import WFEmailLiveSeedValidateBlock, \
+    WFEmailLiveSeedSendBlock
 from workfront_bridge.blocks.email import WFEmailGenHtmlFromZipBlock
 from workfront_bridge.blocks.email import WFEmailValidateHtmlBlock
-from datetime import datetime
 
 
 class ProviderConfig(object):
@@ -153,7 +150,8 @@ class EmailProjectBuilder(object):
 
     def _crt_live_list_block(self, live_list):
         slb = None
-        slb = WFEmailLiveSeedBlock()
+        slb = WFEmailLiveSeedSendBlock() if self.is_created_from_onboarding \
+            else WFEmailLiveSeedBlock()
         slb.seed_list_s3_path = live_list
         slb.campaign_name = "Live List - " + self.project_name
         slb.deployment_datetime = self._normalize_datetime(self.deployment_time)
@@ -236,9 +234,9 @@ class EmailProjectBuilder(object):
                 block_approve_cw_tags = WFEmailApproveCWTaggingBlock()
                 project.append(block_approve_cw_tags)
 
-            if self.live_seed_list is not None:
-                email_seed_block = self._crt_live_list_block(self.live_seed_list)
-                project.append(email_seed_block)
+        if self.live_seed_list is not None:
+            email_seed_block = self._crt_live_list_block(self.live_seed_list)
+            project.append(email_seed_block)
 
         audb = self._crt_audience_block()
         project.append(audb)
@@ -385,7 +383,7 @@ class EmailOnBoardingProjectBuilder(object):
         bval_html.email_subject = self.subject
         project.append(bval_html)
 
-        email_live_seed_block = WFEmailLiveSeedOnboardingBlock()
+        email_live_seed_block = WFEmailLiveSeedValidateBlock()
         email_live_seed_block.seed_list_s3_path = self.live_seed_list
 
         project.live_seed_list = self.live_seed_list

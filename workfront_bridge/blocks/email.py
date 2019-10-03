@@ -106,20 +106,27 @@ class WFEmailLiveSeedBlock(WFEmailSeedBlock):
     }
 
 
-class WFEmailLiveSeedOnboardingBlock(WFBlock):
+class WFEmailLiveSeedValidateBlock(WFEmailLiveSeedBlock):
     '''
     @summary: This block requires only s3 path to live seed list since other
     fields from the parent block's template are not accessible at the moment
     Onboarding project is created.
     '''
 
-    template_name = 'Block - Onboarding Live Setup'
+    template_name = 'Block - Onboarding Live Setup Validate'
 
-    block_params = {
-        'Live Setup': [
-            ('live_seed_list_s3_path', 'seed_list_s3_path', True),
-        ],
-    }
+
+class WFEmailLiveSeedSendBlock(WFEmailLiveSeedBlock):
+    '''
+    @summary: This block is used for live order generated from Onboarding and
+    a deployment file. Live Seed List was already validated and approved at the
+    Onboarding WF project, thus this block doesn't need to contain any
+    validation step.
+    This block belongs to a new WF project created for an order generated from
+    Onboarding and serves for sending Live Seed List emails.
+    '''
+
+    template_name = 'Block - Onboarding Live Setup Send'
 
 
 class WFEmailAudienceLiveSetupBlock(WFBlock):
