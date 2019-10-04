@@ -26,6 +26,9 @@ class WFProjectDataContainer(WFBlock):
 
     def set_b2c(self):
         self.project_type = "Data"
+    
+    def set_b2b(self):
+        self.project_type = "Data B2B"
 
     def set_match_and_export(self):
         self.project_type = "Match Export"

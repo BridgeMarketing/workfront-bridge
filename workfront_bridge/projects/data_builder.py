@@ -50,6 +50,10 @@ class DataProjectBuilder(object):
     def set_b2c(self):
         self.project_type = "b2c"
         return self
+    
+    def set_b2b(self):
+        self.project_type = "b2b"
+        return self
 
     def set_match_and_export(self):
         self.project_type = "m&e"
@@ -146,6 +150,10 @@ class DataProjectBuilder(object):
     def _check_viability_b2c(self):
         if self.count_id is None:
             raise WFBrigeException("{} is required".format("count_id"))
+    
+    def _check_viability_b2b(self):
+        if self.count_id is None:
+            raise WFBrigeException("{} is required".format("count_id"))
 
     def _check_viability_match_and_export(self):
         def raise_missing(field_name):
@@ -171,6 +179,8 @@ class DataProjectBuilder(object):
 
         if self.project_type == "b2c":
             self._check_viability_b2c()
+        elif self.project_type == "b2b":
+            self._check_viability_b2b()
         elif self.project_type == "m&e":
             self._check_viability_match_and_export()
         elif self.project_type == "10x":
@@ -208,6 +218,10 @@ class DataProjectBuilder(object):
             count_group = None
             if self.project_type == "b2c":
                 project.set_b2c()
+                count_group = WFCountIdGroupBlock()
+                project.append(count_group)
+            elif self.project_type == "b2b":
+                project.set_b2b()
                 count_group = WFCountIdGroupBlock()
                 project.append(count_group)
             elif self.project_type == "10x":
