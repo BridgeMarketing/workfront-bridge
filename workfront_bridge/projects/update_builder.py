@@ -1,11 +1,15 @@
+import json
+from datetime import datetime, date
+
 from workfront.objects.project import WFProject
 
 from workfront_bridge.blocks.base import WFBlockParser
 from workfront_bridge.exceptions import WFBrigeException
 from workfront_bridge.projects.update import WFProjectUpdateContainer
 
-from workfront_bridge.blocks.update import WFUpdateEmailDeployBlock
+from workfront_bridge.blocks.update import WFUpdateEmailDeployBlock, WFUpdateDisplayDeployBlock
 from workfront_bridge.tools import datetime_to_wf_format
+from workfront_bridge.util.jsonutil import DateTimeEncoder
 
 
 class UpdateProjectBuilder(object):
@@ -20,12 +24,17 @@ class UpdateProjectBuilder(object):
         '''
         self.supported_project_types = {
             "Email": self.__build_update_email_deploy,
+            "Display - Desktop": self.__build_update_display_deploy,
+            "Display - Mobile": self.__build_update_display_deploy,
+            "Display - Desktop & Mobile": self.__build_update_display_deploy,
         }
         self.wf = wf
 
         self.wf_project_id = None
         self.deploy_datetime = None
         self.project_type = None  # Project type being updateled
+        self.from_datetime = None
+        self.to_datetime = None
 
     def get_supported_project_types(self):
         '''
@@ -48,6 +57,20 @@ class UpdateProjectBuilder(object):
         self.deploy_datetime = dt
         return self
 
+    def set_new_from_datetime(self, from_datetime):
+        '''
+        @param from_datetime: from datetime to update
+        '''
+        self.from_datetime = from_datetime
+        return self
+
+    def set_new_to_datetime(self, to_datetime):
+        '''
+        @param to_datetime: to datetime to update
+        '''
+        self.to_datetime = to_datetime
+        return self
+
     def _check_viability(self):
         '''
         @summary: Check if all the requirement parameters of the builder are
@@ -59,9 +82,14 @@ class UpdateProjectBuilder(object):
                 raise WFBrigeException("{} is required".format(name))
 
         check_not_none("wf_project_id", self.wf_project_id)
-        check_not_none("deploy_datetime", self.deploy_datetime)
         self.__fullfill_project_type()
         check_not_none("project_type", self.project_type)
+
+        if self.project_type == "Email":
+            check_not_none("deploy_datetime", self.deploy_datetime)
+        else:
+            check_not_none("from_datetime", self.from_datetime)
+            check_not_none("to_datetime", self.to_datetime)
 
     def __fullfill_project_type(self):
         '''
@@ -91,7 +119,7 @@ class UpdateProjectBuilder(object):
 
         cw_tool_projects = [p for p in all_project if p.name.startswith("CW tool")]
 
-        tarjeted_bonus_media_projects = [p for p in all_project if p.name.startswith("TBM - ")]
+        targeted_bonus_media_projects = [p for p in all_project if p.name.startswith("TBM - ")]
 
         prj_name = "Update - {}".format(prj_being_updated.name)
         project = WFProjectUpdateContainer(prj_name)
@@ -131,22 +159,55 @@ class UpdateProjectBuilder(object):
             cw_tool_project.set_param_values({"Start Date": datetime_to_wf_format(self.deploy_datetime)})
 
         # Update "StartDateTimeInclusiveUTC" in TBM project if exists
-        if len(tarjeted_bonus_media_projects) > 0:
-            tarjeted_bonus_media_project = tarjeted_bonus_media_projects[0]
+        if len(targeted_bonus_media_projects) > 0:
+            tarjeted_bonus_media_project = targeted_bonus_media_projects[0]
             tarjeted_bonus_media_project.set_param_values(
                 {"StartDateTimeInclusiveUTC": datetime_to_wf_format(self.deploy_datetime)})
 
         return wf_project
 
+    def __build_update_display_deploy(self):
+        """
+        @return: a update wf project to update a display project.
+        """
+
+        prj_being_updated = WFProject(self.wf, self.wf_project_id)
+
+        prj_name = "Update - {}".format(prj_being_updated.name)
+        project = WFProjectUpdateContainer(prj_name)
+        update_block = WFUpdateDisplayDeployBlock()
+        update_block.data = json.dumps({"to_update_wf_project_id": self.wf_project_id,
+                                        "from_datetime": self.from_datetime,
+                                        "to_datetime": self.to_datetime}, cls=DateTimeEncoder)
+
+        project.append(update_block)
+
+        parser = WFBlockParser(self.wf)
+        wf_project = parser.create(project)
+
+        tasks = prj_being_updated.get_tasks()
+        last_adgroup_setup = [t for t in tasks if t.name == "Ad Group Setup"][-1]
+
+        aud_tasks = tasks[tasks.index(last_adgroup_setup):]
+        last_ad_group_task = [t for t in aud_tasks if t.name == "Create Ad Group"][0]
+
+        # Now link the resume task to the push to proivder one
+        resume_task = wf_project.get_tasks()[0]
+        resume_task.add_predecessor(last_ad_group_task)
+
+        return wf_project
+
     def build(self):
-        '''
+        """
         @summary: According to all the parameters set to the builder, build a
         workfront update project.
         @raise WFBrigeException: if the combination of parameters set in the
         builder are not compatible (like missing parameters).
         @return: a WFProject object.
-        '''
+        """
         self._check_viability()
 
         # Call the corresponding method to create the update project
         return self.supported_project_types[self.project_type]()
+
+
