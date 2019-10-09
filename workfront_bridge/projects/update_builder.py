@@ -33,8 +33,8 @@ class UpdateProjectBuilder(object):
         self.wf_project_id = None
         self.deploy_datetime = None
         self.project_type = None  # Project type being updateled
-        self.from_datetime = None
-        self.to_datetime = None
+        self.start_datetime = None
+        self.end_datetime = None
 
     def get_supported_project_types(self):
         '''
@@ -57,18 +57,18 @@ class UpdateProjectBuilder(object):
         self.deploy_datetime = dt
         return self
 
-    def set_new_from_datetime(self, from_datetime):
+    def set_new_start_datetime(self, start_datetime):
         '''
-        @param from_datetime: from datetime to update
+        @param start_datetime: from datetime to update
         '''
-        self.from_datetime = from_datetime
+        self.start_datetime = start_datetime
         return self
 
-    def set_new_to_datetime(self, to_datetime):
+    def set_new_end_datetime(self, end_datetime):
         '''
-        @param to_datetime: to datetime to update
+        @param end_datetime: to datetime to update
         '''
-        self.to_datetime = to_datetime
+        self.end_datetime = end_datetime
         return self
 
     def _check_viability(self):
@@ -88,8 +88,8 @@ class UpdateProjectBuilder(object):
         if self.project_type == "Email":
             check_not_none("deploy_datetime", self.deploy_datetime)
         else:
-            check_not_none("from_datetime", self.from_datetime)
-            check_not_none("to_datetime", self.to_datetime)
+            check_not_none("start_datetime", self.start_datetime)
+            check_not_none("end_datetime", self.end_datetime)
 
     def __fullfill_project_type(self):
         '''
@@ -177,8 +177,8 @@ class UpdateProjectBuilder(object):
         project = WFProjectUpdateContainer(prj_name)
         update_block = WFUpdateDisplayDeployBlock()
         update_block.data = json.dumps({"to_update_wf_project_id": self.wf_project_id,
-                                        "from_datetime": self.from_datetime,
-                                        "to_datetime": self.to_datetime}, cls=DateTimeEncoder)
+                                        "start_datetime": self.start_datetime,
+                                        "end_datetime": self.end_datetime}, cls=DateTimeEncoder)
 
         project.append(update_block)
 
