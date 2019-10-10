@@ -23,8 +23,10 @@ class WFProjectEmailContainer(WFBlock):
             ('Category', 'category', False),
             ('ecm_live_seed_list', 'live_seed_list', False),
             ('ecm_html', 'ecm_html', False),
-            ('lr_account_id', 'lr_account_id', True),
-            ('lr_bonus_media_account_id', 'lr_bonus_media_account_id', True),
+            ('ttd_advertiser_id', 'ttd_advertiser_id', False),
+            ('ttd_bonus_media_advertiser_id', 'ttd_bonus_media_advertiser_id', False),
+            ('lr_account_id', 'lr_account_id', False),
+            ('lr_bonus_media_account_id', 'lr_bonus_media_account_id', False),
         ],
     }
 

@@ -26,6 +26,8 @@ b.set_live_seeds_sender_email("liveseedssender@email.com")
 b.set_live_seeds_sender_name("Live Seed Name")
 
 b.set_email_creative_id("10")
+b.set_ttd_advertiser_id('zxyw93')
+b.set_ttd_bonus_media_advertiser_id('zxyw93')
 b.set_lr_account_id('abcedfg1')
 b.set_lr_bonus_media_account_id('abcedfg1')
 
