@@ -121,7 +121,7 @@ class AudioProjectBuilder(object):
         project.ttd_campaign_id = self._ttd_campaign_id
         project.ttd_flight_id = self._ttd_flight_id
         project.ttd_creative_id = self._ttd_creative_id
-        project.ttd_advertiser_id = self._ttd_advertiser_id
+        project.ttd_advertiser_id = self._ttd_advertiser_id 
         project.is_targeted_bonus_media = self._is_targeted_bonus_media
         project.multiple_ad_groups = self._multiple_ad_groups
         project.project_type = self._project_type

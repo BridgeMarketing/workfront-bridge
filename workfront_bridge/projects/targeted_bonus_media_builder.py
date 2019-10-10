@@ -23,6 +23,9 @@ class TargetedBonusMediaProjectBuilder(object):
 
         # project
         self._ttd_advertiser_id = None
+        self._ttd_bonus_media_advertiser_id = None
+        self._lr_account_id = None
+        self._lr_bonus_media_account_id = None
         self._project_type = None
         self._total_click_goal = None
         self._curve_type = None
@@ -68,6 +71,19 @@ class TargetedBonusMediaProjectBuilder(object):
 
     def set_ttd_advertiser_id(self, v):
         self._ttd_advertiser_id = v
+        return self
+
+    def set_ttd_bonus_media_advertiser_id(self, v):
+        self._ttd_bonus_media_advertiser_id = v
+        return self
+
+    def set_lr_account_id(self, v):
+        self._lr_account_id = v 
+        return self
+
+    def set_lr_bonus_media_account_id(self, v):
+        self._lr_bonus_media_account_id = v 
+        return self
 
     def set_project_type(self, v):
         self._project_type = v
