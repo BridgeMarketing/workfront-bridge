@@ -14,6 +14,9 @@ class WFProjectDisplayContainer(WFBlock):
     block_params = {
         '': [
             ('TTDAdvertiserID', 'ttd_advertiser_id', True),
+            ('TTDAdvertiserBonusMediaID', 'ttd_bonus_media_advertiser_id', True), 
+            ('LiveRampAccountID', 'lr_account_id', True),
+            ('LiveRampAccountBonusMediaID', 'lr_bonus_media_account_id', True),
             ('TTDAudienceID', 'ttd_audience_id', False),
             ('TTDCampaignID', 'ttd_campaign_id', False),
             ('TTDFlightID', 'ttd_flight_id', False),

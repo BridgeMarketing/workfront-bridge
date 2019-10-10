@@ -46,6 +46,8 @@ class EmailProjectBuilder(object):
         self.test_sl_send_emails = True
         self.review_deployment = True
         self.email_creative_id = None
+        self.lr_account_id = None 
+        self.lr_bonus_media_account_id = None
 
         self.audience_provider = ProviderConfig()
         self.seeds_provider = ProviderConfig()
@@ -120,6 +122,14 @@ class EmailProjectBuilder(object):
 
     def set_email_creative_id(self, id):
         self.email_creative_id = id
+        return self
+    
+    def set_lr_account_id(self, id):
+        self.lr_account_id = id
+        return self
+
+    def set_lr_bonus_media_account_id(self,id):
+        self.lr_bonus_media_account_id = id
         return self
 
     def set_is_created_from_onboarding(self, is_from_onboarding):
@@ -212,6 +222,9 @@ class EmailProjectBuilder(object):
         project.email_creative_id = self.email_creative_id
         project.from_line = self.audience_provider.sender_name
         project.subject_test_prefix = self.subject_test_prefix
+        project.lr_account_id = self.lr_account_id
+        project.lr_bonus_media_account_id = self.lr_bonus_media_account_id
+        
 
         if self.is_created_from_onboarding:
             project.ecm_html = self.ecm_html

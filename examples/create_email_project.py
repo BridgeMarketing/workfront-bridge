@@ -26,6 +26,8 @@ b.set_live_seeds_sender_email("liveseedssender@email.com")
 b.set_live_seeds_sender_name("Live Seed Name")
 
 b.set_email_creative_id("10")
+b.set_lr_account_id('abcedfg1')
+b.set_lr_bonus_media_account_id('abcedfg1')
 
 prj = b.build()
 prj.set_fields({"portfolioID": "5b45ff9b000aa3a5db15b2e269976a4c"})

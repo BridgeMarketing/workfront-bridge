@@ -4,7 +4,6 @@ import datetime
 from workfront_bridge.tests.projects.base import BaseBuilderTest
 from workfront_bridge.projects import display_builder
 
-
 class Test_Display_Builder(BaseBuilderTest):
     def setUp(self):
         super(Test_Display_Builder, self).setUp()
@@ -32,6 +31,10 @@ class Test_Display_Builder(BaseBuilderTest):
         )
 
         (self.builder.set_ttd_advertiser_id('xc7votu')
+                     .set_ttd_bonus_media_advertiser_id('xc7votu')
+                     .set_lr_account_id('xc7votu')
+                     .set_lr_bonus_media_account_id('xc7votu')
+                     .set_audience_name('audience_name')
                      .set_audience_name('audience_name')
                      .set_start_date_inclusive_utc(datetime.datetime.strptime('2019-04-29', '%Y-%m-%d'))
                      .set_end_date_exclusive_utc(datetime.datetime.strptime('2019-05-02', '%Y-%m-%d'))
@@ -40,13 +43,16 @@ class Test_Display_Builder(BaseBuilderTest):
                      .set_project_type('Display - Desktop & Mobile'))
 
         prj = self.builder.build()
-
+  
         expected = {
             'wf_template_name': 'Base Project Container - Display Channel v2',
             '': {
                 'MultipleAdGroups': 'True',
                 'Project Type': 'Display - Desktop & Mobile',
-                'TTDAdvertiserID': 'xc7votu'
+                'TTDAdvertiserID': 'xc7votu',
+                'TTDAdvertiserBonusMediaID': 'xc7votu',
+                'LiveRampAccountID' : 'xc7votu',
+                'LiveRampAccountBonusMediaID'  : 'xc7votu',
             },
             'blocks': [
                 {
@@ -164,10 +170,14 @@ class Test_Display_Builder(BaseBuilderTest):
                     'creative_size': '300x250',
                     'third_party_impression_tracking_url': 'http://dummy.com'
                 },
+         
             ]
         )
 
         (self.builder.set_ttd_advertiser_id('xc7votu')
+                     .set_ttd_bonus_media_advertiser_id('xc7votu')
+                     .set_lr_account_id('xc7votu')
+                     .set_lr_bonus_media_account_id('xc7votu')
                      .set_audience_name('audience_name')
                      .set_start_date_inclusive_utc(datetime.datetime.strptime('2019-04-29', '%Y-%m-%d'))
                      .set_end_date_exclusive_utc(datetime.datetime.strptime('2019-05-02', '%Y-%m-%d'))
@@ -182,7 +192,10 @@ class Test_Display_Builder(BaseBuilderTest):
             '': {
                 'MultipleAdGroups': 'True',
                 'Project Type': 'Display - Desktop & Mobile',
-                'TTDAdvertiserID': 'xc7votu'
+                'TTDAdvertiserID': 'xc7votu',
+                'TTDAdvertiserBonusMediaID': 'xc7votu',
+                'LiveRampAccountID' : 'xc7votu',
+                'LiveRampAccountBonusMediaID'  : 'xc7votu',
             },
             'blocks': [
                 {
