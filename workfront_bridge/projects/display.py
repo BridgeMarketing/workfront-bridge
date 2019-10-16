@@ -36,6 +36,7 @@ class WFProjectDisplayContainer(WFBlock):
             ('Open Tier Value', 'open_tier_value', False),
             ('Overage', 'overage', False),
             ('Campaign Type', 'campaign_type', False),
+            ('isCancel', 'is_cancel', False),
         ],
     }
 

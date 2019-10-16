@@ -16,3 +16,21 @@ class WFCancelEmailDeployBlock(WFBlock):
             ('wf_email_project_id', 'project_id', True),
         ],
     }
+
+
+class WFCancelProductDeployBlock(WFBlock):
+    '''
+    @summary: Use this block to cancel the deploy to an esp of a product project.
+    This block contains a single automatic task called "Cancel Product Deploy"
+    that will be excecuted in the Campaign Manager and will make the deploy of
+    the emails stop(if needed).
+    '''
+
+    template_name = 'Block - Cancel Product Deploy'
+
+    block_params = {
+        'Cancel Product Deploy': [
+            ('wf_email_project_id', 'project_id', True),
+            ('type', 'automation_type', True),
+        ],
+    }

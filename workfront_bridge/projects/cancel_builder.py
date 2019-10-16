@@ -5,6 +5,7 @@ from workfront_bridge.exceptions import WFBrigeException
 from workfront_bridge.projects.cancel import WFProjectCancelContainer
 
 from workfront_bridge.blocks.cancel import WFCancelEmailDeployBlock
+from workfront_bridge.blocks.cancel import WFCancelProductDeployBlock
 
 
 class CancelProjectBuilder(object):
@@ -19,6 +20,12 @@ class CancelProjectBuilder(object):
         '''
         self.supported_project_types = {
             "Email": self.__build_cancel_email_deploy,
+            "Display - Mobile": self.__build_cancel_display_deploy,
+            "Display - Desktop": self.__build_cancel_display_deploy,
+            "Display - Desktop & Mobile": self.__build_cancel_display_deploy,
+            "BridgeConnect - Mobile": self.__build_cancel_display_deploy,
+            "BridgeConnect - Desktop": self.__build_cancel_display_deploy,
+            "BridgeConnect - Desktop & Mobile": self.__build_cancel_display_deploy,
         }
         self.wf = wf
 
@@ -97,6 +104,40 @@ class CancelProjectBuilder(object):
             # Now link the cancel task to the push to proivder one
             cancel_task = wf_project.get_tasks()[0]
             cancel_task.add_predecessor(ptp_task)
+        except Exception:
+            pass
+
+        return wf_project
+    
+
+    def __build_cancel_display_deploy(self):
+        '''
+        @return: a cancel wf project to cancel an display/bridge_connect project.
+        '''
+        # Mark the project as cancel
+        prj_being_cancelled = WFProject(self.wf, self.wf_project_id)
+        prj_being_cancelled.set_param_values({"isCancel": "yes"})
+
+        prj_name = "Cancel - {}".format(prj_being_cancelled.name)
+        project = WFProjectCancelContainer(prj_name)
+        cancel_block = WFCancelProductDeployBlock()
+        cancel_block.project_id = self.wf_project_id
+        cancel_block.automation_type = 'DisplayDeployCancel'
+        project.append(cancel_block)
+
+        parser = WFBlockParser(self.wf)
+        wf_project = parser.create(project)
+
+        # Set dependencies to Avoid raise conditions
+        try:
+            # Get Live Setup Push to Provider Task
+            tasks = prj_being_cancelled.get_tasks()
+            ad_group_tasks = [t for t in tasks if t.name == "Ad Group Setup"]
+
+            # Now link the cancel task to the push to proivder one
+            cancel_task = wf_project.get_tasks()[0]
+            for task in ad_group_tasks:
+                cancel_task.add_predecessor(task)
         except Exception:
             pass
 
