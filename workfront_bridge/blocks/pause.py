@@ -29,7 +29,7 @@ class WFPauseDisplayDeployBlock(WFBlock):
     template_name = 'Block - Pause Display Deploy'
 
     block_params = {
-        'Pause Email Deploy': [
+        'Pause Display Deploy': [
             ('data_v1', 'data', True),
         ],
     }
