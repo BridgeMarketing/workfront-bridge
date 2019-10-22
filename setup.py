@@ -10,6 +10,6 @@ setup(name='workfront-bridge',
       # packages=['workfront', 'workfront.wf', 'workfront.wf.objects'],
       long_description=open('README.md').read(),
       packages=find_packages(exclude=('tests')),
-      install_requires=['requests==2.18.4'],
+      install_requires=['requests==2.20.0'],
       tests_require=['mock', 'nose', 'requests-mock'],
       zip_safe=False)
