@@ -34,5 +34,6 @@ class WFResumeDisplayDeployBlock(WFBlock):
         'Resume Display Deploy': [
             ('wf_email_project_id', 'project_id', True),
             ('Deployment Date/Time', 'deploy_datetime', True, datetime_to_wf_format),
+            ('End Date/Time', 'end_datetime', True, datetime_to_wf_format),
         ],
     }

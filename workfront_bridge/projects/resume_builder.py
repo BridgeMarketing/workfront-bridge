@@ -32,6 +32,7 @@ class ResumeProjectBuilder(object):
         self.wf_project_id = None
         self.deploy_datetime = None
         self.project_type = None  # Project type being resumed
+        self.end_datetime = None
 
     def get_supported_project_types(self):
         '''
@@ -52,6 +53,13 @@ class ResumeProjectBuilder(object):
         @param dt: deploy datetime to update
         '''
         self.deploy_datetime = dt
+        return self
+    
+    def set_end_datetime(self, dt):
+        '''
+        @param dt: end datetime to update
+        '''
+        self.end_datetime = dt
         return self
 
     def _check_viability(self):
@@ -144,6 +152,7 @@ class ResumeProjectBuilder(object):
         resume_block = WFResumeDisplayDeployBlock()
         resume_block.project_id = self.wf_project_id
         resume_block.deploy_datetime = self.deploy_datetime
+        resume_block.end_datetime = self.end_datetime
         project.append(resume_block)
 
         parser = WFBlockParser(self.wf)
