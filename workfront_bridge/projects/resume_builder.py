@@ -2,6 +2,7 @@ from workfront.objects.project import WFProject
 
 from workfront_bridge.blocks.base import WFBlockParser
 from workfront_bridge.blocks.resume import WFResumeEmailDeployBlock
+from workfront_bridge.blocks.resume import WFResumeDisplayDeployBlock
 from workfront_bridge.exceptions import WFBrigeException
 from workfront_bridge.projects.resume import WFProjectResumeContainer
 from workfront_bridge.tools import datetime_to_wf_format
@@ -19,6 +20,12 @@ class ResumeProjectBuilder(object):
         '''
         self.supported_project_types = {
             "Email": self.__build_resume_email_deploy,
+            "Display - Mobile": self.__build_resume_display_deploy,
+            "Display - Desktop": self.__build_resume_display_deploy,
+            "Display - Desktop & Mobile": self.__build_resume_display_deploy,
+            "BridgeConnect - Mobile": self.__build_resume_display_deploy,
+            "BridgeConnect - Desktop": self.__build_resume_display_deploy,
+            "BridgeConnect - Desktop & Mobile": self.__build_resume_display_deploy,
         }
         self.wf = wf
 
@@ -123,6 +130,38 @@ class ResumeProjectBuilder(object):
 
         # Update "Start Date" in CW tools project
         cw_tool_project.set_param_values({"Start Date": datetime_to_wf_format(self.deploy_datetime)})
+
+        return wf_project
+
+    def __build_resume_display_deploy(self):
+        prj_being_resumed = WFProject(self.wf, self.wf_project_id)
+
+        program = prj_being_resumed.get_program()
+        all_project = program.get_projects()
+
+        prj_name = "Resume - {}".format(prj_being_resumed.name)
+        project = WFProjectResumeContainer(prj_name)
+        resume_block = WFResumeDisplayDeployBlock()
+        resume_block.project_id = self.wf_project_id
+        resume_block.deploy_datetime = self.deploy_datetime
+        project.append(resume_block)
+
+        parser = WFBlockParser(self.wf)
+        wf_project = parser.create(project)
+
+        # Get Pause Display Deploy Tasks
+        tasks = prj_being_resumed.get_tasks()
+        pause_tsks = [
+            t
+            for p in all_project
+            for t in p.get_tasks()
+            if t.name == "Pause Display Deploy"
+        ]
+
+        # Now link the resume task to the pause tasks
+        resume_task = wf_project.get_tasks()[0]
+        for tsk in pause_tsks:
+            resume_task.add_predecessor(tsk)
 
         return wf_project
 

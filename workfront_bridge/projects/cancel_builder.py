@@ -108,7 +108,6 @@ class CancelProjectBuilder(object):
             pass
 
         return wf_project
-    
 
     def __build_cancel_display_deploy(self):
         '''
