@@ -18,3 +18,17 @@ class WFUpdateEmailDeployBlock(WFBlock):
             ('Deployment Date/Time', 'deploy_datetime', True, datetime_to_wf_format),
         ],
     }
+
+
+class WFUpdateDisplayDeployBlock(WFBlock):
+    """
+    @summary: Use this block to update the deploy to a display project.
+    """
+
+    template_name = 'Block - Update Display Deploy'
+
+    block_params = {
+        'Update Display Deploy': [
+            ('data_update', 'data', True),
+        ],
+    }
