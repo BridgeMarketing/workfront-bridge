@@ -1,7 +1,7 @@
 from setuptools import setup, find_packages
 
 setup(name='workfront-bridge',
-      version='1.0.2',
+      version='1.0.3',
       description='Workfront Bridge Project Library for Python',
       url='https://github.com/BridgeMarketing/workfront-bridge',
       author='Bridge',
