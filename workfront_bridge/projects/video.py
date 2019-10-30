@@ -14,12 +14,16 @@ class WFProjectVideoContainer(WFBlock):
         '': [
             ('Project Type', 'project_type', False),
             ('TTDAdvertiserID', 'ttd_advertiser_id', False),
+            ('TTDAdvertiserBonusMediaID', 'ttd_bonus_media_advertiser_id', True), 
+            ('LiveRampAccountID', 'lr_account_id', True),
+            ('LiveRampAccountBonusMediaID', 'lr_bonus_media_account_id', True),
             ('TTDAudienceID', 'ttd_audience_id', False),
             ('TTDCampaignID', 'ttd_campaign_id', False),
             ('TTDFlightID', 'ttd_flight_id', False),
             ('TTDCreativeID', 'ttd_creative_id', False),
             ('IsTargetedBonusMedia', 'is_targeted_bonus_media', False),
             ('MultipleAdGroups', 'multiple_ad_groups', False),
+            ('isCancel', 'is_cancel', False),
         ],
     }
 

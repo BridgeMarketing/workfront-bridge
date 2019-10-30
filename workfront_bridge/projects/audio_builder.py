@@ -68,6 +68,9 @@ class AudioProjectBuilder(object):
         self._ttd_flight_id = None
         self._ttd_creative_id = None
         self._ttd_advertiser_id = None
+        self._ttd_bonus_media_advertiser_id = None
+        self._lr_account_id = None
+        self._lr_bonus_media_account_id = None
         self._is_targeted_bonus_media = None
         self._multiple_ad_groups = None
         self._project_type = None
@@ -121,7 +124,10 @@ class AudioProjectBuilder(object):
         project.ttd_campaign_id = self._ttd_campaign_id
         project.ttd_flight_id = self._ttd_flight_id
         project.ttd_creative_id = self._ttd_creative_id
-        project.ttd_advertiser_id = self._ttd_advertiser_id 
+        project.ttd_advertiser_id = self._ttd_advertiser_id
+        project.ttd_bonus_media_advertiser_id = self._ttd_bonus_media_advertiser_id
+        project.lr_account_id = self._lr_account_id
+        project.lr_bonus_media_account_id = self._lr_bonus_media_account_id 
         project.is_targeted_bonus_media = self._is_targeted_bonus_media
         project.multiple_ad_groups = self._multiple_ad_groups
         project.project_type = self._project_type
@@ -246,6 +252,18 @@ class AudioProjectBuilder(object):
 
     def set_ttd_advertiser_id(self, v):
         self._ttd_advertiser_id = v
+        return self
+    
+    def set_ttd_bonus_media_advertiser_id(self, v):
+        self._ttd_bonus_media_advertiser_id = v
+        return self
+
+    def set_lr_account_id(self, v):
+        self._lr_account_id = v
+        return self
+
+    def set_lr_bonus_media_account_id(self, v):
+        self._lr_bonus_media_account_id = v
         return self
 
     def set_is_targeted_bonus_media(self, v):
