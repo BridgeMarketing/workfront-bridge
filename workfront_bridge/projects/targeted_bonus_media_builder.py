@@ -149,7 +149,7 @@ class TargetedBonusMediaProjectBuilder(object):
         aud.audience_name = '{} audience'.format(self.project_name)
         project.append(aud)
         camp = WFDisplayCampaignBlock()
-        camp.campaign_name = self.__campaign_name or '{} campaign'.format(self.project_name)
+        camp.campaign_name = self._campaign_name or '{} campaign'.format(self.project_name)
         camp.budget_in_impressions_pre_calc = \
             self._budget_in_impressions_pre_calc
         project.append(camp)
