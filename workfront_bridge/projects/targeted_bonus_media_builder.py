@@ -47,6 +47,10 @@ class TargetedBonusMediaProjectBuilder(object):
         self._adg_max_bid_amount = None
 
         self._ad_group_name = None
+        self._campaign_name = None
+
+    def set_campaign_name(self, name):
+        self._campaign_name = name
 
     def set_ad_group_name(self, name):
         self._ad_group_name = name
@@ -145,7 +149,7 @@ class TargetedBonusMediaProjectBuilder(object):
         aud.audience_name = '{} audience'.format(self.project_name)
         project.append(aud)
         camp = WFDisplayCampaignBlock()
-        camp.campaign_name = '{} campaign'.format(self.project_name)
+        camp.campaign_name = self.__campaign_name or '{} campaign'.format(self.project_name)
         camp.budget_in_impressions_pre_calc = \
             self._budget_in_impressions_pre_calc
         project.append(camp)
