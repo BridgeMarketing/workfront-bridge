@@ -27,7 +27,6 @@ class WFDisplayCreativeQABlock(WFBlock):
             ('NativeTextAssetOptOutText', 'native_text_asset_opt_out_text', False),
             ('NativeImageAssetMain', 'native_image_asset_main', False),
             ('NativeImageAssetLogo', 'native_image_asset_logo', False),
-            ('NativeImageAssetIcon', 'native_image_asset_icon', False),
             ('NativeDecimalAssetRating', 'native_decimal_asset_rating', False),
             ('NativeTextAssetPrice', 'native_text_asset_price', False),
         ],
