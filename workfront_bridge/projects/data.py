@@ -23,15 +23,10 @@ class WFProjectDataContainer(WFBlock):
 
     def __init__(self, prj_name):
         super(WFProjectDataContainer, self).__init__(self.template_name, name=prj_name)
+        self.project_type = None
 
-    def set_b2c(self):
+    def set_data(self):
         self.project_type = "Data"
     
     def set_b2b(self):
         self.project_type = "Data B2B"
-
-    def set_match_and_export(self):
-        self.project_type = "Match Export"
-
-    def set_10x_data(self):
-        self.project_type = "Data 10x"
