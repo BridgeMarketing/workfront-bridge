@@ -14,7 +14,7 @@ def simple_single_segment(wf):
 
 
 def simple_segment_with_suppression_type(wf):
-    b = data_builder.DataProjectBuilder(wf, "Test 10x project builder")
+    b = data_builder.DataProjectBuilder(wf, "Test segment project builder")
     b.add_audience_segment(count_id="COUNTID_1234",
                            segment_type="B2C",
                            audience_file_path=None,
@@ -31,7 +31,7 @@ def simple_segment_with_suppression_type(wf):
 
 
 def simple_segment_with_suppression_files(wf):
-    b = data_builder.DataProjectBuilder(wf, "Test 10x project builder")
+    b = data_builder.DataProjectBuilder(wf, "Test segment project builder")
     b.add_audience_segment(count_id=None,
                            segment_type="ME",
                            audience_file_path="s3://test_bucket/test_path/test_file.csv",
