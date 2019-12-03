@@ -130,7 +130,11 @@ class TargetedBonusMediaProjectBuilder(object):
         @return: a WFProject object.
         """
         project = WFProjectDisplayContainer(self.project_name)
+        project.lr_bonus_media_account_id = self._lr_bonus_media_account_id
+        project.lr_account_id = self._lr_account_id
         project.ttd_advertiser_id = self._ttd_advertiser_id
+        project.ttd_bonus_media_advertiser_id = self._ttd_bonus_media_advertiser_id
+
         project.project_type = self._project_type
         project.total_click_goal = self._total_click_goal
         project.curve_type = self._curve_type
