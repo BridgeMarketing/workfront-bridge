@@ -23,6 +23,9 @@ class PauseProjectBuilder(object):
             "Display - Desktop": self.__build_pause_display_deploy,
             "Display - Mobile": self.__build_pause_display_deploy,
             "Display - Desktop & Mobile": self.__build_pause_display_deploy,
+            "BridgeConnect - Desktop": self.__build_pause_display_deploy,
+            "BridgeConnect - Mobile": self.__build_pause_display_deploy,
+            "BridgeConnect - Desktop & Mobile": self.__build_pause_display_deploy,
         }
         self.wf = wf
 
@@ -69,8 +72,7 @@ class PauseProjectBuilder(object):
             WFBrigeException("Unknown Project Type - {} is missing Project "
                              "Type custom form field".format(prj))
         if params["Project Type"] not in self.supported_project_types:
-            WFBrigeException("Project Type {} not supported for pausing "
-                             "project {}".format(prj))
+            WFBrigeException("Project Type {} not supported for pausing".format(prj))
         self.project_type = params["Project Type"]
 
     def __build_pause_email_deploy(self):
