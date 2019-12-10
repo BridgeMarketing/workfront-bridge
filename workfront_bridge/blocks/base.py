@@ -309,6 +309,10 @@ class WFBlockParser(object):
         '''
 
         r = self.wf.search_objects(WFObjCode.templat_project, {"name": name})
-        if len(r.json()["data"]) != 1:  # not found
-            raise WFBrigeException("WF Template '{}' not found".format(name))
-        return r.json()["data"][0]["ID"]
+        json_data = r.json()
+        if "data" not in json_data or len(json_data["data"]) != 1:  # not found
+            raise WFBrigeException(
+                "WF Template '{}' not found - "
+                "code({}) msg({})".format(name, r.status_code, t.text)
+            )
+        return json_data["data"][0]["ID"]
