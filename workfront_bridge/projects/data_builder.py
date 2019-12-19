@@ -1,12 +1,10 @@
 from workfront_bridge.blocks.base import WFBlockParser
 from workfront_bridge.exceptions import WFBrigeException
 from workfront_bridge.projects.data import WFProjectDataContainer
-from workfront_bridge.blocks.data.pull_10x_data import WFPull10xDataBlock
-from workfront_bridge.blocks.data.create_and_export_audience import WFCreatExportAudienceBlock
 from workfront_bridge.blocks.data.review_data import WFReviewDataBlock
 from workfront_bridge.blocks.data.suppression import WFSuppressionGroupBlock
 from workfront_bridge.blocks.data.suppression import WFSuppressionBlock
-from workfront_bridge.blocks.data.count_id import WFCountIdGroupBlock, WFCountIdBlock
+from workfront_bridge.blocks.data.audience import WFAudienceBlock, WFBridgeAudienceBlock, WFClientAudienceBlock
 from workfront_bridge.blocks.data.hygiene import HygieneDataBlock
 from workfront_bridge.blocks.data.merge import MergeDataBlock
 
@@ -37,78 +35,25 @@ class DataProjectBuilder(object):
         self.suppression_task_ids = []
 
         # Blocks
-        self.count_id = None
-        self.count_type = None
-
-        self.audience_file_path = None
-        self.audience_identifier = None
-        self.audience_name = None
+        self.segments = []
 
         self.suppression_type = None
         self.suppression_files = []
 
-    def set_b2c(self):
-        self.project_type = "b2c"
-        return self
-    
-    def set_b2b(self):
-        self.project_type = "b2b"
-        return self
+    def add_audience_segment(self, **kwargs):
+        self.segments.append(kwargs)
 
-    def set_match_and_export(self):
-        self.project_type = "m&e"
-        return self
-
-    def set_10x_data(self):
-        self.project_type = "10x"
-        return self
-
-    #
-    # B2c & 10x Specific settings
-    #
-    def set_count_id(self, count_id):
-        self.count_id = count_id
-        return self
-
-    def set_count_type(self, count_type):
-        self.count_type = count_type
-        return self
-
-    #
-    # END B2c & 10x Specific settings
-    #
-
-    #
-    # Match and Export Specific settings
-    #
-    def set_audience_file_path(self, audience_file_path):
-        self.audience_file_path = audience_file_path
-        return self
-
-    def set_audience_name(self, audience_name):
-        self.audience_name = audience_name
-        return self
-
-    def set_audience_identifier(self, audience_identifier):
+    def _validate_audience_identifier(self, audience_identifier):
         if audience_identifier not in self.AUDIENCE_FILE_IDENTIFIERS:
             m = "Invalid audience identifier {}. Possible values are {}"
             err = m.format(audience_identifier,
                            ",".join(self.AUDIENCE_FILE_IDENTIFIERS))
             raise WFBrigeException(err)
 
-        self.audience_identifier = audience_identifier
-        return self
-    #
-    # END Match and Export Specific settings
-    #
-
-    #
-    # Common settings
-    #
     def add_suppression_file(self, file_path, suppression_file_type):
         '''
         @param file_path: s3 file path
-        @param supression_type: bridge_id, email, maid, md5, postal
+        @param suppression_file_type: bridge_id, email, maid, md5, postal
         '''
         if suppression_file_type not in self.SUPPRESSION_FILE_TYPES:
             m = "Invalid suppression file type {}. Possible values are {}"
@@ -147,46 +92,24 @@ class DataProjectBuilder(object):
         self.suppression_task_ids = suppression_task_ids
         return self
 
-    def _check_viability_b2c(self):
-        if self.count_id is None:
-            raise WFBrigeException("{} is required".format("count_id"))
-    
-    def _check_viability_b2b(self):
-        if self.count_id is None:
-            raise WFBrigeException("{} is required".format("count_id"))
-
-    def _check_viability_match_and_export(self):
+    def _check_viability(self):
         def raise_missing(field_name):
             m = "{} is required for match and export data projects"
             raise WFBrigeException(m.format(field_name))
-
-        if self.audience_file_path is None:
-            raise_missing("audience_file_path")
-        if self.audience_name is None:
-            raise_missing("audience_name")
-        if self.audience_identifier is None:
-            raise_missing("audience_identifier")
-
-    def _check_viability_10x(self):
-        if self.count_id is None:
-            raise WFBrigeException("{} is required".format("count_id"))
-
-    def _check_viability(self):
-        if self.project_type is None:
-            m = "You must specify the type of data project to be created (use"\
-                " set_b2c or set_match_and_export)"
-            raise WFBrigeException(m)
-
-        if self.project_type == "b2c":
-            self._check_viability_b2c()
-        elif self.project_type == "b2b":
-            self._check_viability_b2b()
-        elif self.project_type == "m&e":
-            self._check_viability_match_and_export()
-        elif self.project_type == "10x":
-            self._check_viability_10x()
-        else:
-            raise Exception("Invalid data project type")
+        for segment in self.segments:
+            if segment.get('count_id') is None and segment.get('audience_file_path') is None:
+                raise WFBrigeException("{} is required".format("count_id or audience_file_path"))
+            if segment.get('count_id') is None:
+                if segment.get('audience_file_path') is None:
+                    raise_missing("audience_file_path")
+                if segment.get('audience_name') is None:
+                    raise_missing("audience_name")
+                if segment.get('audience_identifier') is None:
+                    raise_missing("audience_identifier")
+                self._validate_audience_identifier(segment['audience_identifier'])
+            else:
+                if segment['segment_type'] is None:
+                    raise_missing("segment_type")
 
     def build(self):
         """
@@ -204,42 +127,33 @@ class DataProjectBuilder(object):
         project.suppression_task_ids = self.suppression_task_ids
 
         # Specific project blocks
-        if self.project_type == "m&e":
-            project.set_match_and_export()
-            project.audience_file_path = self.audience_file_path
-            c = WFCreatExportAudienceBlock()
-            c.audience_file_path = self.audience_file_path
-            c.audience_identifier = self.audience_identifier
-            c.audience_name = self.audience_name
-            project.append(c)
-            hygiene_block = HygieneDataBlock()
-            project.append(hygiene_block)
+        is_b2b = False
+        group_block = WFAudienceBlock()
+        for segment in self.segments:
+            if segment.get('segment_type') in ['B2C', 'B2B']:
+                is_b2b = segment.get('segment_type') == 'B2B'
+                count_block = WFBridgeAudienceBlock()
+                count_block.count_id = segment.get('count_id')
+                count_block.count_type = segment.get('segment_type')
+                group_block.append(count_block)
+            elif segment.get('segment_type') in ['ME']:
+                client_block = WFClientAudienceBlock()
+                client_block.audience_file_path = segment['audience_file_path']
+                client_block.audience_identifier = segment['audience_identifier']
+                client_block.audience_name = segment['audience_name']
+                group_block.append(client_block)
+            else:
+                raise WFBrigeException("Invalid segment type: {}".format(segment.get('segment_type', '')))
+
+        if is_b2b:
+            project.set_b2b()
         else:
-            count_group = None
-            if self.project_type == "b2c":
-                project.set_b2c()
-                count_group = WFCountIdGroupBlock()
-                project.append(count_group)
-            elif self.project_type == "b2b":
-                project.set_b2b()
-                count_group = WFCountIdGroupBlock()
-                project.append(count_group)
-            elif self.project_type == "10x":
-                project.set_10x_data()
-                # b = WFPull10xDataBlock()
-                count_group = WFCountIdGroupBlock()
-                project.append(count_group)
-
-            for count_id in self.count_id:
-                count_block = WFCountIdBlock()
-                count_block.count_id = count_id
-                count_block.count_type = self.count_type
-                count_group.append(count_block)
-
-            merge_block = MergeDataBlock()
-            project.append(merge_block)
-            hygiene_block = HygieneDataBlock()
-            project.append(hygiene_block)
+            project.set_data()
+        project.append(group_block)
+        merge_block = MergeDataBlock()
+        project.append(merge_block)
+        hygiene_block = HygieneDataBlock()
+        project.append(hygiene_block)
 
         # Suppressions
         if self.suppression_type is not None or len(self.suppression_files) > 0:
