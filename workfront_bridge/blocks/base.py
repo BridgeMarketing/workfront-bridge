@@ -313,6 +313,6 @@ class WFBlockParser(object):
         if "data" not in json_data or len(json_data["data"]) != 1:  # not found
             raise WFBrigeException(
                 "WF Template '{}' not found - "
-                "code({}) msg({})".format(name, r.status_code, t.text)
+                "code({}) msg({})".format(name, r.status_code, r.text)
             )
         return json_data["data"][0]["ID"]
