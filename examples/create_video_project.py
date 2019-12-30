@@ -21,6 +21,9 @@ b.add_ad_group(
     ]
 )
 (b.set_ttd_advertiser_id('xc7votu')
+ .set_lr_account_id('lr_id')
+ .set_lr_bonus_media_account_id('lr_account')
+ .set_ttd_bonus_media_advertiser_id('ttd_bm_advertiser')
  .set_audience_name('audience_name')
  .set_start_date_inclusive_utc(datetime.datetime.utcnow())
  .set_end_date_exclusive_utc(datetime.datetime.utcnow() + datetime.timedelta(days=3))

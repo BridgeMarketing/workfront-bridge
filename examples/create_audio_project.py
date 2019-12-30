@@ -20,12 +20,16 @@ b.add_ad_group(
     ]
 )
 (b.set_ttd_advertiser_id('xc7votu')
+ .set_lr_account_id('lr_id')
+ .set_lr_bonus_media_account_id('lr_account')
+ .set_ttd_bonus_media_advertiser_id('ttd_bm_advertiser')
  .set_audience_name('audience_name')
  .set_start_date_inclusive_utc(datetime.datetime.utcnow())
  .set_end_date_exclusive_utc(datetime.datetime.utcnow() + datetime.timedelta(days=3))
  .set_campaign_name('Test Campaign')
  .set_multiple_ad_groups(True)
  .set_project_type('Audio'))
+
 prj = b.build()
 prj.set_fields({"portfolioID": "5b45ff9b000aa3a5db15b2e269976a4c"})
 print(prj)
