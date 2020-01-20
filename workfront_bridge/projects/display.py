@@ -28,6 +28,7 @@ class WFProjectDisplayContainer(WFBlock):
             ('curve type', 'curve_type', False),
             ('links', 'links', False, lambda v: '||'.join(v)),
             ('weights', 'weights', False, lambda v: '||'.join(map(str, v))),
+            ('links_ids', 'links_ids', False, lambda v: '||'.join(map(str, v))),
             ('StartDateTimeInclusiveUTC', 'start_date_inclusive_utc', False, datetime_to_wf_format),
             ('EndDateTimeExclusiveUTC', 'end_date_exclusive_utc', False, datetime_to_wf_format),
             ('Click Tier', 'click_tier', False),

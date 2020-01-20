@@ -31,6 +31,7 @@ class TargetedBonusMediaProjectBuilder(object):
         self._curve_type = None
         self._links = None
         self._weights = None
+        self._links_ids = None
         self._start_date_inclusive_utc = None
         self._open_tier = None
         self._open_tier_value = None
@@ -101,6 +102,9 @@ class TargetedBonusMediaProjectBuilder(object):
     def set_links(self, v):
         self._links = v
 
+    def set_links_ids(self, v):
+        self._links_ids = v
+
     def set_weights(self, v):
         self._weights = v
 
@@ -140,6 +144,7 @@ class TargetedBonusMediaProjectBuilder(object):
         project.curve_type = self._curve_type
         project.links = self._links
         project.weights = self._weights
+        project.links_ids = self._links_ids
         project.start_date_inclusive_utc = self._start_date_inclusive_utc
         project.is_targeted_bonus_media = "True"
         project.click_tier = self._click_tier
