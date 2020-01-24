@@ -256,16 +256,16 @@ class EmailProjectBuilder(object):
             bval_html.email_subject = self.subject
             project.append(bval_html)
 
-            if self.add_tags_weight_approval_step:
-                block_approve_cw_tags = WFEmailApproveCWTaggingBlock()
-                project.append(block_approve_cw_tags)
-
         if self.live_seed_list is not None:
             email_seed_block = self._crt_live_list_block(self.live_seed_list)
             project.append(email_seed_block)
 
         audb = self._crt_audience_block()
         project.append(audb)
+
+        if not self.is_created_from_onboarding and self.add_tags_weight_approval_step:
+            block_approve_cw_tags = WFEmailApproveCWTaggingBlock()
+            project.append(block_approve_cw_tags)
 
         if self.review_deployment:
             reviewb = WFEmailReviewDeploymentBlock()

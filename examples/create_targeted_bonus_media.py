@@ -13,6 +13,8 @@ b = targeted_bonus_media_builder.TargetedBonusMediaProjectBuilder(
     'Targeted Bonus Media Channel (DEMO)')
 b.set_links(['https://k0ch.github.io/', 'https://k0ch.github.io/peppe'])
 b.set_weights([50, 50])
+b.set_links_ids([112, 225])
+
 b.set_curve_type(1)
 b.set_project_type('Display - Desktop & Mobile')
 b.set_total_click_goal(20)
