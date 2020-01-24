@@ -38,6 +38,8 @@ class WFProjectDisplayContainer(WFBlock):
             ('Overage', 'overage', False),
             ('Campaign Type', 'campaign_type', False),
             ('isCancel', 'is_cancel', False),
+            ('Geo Target', 'geo_target', False),
+            ('Geo Target State', 'geo_target_state', False, lambda l: l),
         ],
     }
 
