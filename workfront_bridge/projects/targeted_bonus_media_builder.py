@@ -50,8 +50,8 @@ class TargetedBonusMediaProjectBuilder(object):
         self._ad_group_name = None
         self._campaign_name = None
 
-        self.geo_target = None
-        self.geo_target_state = None
+        self._geo_target = None
+        self._geo_target_state = None
 
     def set_campaign_name(self, name):
         self._campaign_name = name
@@ -129,6 +129,12 @@ class TargetedBonusMediaProjectBuilder(object):
     def set_adg_max_bid_amount(self, v):
         self._adg_max_bid_amount = v
 
+    def set_geo_target(self, v):
+        self._geo_target = v
+
+    def set_geo_target_state(self, v):
+        self._geo_target_state = v
+
     def build(self):
         """
         @summary: Build the WF project.
@@ -157,9 +163,8 @@ class TargetedBonusMediaProjectBuilder(object):
         project.overage = self._overage
         project.campaign_type = self._campaign_type
 
-        project.geo_target = self.geo_target
-        project.geo_target_state = self.geo_target_state
-
+        project.geo_target = self._geo_target
+        project.geo_target_state = self._geo_target_state
 
         aud = WFDisplayDataBlock()
         aud.audience_name = '{} audience'.format(self.project_name)

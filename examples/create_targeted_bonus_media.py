@@ -36,8 +36,8 @@ b.set_click_tier('CL')
 b.set_click_tier_value(0.05)
 b.set_overage(True)
 b.set_campaign_type("CPM Deployment")  # Options are: Match and Deploy | Reblast | CPM Deployment
-b.geo_target = "State"
-b.geo_target_state = ["Alaska", "Connecticut"]
+b.set_geo_target("State")
+b.set_geo_target_state(["Alaska", "Connecticut"])
 
 prj = b.build()
 
