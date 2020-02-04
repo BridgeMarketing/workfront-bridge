@@ -99,9 +99,6 @@ class ResumeProjectBuilder(object):
         prj_being_resumed = WFProject(self.wf, self.wf_project_id)
 
         program = prj_being_resumed.get_program()
-        all_project = program.get_projects()
-
-        cw_tool_project = [p for p in all_project if p.name.startswith("CW tool")][0]
 
         prj_name = "Resume - {}".format(prj_being_resumed.name)
         project = WFProjectResumeContainer(prj_name)
@@ -135,9 +132,6 @@ class ResumeProjectBuilder(object):
         live_setup_create_flight_task = [t for t in live_setup_task_tasks if t.name == "Create Flight"][0]
         live_setup_create_flight_task.set_param_values(
             {"Deployment Date/Time": datetime_to_wf_format(self.deploy_datetime)})
-
-        # Update "Start Date" in CW tools project
-        cw_tool_project.set_param_values({"Start Date": datetime_to_wf_format(self.deploy_datetime)})
 
         return wf_project
 
