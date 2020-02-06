@@ -29,9 +29,7 @@ class TargetedBonusMediaProjectBuilder(object):
         self._project_type = None
         self._total_click_goal = None
         self._curve_type = None
-        self._links = None
-        self._weights = None
-        self._links_ids = None
+        self._links_s3_path = None
         self._start_date_inclusive_utc = None
         self._open_tier = None
         self._open_tier_value = None
@@ -102,14 +100,8 @@ class TargetedBonusMediaProjectBuilder(object):
     def set_curve_type(self, v):
         self._curve_type = v
 
-    def set_links(self, v):
-        self._links = v
-
-    def set_links_ids(self, v):
-        self._links_ids = v
-
-    def set_weights(self, v):
-        self._weights = v
+    def set_links_s3_path(self, v):
+        self._links_s3_path = v
 
     def set_start_date_inclusive_utc(self, v):
         self._start_date_inclusive_utc = v
@@ -151,9 +143,7 @@ class TargetedBonusMediaProjectBuilder(object):
         project.project_type = self._project_type
         project.total_click_goal = self._total_click_goal
         project.curve_type = self._curve_type
-        project.links = self._links
-        project.weights = self._weights
-        project.links_ids = self._links_ids
+        project.links_s3_path = self._links_s3_path
         project.start_date_inclusive_utc = self._start_date_inclusive_utc
         project.is_targeted_bonus_media = "True"
         project.click_tier = self._click_tier

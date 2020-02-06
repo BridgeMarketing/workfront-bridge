@@ -75,7 +75,11 @@ b.add_ad_group(
  .set_end_date_exclusive_utc(datetime.datetime.utcnow() + datetime.timedelta(days=3))
  .set_campaign_name('Test Campaign')
  .set_multiple_ad_groups(True)
- .set_project_type('BridgeConnect - Desktop & Mobile'))
+ .set_project_type('BridgeConnect - Desktop & Mobile')
+ .set_ttd_bonus_media_advertiser_id('XXX')
+ .set_lr_account_id('XXX')
+ .set_lr_bonus_media_account_id('XXX'))
+
 prj = b.build()
 prj.set_fields({"portfolioID": "5b45ff9b000aa3a5db15b2e269976a4c"})
 print(prj)

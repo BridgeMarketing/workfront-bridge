@@ -11,9 +11,15 @@ wf.login()
 b = targeted_bonus_media_builder.TargetedBonusMediaProjectBuilder(
     wf,
     'Targeted Bonus Media Channel (DEMO)')
-b.set_links(['https://k0ch.github.io/', 'https://k0ch.github.io/peppe'])
-b.set_weights([50, 50])
-b.set_links_ids([112, 225])
+
+links = {
+    "links": [
+        {"id": 112, "url": 'https://k0ch.github.io/', "weights": 40},
+        {"id": 225, "url": 'https://k0ch.github.io/peppe', "weights": 60},
+    ]
+}
+
+b.set_links_s3_path('s3://bridge-file-assets/API_files/orderID_10000129/Channel_2/links.json')
 
 b.set_curve_type(1)
 b.set_project_type('Display - Desktop & Mobile')
