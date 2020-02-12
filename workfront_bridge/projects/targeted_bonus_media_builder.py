@@ -163,8 +163,6 @@ class TargetedBonusMediaProjectBuilder(object):
         camp.campaign_name = self._campaign_name or '{} campaign'.format(self.project_name)
         camp.budget_in_impressions_pre_calc = \
             self._budget_in_impressions_pre_calc
-        camp.pacing_mode = "PaceToEndOfDay"
-        camp.auto_allocator = True
         project.append(camp)
 
         ad_group_setup_block = WFDisplayAdGroupSetupBlock()
