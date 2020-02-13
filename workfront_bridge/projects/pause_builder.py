@@ -102,6 +102,15 @@ class PauseProjectBuilder(object):
             # Now link the pause task to the push to proivder one
             pause_task = wf_project.get_tasks()[0]
             pause_task.add_predecessor(ptp_task)
+
+            # Link TBM tasks
+            pgm = prj_being_paused.get_program()
+            tbm_pjt = [pjt for pjt in pgm.get_projects() if pjt.name.startswith('TBM - ')]
+            if tbm_pjt:
+                tbm_pjt = tbm_pjt[0]
+                for task in tbm_pjt.get_tasks():
+                    if task.name == "Create Ad Group":
+                        pause_task.add_predecessor(task)
         except Exception:
             pass
 
