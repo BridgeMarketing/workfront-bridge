@@ -31,6 +31,7 @@ class WFDisplayQAAdGroupBlock(WFBlock):
             ('DailyTargetInImpressions', 'daily_target_in_impressions', False),
             ('ADGDescription', 'adg_description', False),
             ('ADGDailyBudget', 'adg_daily_budget', False),
+            ('ADGBudgetRate', 'adg_budget_rate', False),
             ('ADGDailyBudgetInImpressions', 'adg_daily_budget_in_impressions', False),
             ('ADGBudgetInImpressions_preCalc', 'adg_budget_in_impressions_pre_calc', False),
             ('ADGPacingMode', 'adg_pacing_mode', False),
