@@ -20,6 +20,7 @@ class AudioProjectBuilder(object):
         "ad_group_name",
         "adg_base_bid_amount",
         "adg_description",
+        "adg_budget_rate",
         "adg_daily_budget",
         "adg_daily_budget_in_impressions",
         "adg_budget_in_impressions_pre_calc",
