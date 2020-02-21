@@ -19,6 +19,7 @@ class WFDisplayCreateAdGroupBlock(WFBlock):
             ('ADGPacingMode', 'adg_pacing_mode', False),
             ('ADGAutoAllocatorPriority', 'adg_auto_allocator_priority', False),
             ('ADGMaxBidAmount', 'adg_max_bid_amount', False),
+            ('ADGBudgetRate', 'adg_budget_rate', False),
             ('ADGFrequencyPeriodInMinutes', 'adg_frequency_period_in_minutes', False),
             ('ADGFrequencyCap', 'adg_frequency_cap', False),
             ('ADGFrequencyPricingSlopeCPM', 'adg_frequency_pricing_slope_cpm', False),
