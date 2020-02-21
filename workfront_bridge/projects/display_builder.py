@@ -133,6 +133,7 @@ class DisplayProjectBuilder(object):
         * adg_daily_budget
         * adg_daily_budget_in_impressions
         * adg_budget_in_impressions_pre_calc
+        * adg_budget_rate
         * adg_pacing_mode
         * adg_auto_allocator_priority
         * adg_max_bid_amount
