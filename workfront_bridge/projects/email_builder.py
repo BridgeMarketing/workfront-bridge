@@ -237,7 +237,6 @@ class EmailProjectBuilder(object):
         project.ttd_bonus_media_advertiser_id = self.ttd_bonus_media_advertiser_id
         project.lr_account_id = self.lr_account_id
         project.lr_bonus_media_account_id = self.lr_bonus_media_account_id
-        
 
         if self.is_created_from_onboarding:
             project.ecm_html = self.ecm_html

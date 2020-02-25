@@ -18,7 +18,7 @@ class WFProjectEmailContainer(WFBlock):
             ('email_creative_id', 'email_creative_id', True),
             ('tags', 'tags', False),
             ('input_html_s3_path', 'html_s3_path', False),
-            ('ecm_from_line', 'from_line', False),
+            ('ecm_from_line', 'from_line', True, lambda x: str(x.encode('utf-8'))),
             ('Suppression File Path', 'suppression_file_path', False),
             ('Category', 'category', False),
             ('ecm_live_seed_list', 'live_seed_list', False),
