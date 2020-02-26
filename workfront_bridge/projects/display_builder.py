@@ -100,6 +100,7 @@ class DisplayProjectBuilder(object):
         self._is_targeted_bonus_media = None
         self._multiple_ad_groups = None
         self._project_type = None
+        self._ttd_tracking_tags = None
 
         # data block
         self._audience_name = None
@@ -210,6 +211,7 @@ class DisplayProjectBuilder(object):
         project.lr_account_id = self._lr_account_id
         project.lr_bonus_media_account_id = self._lr_bonus_media_account_id
         project.is_targeted_bonus_media = self._is_targeted_bonus_media
+        project.ttd_tracking_tags = self._ttd_tracking_tags
         project.multiple_ad_groups = self._multiple_ad_groups
         project.project_type = self._project_type
 
@@ -325,6 +327,10 @@ class DisplayProjectBuilder(object):
 
     def set_is_targeted_bonus_media(self, v):
         self._is_targeted_bonus_media = v
+        return self
+
+    def set_ttd_tracking_tags(self, v):
+        self._ttd_tracking_tags = v
         return self
 
     def set_multiple_ad_groups(self, v):

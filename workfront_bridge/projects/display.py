@@ -22,6 +22,7 @@ class WFProjectDisplayContainer(WFBlock):
             ('TTDFlightID', 'ttd_flight_id', False),
             ('TTDCreativeID', 'ttd_creative_id', False),
             ('IsTargetedBonusMedia', 'is_targeted_bonus_media', False),
+            ('TTDTrackingTags', 'ttd_tracking_tags', False),
             ('MultipleAdGroups', 'multiple_ad_groups', False),
             ('Project Type', 'project_type', False),
             ('total click goal', 'total_click_goal', False),
