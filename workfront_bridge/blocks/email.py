@@ -40,7 +40,7 @@ class WFEmailSeedBlock(WFBlock):
     block_params = {
         'Create Flight': [
             ('Campaign Name', 'campaign_name', True),
-            ('Sender Name', 'sender_name', True),
+            ('Sender Name', 'sender_name', True, lambda x: str(x.encode('utf-8'))),
             ('Deployment Date/Time', 'deployment_datetime', True, lambda v: v.strftime("%Y-%m-%dT%H:%M:%S.000%z")),
             ('Sender Email', 'sender_email', True),
         ],
@@ -154,7 +154,7 @@ class WFEmailAudienceLiveSetupBlock(WFBlock):
         ],
         'Create Flight': [
             ('Campaign Name', 'campaign_name', True),
-            ('Sender Name', 'sender_name', True),
+            ('Sender Name', 'sender_name', True, lambda x: str(x.encode('utf-8'))),
             ('Deployment Date/Time', 'deployment_datetime', True, lambda v: v.strftime("%Y-%m-%dT%H:%M:%S.000%z")),
             ('Sender Email', 'sender_email', True),
         ],
