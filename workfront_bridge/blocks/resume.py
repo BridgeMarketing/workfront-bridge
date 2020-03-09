@@ -20,18 +20,19 @@ class WFResumeEmailDeployBlock(WFBlock):
     }
 
 
-class WFResumeDisplayDeployBlock(WFBlock):
+class WFResumeMediaCampaignDeployBlock(WFBlock):
     '''
-    @summary: Use this block to resume the deploy to an esp of an display project.
-    This block contains a single automatic task called "Resume Email Deploy"
-    that will be excecuted in the Campaign Manager and will make the deploy of
-    the emails resume(if needed).
+    @summary: Use this block to resume the deploy of Audio/Video/Display
+    project.
+    This block contains a single automatic task called "Resume Media Campaign
+    Deploy" that will be executed in the Campaign Manager and will resume the
+    deploy of the media.
     '''
 
-    template_name = 'Block - Resume Display Deploy'
+    template_name = 'Block - Resume Media Campaign Deploy'
 
     block_params = {
-        'Resume Display Deploy': [
+        'Resume Media Campaign Deploy': [
             ('wf_email_project_id', 'project_id', True),
             ('Deployment Date/Time', 'deploy_datetime', True, datetime_to_wf_format),
             ('End Date/Time', 'end_datetime', True, datetime_to_wf_format),

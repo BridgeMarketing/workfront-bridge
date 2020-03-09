@@ -2,7 +2,7 @@ from workfront.objects.project import WFProject
 
 from workfront_bridge.blocks.base import WFBlockParser
 from workfront_bridge.blocks.resume import WFResumeEmailDeployBlock
-from workfront_bridge.blocks.resume import WFResumeDisplayDeployBlock
+from workfront_bridge.blocks.resume import WFResumeMediaCampaignDeployBlock
 from workfront_bridge.exceptions import WFBrigeException
 from workfront_bridge.projects.resume import WFProjectResumeContainer
 from workfront_bridge.tools import datetime_to_wf_format
@@ -20,12 +20,14 @@ class ResumeProjectBuilder(object):
         '''
         self.supported_project_types = {
             "Email": self.__build_resume_email_deploy,
-            "Display - Mobile": self.__build_resume_display_deploy,
-            "Display - Desktop": self.__build_resume_display_deploy,
-            "Display - Desktop & Mobile": self.__build_resume_display_deploy,
-            "BridgeConnect - Mobile": self.__build_resume_display_deploy,
-            "BridgeConnect - Desktop": self.__build_resume_display_deploy,
-            "BridgeConnect - Desktop & Mobile": self.__build_resume_display_deploy,
+            "Display - Mobile": self.__build_resume_media_deploy,
+            "Display - Desktop": self.__build_resume_media_deploy,
+            "Display - Desktop & Mobile": self.__build_resume_media_deploy,
+            "BridgeConnect - Mobile": self.__build_resume_media_deploy,
+            "BridgeConnect - Desktop": self.__build_resume_media_deploy,
+            "BridgeConnect - Desktop & Mobile": self.__build_resume_media_deploy,
+            "Audio": self.__build_resume_media_deploy,
+            "Video": self.__build_resume_media_deploy,
         }
         self.wf = wf
 
@@ -135,7 +137,7 @@ class ResumeProjectBuilder(object):
 
         return wf_project
 
-    def __build_resume_display_deploy(self):
+    def __build_resume_media_deploy(self):
         prj_being_resumed = WFProject(self.wf, self.wf_project_id)
 
         program = prj_being_resumed.get_program()
@@ -143,7 +145,7 @@ class ResumeProjectBuilder(object):
 
         prj_name = "Resume - {}".format(prj_being_resumed.name)
         project = WFProjectResumeContainer(prj_name)
-        resume_block = WFResumeDisplayDeployBlock()
+        resume_block = WFResumeMediaCampaignDeployBlock()
         resume_block.project_id = self.wf_project_id
         resume_block.deploy_datetime = self.deploy_datetime
         resume_block.end_datetime = self.end_datetime
@@ -158,7 +160,7 @@ class ResumeProjectBuilder(object):
             t
             for p in all_project
             for t in p.get_tasks()
-            if t.name == "Pause Display Deploy"
+            if t.name == "Pause Media Campaign Deploy"
         ]
 
         # Now link the resume task to the pause tasks

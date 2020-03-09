@@ -3,7 +3,8 @@ import json
 from workfront.objects.project import WFProject
 
 from workfront_bridge.blocks.base import WFBlockParser
-from workfront_bridge.blocks.pause import WFPauseEmailDeployBlock, WFPauseDisplayDeployBlock
+from workfront_bridge.blocks.pause import WFPauseEmailDeployBlock, \
+    WFPauseMediaCampaignDeployBlock
 from workfront_bridge.exceptions import WFBrigeException
 from workfront_bridge.projects.pause import WFProjectPauseContainer
 
@@ -20,12 +21,14 @@ class PauseProjectBuilder(object):
         '''
         self.supported_project_types = {
             "Email": self.__build_pause_email_deploy,
-            "Display - Desktop": self.__build_pause_display_deploy,
-            "Display - Mobile": self.__build_pause_display_deploy,
-            "Display - Desktop & Mobile": self.__build_pause_display_deploy,
-            "BridgeConnect - Desktop": self.__build_pause_display_deploy,
-            "BridgeConnect - Mobile": self.__build_pause_display_deploy,
-            "BridgeConnect - Desktop & Mobile": self.__build_pause_display_deploy,
+            "Display - Desktop": self.__build_pause_media_deploy,
+            "Display - Mobile": self.__build_pause_media_deploy,
+            "Display - Desktop & Mobile": self.__build_pause_media_deploy,
+            "BridgeConnect - Desktop": self.__build_pause_media_deploy,
+            "BridgeConnect - Mobile": self.__build_pause_media_deploy,
+            "BridgeConnect - Desktop & Mobile": self.__build_pause_media_deploy,
+            "Audio": self.__build_pause_media_deploy,
+            "Video": self.__build_pause_media_deploy,
         }
         self.wf = wf
 
@@ -116,16 +119,16 @@ class PauseProjectBuilder(object):
 
         return wf_project
 
-    def __build_pause_display_deploy(self):
+    def __build_pause_media_deploy(self):
         '''
-        @return: a pause wf project to pause an display project.
+        @return: Project that pauses an Audio/Video/Display program.
         '''
 
         prj_being_paused = WFProject(self.wf, self.wf_project_id)
 
         prj_name = "Pause - {}".format(prj_being_paused.name)
         project = WFProjectPauseContainer(prj_name)
-        pause_block = WFPauseDisplayDeployBlock()
+        pause_block = WFPauseMediaCampaignDeployBlock()
         pause_block.data = json.dumps({"to_pause_wf_project_id": self.wf_project_id})
         project.append(pause_block)
 
