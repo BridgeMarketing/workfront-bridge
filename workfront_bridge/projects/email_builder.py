@@ -65,6 +65,10 @@ class EmailProjectBuilder(object):
         self.project_id = project_id
         return self
 
+    def set_provider(self, provider):
+        self.provider = provider
+        return self
+
     def set_html(self, s3_path):
         self.html = s3_path
         return self
@@ -263,7 +267,7 @@ class EmailProjectBuilder(object):
         bval_html.email_subject = self.subject
         project.append(bval_html)
 
-        if self.audience_provider.name.lower() != 'ongage':
+        if self.provider.lower() != 'ongage':
             if self.live_seed_list is not None:
                 email_seed_block = self._crt_live_list_block(self.live_seed_list)
                 project.append(email_seed_block)
