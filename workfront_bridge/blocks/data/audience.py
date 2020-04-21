@@ -42,5 +42,6 @@ class WFClientAudienceBlock(WFBlock):
             ('Audience Name', 'audience_name', True),
             ('Audience File Path', 'audience_file_path', True),
             ('Audience Field Identifier', 'audience_identifier', False),
+            ('Audience Field Map', 'audience_field_map', False),
         ],
     }
