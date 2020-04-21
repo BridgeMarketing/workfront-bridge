@@ -279,6 +279,8 @@ class EmailProjectBuilder(object):
                 reviewb = WFEmailReviewDeploymentBlock()
                 project.append(reviewb)
         else:
+            if self.live_seed_list is not None:
+                project.live_seed_list = self.live_seed_list
             push_dwh_el = WFEmailPushToDWHAndEL()
             project.append(push_dwh_el)
 
