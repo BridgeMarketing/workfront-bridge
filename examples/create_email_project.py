@@ -6,7 +6,7 @@ wf = Workfront("notifications@wf.bridgemarketing.com", 'beef6060', 'thebridgecor
 
 wf.login()
 
-b = email_builder.EmailProjectBuilder(wf, "Test pablo email project builder 1")
+b = email_builder.EmailProjectBuilder(wf, "Test harsh manual email project builder 1")
 
 b.set_html("s3://some/creative.html")
 
@@ -16,8 +16,12 @@ b.set_seed_list("s3://some/seed.csv")
 b.set_subject("asuntoooo")
 b.set_subject_test_prefix("prefijooooo")
 b.set_send_validate_test_seed_emails(True)
+b.set_project_id("211")
+b.set_deployment_datetime(datetime.today())
 
-b.set_audience_provider("ActOn")
+b.set_ecm_html("s3://some/creative.html")
+b.set_is_created_from_onboarding(True)
+b.set_audience_provider("ongage")
 b.set_audience_sender_email("audience_sender@email.com")
 b.set_audience_sender_name("Sender NAME")
 

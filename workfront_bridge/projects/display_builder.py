@@ -3,7 +3,6 @@ from workfront_bridge.blocks.display.campaign import WFDisplayCampaignBlock
 from workfront_bridge.blocks.display.data import WFDisplayDataBlock
 from workfront_bridge.blocks.display.launch import WFDisplayLaunchBlock
 from workfront_bridge.blocks.display.ad_group_setup import WFDisplayAdGroupSetupBlock
-from workfront_bridge.blocks.display.qa import WFDisplayQABlock
 from workfront_bridge.exceptions import WFBrigeException
 from workfront_bridge.blocks.base import WFBlockParser
 
@@ -22,6 +21,9 @@ class DisplayProjectBuilder(object):
         "third_party_impression_tracking_url",
         "third_party_impression_tracking_url2",
         "third_party_impression_tracking_url3",
+        "js_tracking_tag",
+        "js_tracking_tag2",
+        "js_tracking_tag3",
         "securable",
         "availability",
         "third_party_tag",
@@ -240,19 +242,13 @@ class DisplayProjectBuilder(object):
         campaign_block.daily_target_in_impressions = self._daily_target_in_impressions
 
         ad_group_setup_blocks = []
-        qa_blocks = []
         for ad_group in self.ad_groups:
             ad_group_setup_block = WFDisplayAdGroupSetupBlock()
-            qa_block = WFDisplayQABlock()
             for creative in ad_group['creatives']:
                 creative_upload_dict = {k: creative[k] for k in
                                         (self.creative_upload_params + self.creative_native_params)
                                         if k in creative}
                 ad_group_setup_block.add_creative(**creative_upload_dict)
-                creative_qa_dict = {k: creative[k] for k in
-                                    (self.creative_qa_params + self.creative_native_params)
-                                    if k in creative}
-                qa_block.add_creative(**creative_qa_dict)
             ad_group_setup_block.add_ad_group(**ad_group)
             ad_group_setup_blocks.append(ad_group_setup_block)
             ad_group.update({
@@ -274,10 +270,6 @@ class DisplayProjectBuilder(object):
                 'daily_target_in_advertiser_currency': self._daily_target_in_advertiser_currency,
                 'daily_target_in_impressions': self._daily_target_in_impressions,
             })
-            qa_block.add_ad_group(**ad_group)
-            qa_blocks.append(qa_block)
-
-        launch_block = WFDisplayLaunchBlock()   # Manual
 
         project_blocks = [
             # order_review_block,
@@ -285,8 +277,6 @@ class DisplayProjectBuilder(object):
             campaign_block,
         ]
         project_blocks.extend(ad_group_setup_blocks)
-        project_blocks.extend(qa_blocks)
-        project_blocks.append(launch_block)
         [project.append(block) for block in project_blocks]
         parser = WFBlockParser(self.wf)
         wf_project = parser.create(project)

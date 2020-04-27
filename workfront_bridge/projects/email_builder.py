@@ -5,7 +5,7 @@ from workfront_bridge.blocks.base import WFBlockParser
 from workfront_bridge.exceptions import WFBrigeException
 from workfront_bridge.projects.email import WFProjectEmailContainer
 from workfront_bridge.blocks.email import WFEmailAudienceLiveSetupBlock, \
-    WFEmailReviewDeploymentBlock, WFEmailApproveCWTaggingBlock
+    WFEmailReviewDeploymentBlock, WFEmailApproveCWTaggingBlock, WFEmailPushToDWHAndEL
 from workfront_bridge.blocks.email import WFEmailLiveSeedBlock
 from workfront_bridge.blocks.email import WFEmailLiveSeedValidateBlock, \
     WFEmailLiveSeedSendBlock
@@ -46,9 +46,9 @@ class EmailProjectBuilder(object):
         self.test_sl_send_emails = True
         self.review_deployment = True
         self.email_creative_id = None
-        self.ttd_advertiser_id = None 
-        self.ttd_bonus_media_advertiser_id = None 
-        self.lr_account_id = None 
+        self.ttd_advertiser_id = None
+        self.ttd_bonus_media_advertiser_id = None
+        self.lr_account_id = None
         self.lr_bonus_media_account_id = None
 
         self.audience_provider = ProviderConfig()
@@ -58,6 +58,16 @@ class EmailProjectBuilder(object):
         self.is_created_from_onboarding = False
         self.ecm_html = None
         self.add_tags_weight_approval_step = False
+        self.deployment_time = None
+        self.project_id = None
+
+    def set_project_id(self, project_id):
+        self.project_id = project_id
+        return self
+
+    def set_provider(self, provider):
+        self.provider = provider
+        return self
 
     def set_html(self, s3_path):
         self.html = s3_path
@@ -133,7 +143,7 @@ class EmailProjectBuilder(object):
     def set_ttd_bonus_media_advertiser_id(self, id):
         self.ttd_bonus_media_advertiser_id = id
         return self
-    
+
     def set_lr_account_id(self, id):
         self.lr_account_id = id
         return self
@@ -232,12 +242,13 @@ class EmailProjectBuilder(object):
         project.email_creative_id = self.email_creative_id
         project.from_line = self.audience_provider.sender_name
         project.subject_test_prefix = self.subject_test_prefix
+        project.deployment_time = self._normalize_datetime(self.deployment_time)
+        project.project_id = self.project_id
 
         project.ttd_advertiser_id = self.ttd_advertiser_id
         project.ttd_bonus_media_advertiser_id = self.ttd_bonus_media_advertiser_id
         project.lr_account_id = self.lr_account_id
         project.lr_bonus_media_account_id = self.lr_bonus_media_account_id
-        
 
         if self.is_created_from_onboarding:
             project.ecm_html = self.ecm_html
@@ -252,24 +263,30 @@ class EmailProjectBuilder(object):
                 project.html_s3_path = self.html
             project.append(zipb)
 
-            bval_html = WFEmailValidateHtmlBlock()
-            bval_html.email_subject = self.subject
-            project.append(bval_html)
+        bval_html = WFEmailValidateHtmlBlock()
+        bval_html.email_subject = self.subject
+        project.append(bval_html)
 
-        if self.live_seed_list is not None:
-            email_seed_block = self._crt_live_list_block(self.live_seed_list)
-            project.append(email_seed_block)
+        if not self.provider or self.provider.lower() != 'ongage':
+            if self.live_seed_list is not None:
+                email_seed_block = self._crt_live_list_block(self.live_seed_list)
+                project.append(email_seed_block)
 
-        audb = self._crt_audience_block()
-        project.append(audb)
+            audb = self._crt_audience_block()
+            project.append(audb)
 
-        if not self.is_created_from_onboarding and self.add_tags_weight_approval_step:
-            block_approve_cw_tags = WFEmailApproveCWTaggingBlock()
-            project.append(block_approve_cw_tags)
+            if not self.is_created_from_onboarding and self.add_tags_weight_approval_step:
+                block_approve_cw_tags = WFEmailApproveCWTaggingBlock()
+                project.append(block_approve_cw_tags)
 
-        if self.review_deployment:
-            reviewb = WFEmailReviewDeploymentBlock()
-            project.append(reviewb)
+            if self.review_deployment:
+                reviewb = WFEmailReviewDeploymentBlock()
+                project.append(reviewb)
+        else:
+            if self.live_seed_list is not None:
+                project.live_seed_list = self.live_seed_list
+            push_dwh_el = WFEmailPushToDWHAndEL()
+            project.append(push_dwh_el)
 
         parser = WFBlockParser(self.wf)
         wf_project = parser.create(project)

@@ -18,7 +18,7 @@ class WFProjectEmailContainer(WFBlock):
             ('email_creative_id', 'email_creative_id', True),
             ('tags', 'tags', False),
             ('input_html_s3_path', 'html_s3_path', False),
-            ('ecm_from_line', 'from_line', False, lambda x: str(x.encode('utf-8'))),
+            ('ecm_from_line', 'from_line', True, lambda x: str(x.encode('utf-8'))),
             ('Suppression File Path', 'suppression_file_path', False),
             ('Category', 'category', False),
             ('ecm_live_seed_list', 'live_seed_list', False),
@@ -27,6 +27,8 @@ class WFProjectEmailContainer(WFBlock):
             ('ttd_bonus_media_advertiser_id', 'ttd_bonus_media_advertiser_id', False),
             ('lr_account_id', 'lr_account_id', False),
             ('lr_bonus_media_account_id', 'lr_bonus_media_account_id', False),
+            ('deployment_time', 'deployment_time', False),
+            ('project_id', 'project_id', False),
         ],
     }
 

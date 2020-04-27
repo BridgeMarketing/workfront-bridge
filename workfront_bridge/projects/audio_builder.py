@@ -1,11 +1,9 @@
 from workfront_bridge.blocks.audio.campaign import WFAudioCampaignBlock
 from workfront_bridge.blocks.audio.ad_group_create import WFAudioCreateAdGroupBlock
 from workfront_bridge.blocks.audio.ad_group_creative_upload import WFAudioCreativeUploadBlock
-from workfront_bridge.blocks.audio.qa_creative import WFAudioCreativeQABlock
 from workfront_bridge.blocks.display.data import WFDisplayDataBlock
 from workfront_bridge.blocks.display.launch import WFDisplayLaunchBlock
 from workfront_bridge.blocks.display.ad_group_setup import WFDisplayAdGroupSetupBlock
-from workfront_bridge.blocks.display.qa import WFDisplayQABlock
 from workfront_bridge.projects.audio import WFProjectAudioContainer
 from workfront_bridge.exceptions import WFBrigeException
 from workfront_bridge.blocks.base import WFBlockParser
@@ -164,24 +162,17 @@ class AudioProjectBuilder(object):
 
     def build_ad_groups(self,
                         create_ad_group_class=WFAudioCreateAdGroupBlock,
-                        creative_upload_class=WFAudioCreativeUploadBlock,
-                        creative_qa_class=WFAudioCreativeQABlock):
+                        creative_upload_class=WFAudioCreativeUploadBlock):
         ad_group_setup_blocks = []
-        qa_blocks = []
 
         for ad_group in self.ad_groups:
             ad_group_setup_block = WFDisplayAdGroupSetupBlock()
-            qa_block = WFDisplayQABlock()
 
             for creative in ad_group['creatives']:
                 creative_upload_dict = {k: creative[k]
                                         for k in self.creative_upload_params
                                         if k in creative}
                 ad_group_setup_block.add_creative(block_class=creative_upload_class, **creative_upload_dict)
-                creative_qa_dict = {k: creative[k]
-                                    for k in self.creative_qa_params
-                                    if k in creative}
-                qa_block.add_creative(block_class=creative_qa_class, **creative_qa_dict)
 
             ad_group_setup_block.add_ad_group(block_class=create_ad_group_class, **ad_group)
             ad_group_setup_blocks.append(ad_group_setup_block)
@@ -205,10 +196,7 @@ class AudioProjectBuilder(object):
                 'daily_target_in_impressions': self._daily_target_in_impressions,
             })
 
-            qa_block.add_ad_group(**ad_group)
-            qa_blocks.append(qa_block)
-
-        return ad_group_setup_blocks, qa_blocks
+        return ad_group_setup_blocks
 
     def build(self):
         """
@@ -220,17 +208,13 @@ class AudioProjectBuilder(object):
         project = self.build_project()
         data_block = self.build_data_block()
         campaign_block = self.build_campaign_block()
-        ad_group_setup_blocks, qa_blocks = self.build_ad_groups()
-
-        launch_block = WFDisplayLaunchBlock()
+        ad_group_setup_blocks = self.build_ad_groups()
 
         project_blocks = [
             data_block,
             campaign_block,
         ]
         project_blocks.extend(ad_group_setup_blocks)
-        project_blocks.extend(qa_blocks)
-        project_blocks.append(launch_block)
         [project.append(block) for block in project_blocks]
 
         parser = WFBlockParser(self.wf)

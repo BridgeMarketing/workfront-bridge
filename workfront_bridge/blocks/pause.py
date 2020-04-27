@@ -18,18 +18,19 @@ class WFPauseEmailDeployBlock(WFBlock):
     }
 
 
-class WFPauseDisplayDeployBlock(WFBlock):
+class WFPauseMediaCampaignDeployBlock(WFBlock):
     '''
-    @summary: Use this block to pause the deploy to an ttd of an display project.
-    This block contains a single automatic task called "Pause Display Deploy"
-    that will be executed in the Campaign Manager and will make the deploy of
-    the display pause(if needed).
+    @summary: Use this block to pause the deploy to an ttd of an
+    Audio/Video/Display project.
+    This block contains a single automatic task called
+    "Pause Media Campaign Deploy" that will be executed in the Campaign Manager
+    and will make the deploy of the project paused.
     '''
 
-    template_name = 'Block - Pause Display Deploy'
+    template_name = 'Block - Pause Media Campaign Deploy'
 
     block_params = {
-        'Pause Display Deploy': [
+        'Pause Media Campaign Deploy': [
             ('data_v1', 'data', True),
         ],
     }
