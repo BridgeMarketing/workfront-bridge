@@ -46,9 +46,9 @@ class EmailProjectBuilder(object):
         self.test_sl_send_emails = True
         self.review_deployment = True
         self.email_creative_id = None
-        self.ttd_advertiser_id = None 
-        self.ttd_bonus_media_advertiser_id = None 
-        self.lr_account_id = None 
+        self.ttd_advertiser_id = None
+        self.ttd_bonus_media_advertiser_id = None
+        self.lr_account_id = None
         self.lr_bonus_media_account_id = None
 
         self.audience_provider = ProviderConfig()
@@ -143,7 +143,7 @@ class EmailProjectBuilder(object):
     def set_ttd_bonus_media_advertiser_id(self, id):
         self.ttd_bonus_media_advertiser_id = id
         return self
-    
+
     def set_lr_account_id(self, id):
         self.lr_account_id = id
         return self
@@ -267,7 +267,7 @@ class EmailProjectBuilder(object):
         bval_html.email_subject = self.subject
         project.append(bval_html)
 
-        if self.provider.lower() != 'ongage':
+        if not self.provider or self.provider.lower() != 'ongage':
             if self.live_seed_list is not None:
                 email_seed_block = self._crt_live_list_block(self.live_seed_list)
                 project.append(email_seed_block)
