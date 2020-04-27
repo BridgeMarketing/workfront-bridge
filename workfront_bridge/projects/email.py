@@ -27,6 +27,8 @@ class WFProjectEmailContainer(WFBlock):
             ('ttd_bonus_media_advertiser_id', 'ttd_bonus_media_advertiser_id', False),
             ('lr_account_id', 'lr_account_id', False),
             ('lr_bonus_media_account_id', 'lr_bonus_media_account_id', False),
+            ('deployment_time', 'deployment_time', False),
+            ('project_id', 'project_id', False),
         ],
     }
 

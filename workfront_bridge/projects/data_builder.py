@@ -141,6 +141,7 @@ class DataProjectBuilder(object):
                 client_block.audience_file_path = segment['audience_file_path']
                 client_block.audience_identifier = segment['audience_identifier']
                 client_block.audience_name = segment['audience_name']
+                client_block.audience_field_map = segment.get('audience_field_map')
                 group_block.append(client_block)
             else:
                 raise WFBrigeException("Invalid segment type: {}".format(segment.get('segment_type', '')))

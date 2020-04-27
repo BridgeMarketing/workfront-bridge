@@ -192,3 +192,12 @@ class WFEmailApproveCWTaggingBlock(WFBlock):
     '''
 
     template_name = 'Block - Email - Approve CW Tagging'
+
+
+class WFEmailPushToDWHAndEL(WFBlock):
+    '''
+    @summary: Use this block to validate an html with the CCM.
+    This block will add validate html and creative approval task.
+    '''
+
+    template_name = 'Block - Email Push to DWH and EL'
