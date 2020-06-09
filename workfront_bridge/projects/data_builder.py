@@ -7,6 +7,7 @@ from workfront_bridge.blocks.data.suppression import WFSuppressionBlock
 from workfront_bridge.blocks.data.audience import WFAudienceBlock, WFBridgeAudienceBlock, WFClientAudienceBlock
 from workfront_bridge.blocks.data.hygiene import HygieneDataBlock
 from workfront_bridge.blocks.data.merge import MergeDataBlock
+from workfront_bridge.blocks.data.replace_report import WFReplaceReportBlock
 
 
 class DataProjectBuilder(object):
@@ -39,6 +40,8 @@ class DataProjectBuilder(object):
 
         self.suppression_type = None
         self.suppression_files = []
+
+        self.replace_report = False
 
     def add_audience_segment(self, **kwargs):
         self.segments.append(kwargs)
@@ -90,6 +93,10 @@ class DataProjectBuilder(object):
 
     def set_suppression_task_ids(self, suppression_task_ids):
         self.suppression_task_ids = suppression_task_ids
+        return self
+
+    def set_replace_report(self, replace_report):
+        self.replace_report = replace_report
         return self
 
     def _check_viability(self):
@@ -175,6 +182,11 @@ class DataProjectBuilder(object):
         # Review
         rev_block = WFReviewDataBlock()
         project.append(rev_block)
+
+        # Replace report
+        if self.replace_report:
+            rr_block = WFReplaceReportBlock()
+            project.append(rr_block)
 
         parser = WFBlockParser(self.wf)
         wf_project = parser.create(project)
