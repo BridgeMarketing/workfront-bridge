@@ -1,13 +1,19 @@
 from workfront_bridge.blocks.base import WFBlockParser
 from workfront_bridge.exceptions import WFBrigeException
 from workfront_bridge.projects.data import WFProjectDataContainer
-from workfront_bridge.blocks.data.review_data import WFReviewDataBlock
+from workfront_bridge.blocks.data.review_data import (
+    WFReviewDataBlock,
+    WFReviewUpdatedDataBlock,
+)
 from workfront_bridge.blocks.data.suppression import WFSuppressionGroupBlock
 from workfront_bridge.blocks.data.suppression import WFSuppressionBlock
-from workfront_bridge.blocks.data.audience import WFAudienceBlock, WFBridgeAudienceBlock, WFClientAudienceBlock
+from workfront_bridge.blocks.data.audience import (
+    WFAudienceBlock,
+    WFBridgeAudienceBlock,
+    WFClientAudienceBlock,
+)
 from workfront_bridge.blocks.data.hygiene import HygieneDataBlock
 from workfront_bridge.blocks.data.merge import MergeDataBlock
-from workfront_bridge.blocks.data.replace_report import WFReplaceReportBlock
 
 
 class DataProjectBuilder(object):
@@ -37,11 +43,10 @@ class DataProjectBuilder(object):
 
         # Blocks
         self.segments = []
-
         self.suppression_type = None
         self.suppression_files = []
 
-        self.replace_report = False
+        self.is_audience_updated = False
 
     def add_audience_segment(self, **kwargs):
         self.segments.append(kwargs)
@@ -95,8 +100,8 @@ class DataProjectBuilder(object):
         self.suppression_task_ids = suppression_task_ids
         return self
 
-    def set_replace_report(self, replace_report):
-        self.replace_report = replace_report
+    def set_is_audience_updated(self, is_audience_updated):
+        self.is_audience_updated = is_audience_updated
         return self
 
     def _check_viability(self):
@@ -180,13 +185,9 @@ class DataProjectBuilder(object):
                 sup_group.append(sup)
 
         # Review
-        rev_block = WFReviewDataBlock()
+        rev_block = WFReviewUpdatedDataBlock() if self.is_audience_updated \
+            else WFReviewDataBlock()
         project.append(rev_block)
-
-        # Replace report
-        if self.replace_report:
-            rr_block = WFReplaceReportBlock()
-            project.append(rr_block)
 
         parser = WFBlockParser(self.wf)
         wf_project = parser.create(project)

@@ -7,3 +7,13 @@ class WFReviewDataBlock(WFBlock):
     """
 
     template_name = 'Block - Data - Review Data V2'
+
+
+class WFReviewUpdatedDataBlock(WFBlock):
+    """
+    @summary: Use this block to add the following tasks to a data project:
+        * Review Data
+        * ReplaceReports in DWH
+    """
+
+    template_name = 'Block - Data - Review Updated Data'
