@@ -7,7 +7,7 @@ from workfront_bridge.blocks.base import WFBlockParser
 from workfront_bridge.exceptions import WFBrigeException
 from workfront_bridge.projects.update import WFProjectUpdateContainer
 
-from workfront_bridge.blocks.update import WFUpdateEmailDeployBlock, WFUpdateDisplayDeployBlock
+from workfront_bridge.blocks.update import WFUpdateEmailDeployBlock, WFUpdateMediaDeployBlock
 from workfront_bridge.tools import datetime_to_wf_format
 from workfront_bridge.util.jsonutil import DateTimeEncoder
 
@@ -24,15 +24,20 @@ class UpdateProjectBuilder(object):
         '''
         self.supported_project_types = {
             "Email": self.__build_update_email_deploy,
-            "Display - Desktop": self.__build_update_display_deploy,
-            "Display - Mobile": self.__build_update_display_deploy,
-            "Display - Desktop & Mobile": self.__build_update_display_deploy,
+            "Display - Desktop": self.__build_update_media_deploy,
+            "Display - Mobile": self.__build_update_media_deploy,
+            "Display - Desktop & Mobile": self.__build_update_media_deploy,
+            "BridgeConnect - Desktop": self.__build_update_media_deploy,
+            "BridgeConnect - Mobile": self.__build_update_media_deploy,
+            "BridgeConnect - Desktop & Mobile": self.__build_update_media_deploy,
+            "Audio": self.__build_update_media_deploy,
+            "Video": self.__build_update_media_deploy,
         }
         self.wf = wf
 
         self.wf_project_id = None
         self.deploy_datetime = None
-        self.project_type = None  # Project type being updateled
+        self.project_type = None  # Project type being updated
         self.start_datetime = None
         self.end_datetime = None
 
@@ -166,19 +171,24 @@ class UpdateProjectBuilder(object):
 
         return wf_project
 
-    def __build_update_display_deploy(self):
+    def __build_update_media_deploy(self):
         """
-        @return: a update wf project to update a display project.
+        @return: wf project to update a media project.
         """
 
         prj_being_updated = WFProject(self.wf, self.wf_project_id)
 
         prj_name = "Update - {}".format(prj_being_updated.name)
         project = WFProjectUpdateContainer(prj_name)
-        update_block = WFUpdateDisplayDeployBlock()
-        update_block.data = json.dumps({"to_update_wf_project_id": self.wf_project_id,
-                                        "start_datetime": self.start_datetime,
-                                        "end_datetime": self.end_datetime}, cls=DateTimeEncoder)
+        update_block = WFUpdateMediaDeployBlock()
+        update_block.data = json.dumps(
+            {
+                "to_update_wf_project_id": self.wf_project_id,
+                "start_datetime": self.start_datetime,
+                "end_datetime": self.end_datetime,
+            },
+            cls=DateTimeEncoder,
+        )
 
         project.append(update_block)
 

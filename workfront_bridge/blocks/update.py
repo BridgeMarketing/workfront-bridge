@@ -20,15 +20,15 @@ class WFUpdateEmailDeployBlock(WFBlock):
     }
 
 
-class WFUpdateDisplayDeployBlock(WFBlock):
+class WFUpdateMediaDeployBlock(WFBlock):
     """
-    @summary: Use this block to update the deploy to a display project.
+    @summary: Use this block to update the deploy of a Media project.
     """
 
-    template_name = 'Block - Update Display Deploy'
+    template_name = 'Block - Update Media Campaign Deploy'
 
     block_params = {
-        'Update Display Deploy': [
+        'Update Media Campaign Deploy': [
             ('data_update', 'data', True),
         ],
     }
