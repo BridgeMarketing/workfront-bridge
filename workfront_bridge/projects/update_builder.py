@@ -177,6 +177,7 @@ class UpdateProjectBuilder(object):
         """
 
         prj_being_updated = WFProject(self.wf, self.wf_project_id)
+        original_tasks = prj_being_updated.get_tasks()
 
         prj_name = "Update - {}".format(prj_being_updated.name)
         project = WFProjectUpdateContainer(prj_name)
@@ -196,15 +197,9 @@ class UpdateProjectBuilder(object):
         wf_project = parser.create(project)
 
         tasks = prj_being_updated.get_tasks()
-        last_adgroup_setup = [t for t in tasks if t.name == "Ad Group Setup"][-1]
-
-        aud_tasks = tasks[tasks.index(last_adgroup_setup):]
-        last_ad_group_task = [t for t in aud_tasks if t.name == "Create Ad Group"][0]
-
-        # Now link the resume task to the push to proivder one
-        resume_task = wf_project.get_tasks()[0]
-        resume_task.add_predecessor(last_ad_group_task)
-
+        last_original_task_idx = len(original_tasks) - 1
+        update_task = wf_project.get_tasks()[0]
+        update_task.add_predecessor(tasks[last_original_task_idx])
         return wf_project
 
     def build(self):

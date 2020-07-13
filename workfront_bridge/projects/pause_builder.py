@@ -125,6 +125,7 @@ class PauseProjectBuilder(object):
         '''
 
         prj_being_paused = WFProject(self.wf, self.wf_project_id)
+        original_tasks = prj_being_paused.get_tasks()
 
         prj_name = "Pause - {}".format(prj_being_paused.name)
         project = WFProjectPauseContainer(prj_name)
@@ -137,15 +138,10 @@ class PauseProjectBuilder(object):
 
         # Set dependencies to Avoid raise conditions
         try:
-            # Get Audience Live Setup Push to Provider Task
             tasks = prj_being_paused.get_tasks()
-            last_adgroup_task = [t for t in tasks if t.name == "Ad Group Setup"][-1]
-            aud_tasks = tasks[tasks.index(last_adgroup_task):]
-            create_adgroup = [t for t in aud_tasks if t.name == "Create Ad Group"][0]
-
-            # Now link the pause task to the push to proivder one
+            last_original_task_idx = len(original_tasks) - 1
             pause_task = wf_project.get_tasks()[0]
-            pause_task.add_predecessor(create_adgroup)
+            pause_task.add_predecessor(tasks[last_original_task_idx])
         except Exception:
             pass
 
