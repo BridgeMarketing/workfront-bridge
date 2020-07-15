@@ -81,7 +81,7 @@ class TTDBuilderMixin(object):
         ad_group_setup_block.update_ad_group()
 
         parser = WFBlockParser(self.wf)
-        wf_project = parser.attach_to_project(wf_project, ad_group_setup_block)
+        parser.attach_to_project(wf_project, ad_group_setup_block)
         return wf_project
 
     def ad_groups_build_and_attach(self, wf_project):
