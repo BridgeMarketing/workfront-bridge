@@ -3,13 +3,13 @@ from workfront_bridge.blocks.audio.ad_group_create import WFAudioCreateAdGroupBl
 from workfront_bridge.blocks.audio.ad_group_creative_upload import WFAudioCreativeUploadBlock
 from workfront_bridge.blocks.display.data import WFDisplayDataBlock
 from workfront_bridge.blocks.display.launch import WFDisplayLaunchBlock
-from workfront_bridge.blocks.display.ad_group_setup import WFDisplayAdGroupSetupBlock
 from workfront_bridge.projects.audio import WFProjectAudioContainer
+from workfront_bridge.projects.ttd import TTDBuilderMixin
 from workfront_bridge.exceptions import WFBrigeException
 from workfront_bridge.blocks.base import WFBlockParser
 
 
-class AudioProjectBuilder(object):
+class AudioProjectBuilder(TTDBuilderMixin):
     """
     @summary: Audio project builder
     """
@@ -97,6 +97,9 @@ class AudioProjectBuilder(object):
         self._daily_target_in_advertiser_currency = None
         self._daily_target_in_impressions = None
 
+        self.create_ad_group_class = WFAudioCreateAdGroupBlock
+        self.creative_upload_class = WFAudioCreativeUploadBlock
+
     def add_ad_group(self, **kwargs):
         allowed_kwargs = self.ad_group_params
         creative_kwargs = set(self.creative_upload_params + self.creative_qa_params)
@@ -160,44 +163,6 @@ class AudioProjectBuilder(object):
         campaign_block.daily_target_in_impressions = self._daily_target_in_impressions
         return campaign_block
 
-    def build_ad_groups(self,
-                        create_ad_group_class=WFAudioCreateAdGroupBlock,
-                        creative_upload_class=WFAudioCreativeUploadBlock):
-        ad_group_setup_blocks = []
-
-        for ad_group in self.ad_groups:
-            ad_group_setup_block = WFDisplayAdGroupSetupBlock()
-
-            for creative in ad_group['creatives']:
-                creative_upload_dict = {k: creative[k]
-                                        for k in self.creative_upload_params
-                                        if k in creative}
-                ad_group_setup_block.add_creative(block_class=creative_upload_class, **creative_upload_dict)
-
-            ad_group_setup_block.add_ad_group(block_class=create_ad_group_class, **ad_group)
-            ad_group_setup_blocks.append(ad_group_setup_block)
-            ad_group.update({
-                'start_date_inclusive_utc': self._start_date_inclusive_utc,
-                'end_date_exclusive_utc': self._end_date_exclusive_utc,
-                'campaign_name': self._campaign_name,
-                'campaign_overview': self._campaign_overview,
-                'partner_cost_percentage_fee': self._partner_cost_percentage_fee,
-                'availability': self._availability,
-                'auto_allocator': self._auto_allocator,
-                'ctv_targeting_and_attribution': self._ctv_targeting_and_attribution,
-                'pacing_mode': self._pacing_mode,
-                'partner_cpm_fee_amount': self._partner_cpm_fee_amount,
-                'partner_cpm_fee_currency': self._partner_cpm_fee_currency,
-                'partner_cpc_fee_amount': self._partner_cpc_fee_amount,
-                'partner_cpc_fee_currency': self._partner_cpc_fee_currency,
-                'max_bid_amount': self._max_bid_amount,
-                'budget_in_impressions_pre_calc': self._budget_in_impressions_pre_calc,
-                'daily_target_in_advertiser_currency': self._daily_target_in_advertiser_currency,
-                'daily_target_in_impressions': self._daily_target_in_impressions,
-            })
-
-        return ad_group_setup_blocks
-
     def build(self):
         """
         @summary: build the Workfront project.
@@ -208,7 +173,10 @@ class AudioProjectBuilder(object):
         project = self.build_project()
         data_block = self.build_data_block()
         campaign_block = self.build_campaign_block()
-        ad_group_setup_blocks = self.build_ad_groups()
+        ad_group_setup_blocks = self.build_ad_groups(
+            create_ad_group_class=self.create_ad_group_class,
+            creative_upload_class=self.creative_upload_class,
+        )
 
         project_blocks = [
             data_block,

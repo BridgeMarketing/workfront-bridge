@@ -8,6 +8,11 @@ from workfront_bridge.projects.audio_builder import AudioProjectBuilder
 
 
 class VideoProjectBuilder(AudioProjectBuilder):
+    def __init__(self):
+        super(VideoProjectBuilder, self).__init__()
+        self.create_ad_group_class = WFVideoCreateAdGroupBlock
+        self.creative_upload_class = WFVideoCreativeUploadBlock
+
     """
     @summary: Video project builder
     """
@@ -22,8 +27,8 @@ class VideoProjectBuilder(AudioProjectBuilder):
         data_block = self.build_data_block()
         campaign_block = self.build_campaign_block(WFVideoCampaignBlock)
         ad_group_setup_blocks = self.build_ad_groups(
-            WFVideoCreateAdGroupBlock,
-            WFVideoCreativeUploadBlock
+            create_ad_group_class=self.create_ad_group_class,
+            creative_upload_class=self.creative_upload_class,
         )
 
         project_blocks = [
