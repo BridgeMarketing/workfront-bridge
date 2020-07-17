@@ -8,8 +8,8 @@ from workfront_bridge.projects.audio_builder import AudioProjectBuilder
 
 
 class VideoProjectBuilder(AudioProjectBuilder):
-    def __init__(self):
-        super(VideoProjectBuilder, self).__init__()
+    def __init__(self, wf, project_name):
+        super(VideoProjectBuilder, self).__init__(wf, project_name)
         self.create_ad_group_class = WFVideoCreateAdGroupBlock
         self.creative_upload_class = WFVideoCreativeUploadBlock
 
