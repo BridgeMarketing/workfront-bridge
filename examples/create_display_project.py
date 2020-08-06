@@ -40,6 +40,7 @@ b.add_ad_group(
 )
 b.add_ad_group(
     ad_group_name='Test AdGroup 2',
+    adg_kpi_goal='seeAds',
     creatives=[
         {
             'creative_type': 'Image Banner or Interstitial',
