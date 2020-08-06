@@ -21,7 +21,7 @@ class DataProjectBuilder(object):
     @summary: Project builder for M&E and B2C projects.
     """
 
-    SUPPRESSION_TYPES = set(["one_per_person", "one_per_household"])
+    SUPPRESSION_TYPES = set(["one_per_person", "one_per_household", "one_per_row"])
     IDENTIFIER_FIELDS = set(["bridge_id", "email", "maid", "md5", "postal"])
     SUPPRESSION_FILE_TYPES = IDENTIFIER_FIELDS
     AUDIENCE_FILE_IDENTIFIERS = IDENTIFIER_FIELDS
@@ -171,18 +171,19 @@ class DataProjectBuilder(object):
         # Suppressions
         if self.suppression_type is not None or len(self.suppression_files) > 0:
             sup_group = WFSuppressionGroupBlock()
-            project.append(sup_group)
-
-            if self.suppression_type is not None:
-                sup = WFSuppressionBlock()
-                sup.suppression_type = self.suppression_type
-                sup_group.append(sup)
 
             for file_data in self.suppression_files:
                 sup = WFSuppressionBlock()
                 sup.suppression_file_path = file_data["file_path"]
                 sup.suppression_file_type = file_data["suppression_file_type"]
                 sup_group.append(sup)
+
+            if self.suppression_type is not None:
+                sup = WFSuppressionBlock()
+                sup.suppression_type = self.suppression_type
+                sup_group.append(sup)
+
+            project.append(sup_group)
 
         # Review
         rev_block = WFReviewUpdatedDataBlock() if self.is_audience_updated \
