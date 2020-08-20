@@ -45,3 +45,17 @@ class WFClientAudienceBlock(WFBlock):
             ('Audience Field Map', 'audience_field_map', False),
         ],
     }
+
+
+class WFRetrieveRetargetingAudience(WFBlock):
+    """
+    @summary: Use this block to retrieve retargeting audience.
+    """
+    template_name = 'Block - Data - Retrieve Retargeting Audience'
+    block_params = {
+        'Retrieve Retargeting Audience': [
+            ('Provider Campaign Id', 'provider_campaign_id', True),
+            ('Provider Name', 'provider_name', False),
+            ('Retargeting Type', 'retargeting_type', False),
+        ],
+    }
