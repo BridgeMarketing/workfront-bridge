@@ -4,7 +4,7 @@ from workfront_bridge.projects import data_builder
 
 def simple_retargeting_project(wf):
     b = data_builder.DataProjectBuilder(wf, "Test Retargeting Data project builder")
-    b.set_retargeting_data(retargeting_type="Openers", provider_name="ongage", provider_campaign_id="hj12f3")
+    b.set_retargeting_data(retargeting_type="Openers", parent_wf_project_id="test_id")
     prj = b.build()
     return prj
 

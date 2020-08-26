@@ -10,7 +10,7 @@ from workfront_bridge.blocks.data.suppression import WFSuppressionBlock
 from workfront_bridge.blocks.data.audience import (
     WFAudienceBlock,
     WFBridgeAudienceBlock,
-    WFClientAudienceBlock, WFRetrieveRetargetingAudience,
+    WFClientAudienceBlock, WFRetrieveRetargetingAudience, WFRetrieveProviderParamsFromDWH,
 )
 from workfront_bridge.blocks.data.hygiene import HygieneDataBlock
 from workfront_bridge.blocks.data.merge import MergeDataBlock
@@ -48,9 +48,8 @@ class DataProjectBuilder(object):
 
         self.is_audience_updated = False
 
+        self.parent_wf_project_id = None
         self.retargeting_type = None
-        self.provider_campaign_id = None
-        self.provider_name = None
 
     def add_audience_segment(self, **kwargs):
         self.segments.append(kwargs)
@@ -109,9 +108,8 @@ class DataProjectBuilder(object):
         return self
 
     def set_retargeting_data(self, **kwargs):
+        self.parent_wf_project_id = kwargs.get("parent_wf_project_id")
         self.retargeting_type = kwargs.get("retargeting_type")
-        self.provider_campaign_id = kwargs.get("provider_campaign_id")
-        self.provider_name = kwargs.get("provider_name")
 
     def _check_viability(self):
         def raise_missing(field_name):
@@ -195,10 +193,11 @@ class DataProjectBuilder(object):
                 project.append(sup_group)
         else:
             project.set_data()
+            provider_dwh_block = WFRetrieveProviderParamsFromDWH()
+            provider_dwh_block.parent_wf_project_id = self.parent_wf_project_id
+            project.append(provider_dwh_block)
             retargeting_block = WFRetrieveRetargetingAudience()
             retargeting_block.retargeting_type = self.retargeting_type
-            retargeting_block.provider_campaign_id = self.provider_campaign_id
-            retargeting_block.provider_name = self.provider_name
             project.append(retargeting_block)
 
         # Review
