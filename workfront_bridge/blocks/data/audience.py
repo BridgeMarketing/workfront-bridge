@@ -6,7 +6,7 @@ class WFAudienceBlock(WFBlock):
     @summary: Use this block to group count id blocks in a data project.
     """
 
-    template_name = 'Block - Data - Audience'
+    template_name = "Block - Data - Audience"
 
 
 class WFBridgeAudienceBlock(WFBlock):
@@ -17,12 +17,12 @@ class WFBridgeAudienceBlock(WFBlock):
     - file : use suppression file path and suppression file type
     """
 
-    template_name = 'Block - Data - Bridge Audience Segment'
+    template_name = "Block - Data - Bridge Audience Segment"
 
     block_params = {
-        'Bridge Audience Segment': [
-            ('Count Id', 'count_id', True),
-            ('Count Type', 'count_type', False),
+        "Bridge Audience Segment": [
+            ("Count Id", "count_id", True),
+            ("Count Type", "count_type", False),
         ],
     }
 
@@ -35,14 +35,14 @@ class WFClientAudienceBlock(WFBlock):
     - file : use suppression file path and suppression file type
     """
 
-    template_name = 'Block - Data - Client Audience Segment'
+    template_name = "Block - Data - Client Audience Segment"
 
     block_params = {
-        'Client Audience Segment': [
-            ('Audience Name', 'audience_name', True),
-            ('Audience File Path', 'audience_file_path', True),
-            ('Audience Field Identifier', 'audience_identifier', False),
-            ('Audience Field Map', 'audience_field_map', False),
+        "Client Audience Segment": [
+            ("Audience Name", "audience_name", True),
+            ("Audience File Path", "audience_file_path", True),
+            ("Audience Field Identifier", "audience_identifier", False),
+            ("Audience Field Map", "audience_field_map", False),
         ],
     }
 
@@ -51,10 +51,11 @@ class WFRetrieveProviderParamsFromDWH(WFBlock):
     """
     @summary: Use this block to retrieve retargeting audience.
     """
-    template_name = 'Block - Data - Retrieve Provider Params From DWH'
+
+    template_name = "Block - Data - Retrieve Provider Params From DWH"
     block_params = {
-        'Retrieve Provider Params From DWH': [
-            ('Parent WF Project ID', 'parent_wf_project_id', True),
+        "Retrieve Provider Params From DWH": [
+            ("Parent WF Project ID", "parent_wf_project_id", True),
         ],
     }
 
@@ -63,9 +64,10 @@ class WFRetrieveRetargetingAudience(WFBlock):
     """
     @summary: Use this block to retrieve retargeting audience.
     """
-    template_name = 'Block - Data - Retrieve Retargeting Audience'
+
+    template_name = "Block - Data - Retrieve Retargeting Audience"
     block_params = {
-        'Retrieve Retargeting Audience': [
-            ('Retargeting Type', 'retargeting_type', False),
+        "Retrieve Retargeting Audience": [
+            ("Retargeting Type", "retargeting_type", False),
         ],
     }

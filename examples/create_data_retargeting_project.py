@@ -9,7 +9,10 @@ def simple_retargeting_project(wf):
     return prj
 
 
-wf = Workfront("notifications@wf.bridgemarketing.com", 'beef6060',
-               'thebridgecorp.sb01.workfront.com')
+wf = Workfront(
+    "notifications@wf.bridgemarketing.com",
+    "beef6060",
+    "thebridgecorp.sb01.workfront.com",
+)
 
 print(simple_retargeting_project(wf))
