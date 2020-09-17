@@ -1,23 +1,23 @@
 from workfront.objects.project import WFProject
 
 from workfront_bridge.blocks.base import WFBlockParser
-from workfront_bridge.blocks.resume import WFResumeEmailDeployBlock
-from workfront_bridge.blocks.resume import WFResumeMediaCampaignDeployBlock
+from workfront_bridge.blocks.resume import (WFResumeEmailDeployBlock,
+                                            WFResumeMediaCampaignDeployBlock)
 from workfront_bridge.exceptions import WFBrigeException
 from workfront_bridge.projects.resume import WFProjectResumeContainer
 from workfront_bridge.tools import datetime_to_wf_format
 
 
 class ResumeProjectBuilder(object):
-    '''
+    """
     @summary: Resume project builder to easily construct Resume workfront
     projects to Resume other workfront projects.
-    '''
+    """
 
     def __init__(self, wf):
-        '''
+        """
         @param wf: Workfront service object
-        '''
+        """
         self.supported_project_types = {
             "Email": self.__build_resume_email_deploy,
             "Display - Mobile": self.__build_resume_media_deploy,
@@ -37,38 +37,39 @@ class ResumeProjectBuilder(object):
         self.end_datetime = None
 
     def get_supported_project_types(self):
-        '''
+        """
         @return: A list of Project Types that can be resumed using this
         builder.
-        '''
+        """
         return self.supported_project_types.keys()
 
     def set_project_to_resume(self, wf_project_id):
-        '''
+        """
         @param wf_project_id: id of the wf project to resume
-        '''
+        """
         self.wf_project_id = wf_project_id
         return self
 
     def set_datetime_to_update(self, dt):
-        '''
+        """
         @param dt: deploy datetime to update
-        '''
+        """
         self.deploy_datetime = dt
         return self
-    
+
     def set_end_datetime(self, dt):
-        '''
+        """
         @param dt: end datetime to update
-        '''
+        """
         self.end_datetime = dt
         return self
 
     def _check_viability(self):
-        '''
+        """
         @summary: Check if all the requirement parameters of the builder are
         set in order to build a resume project.
-        '''
+        """
+
         def check_not_none(name, value):
             if value is None:
                 raise WFBrigeException("{} is required".format(name))
@@ -78,26 +79,33 @@ class ResumeProjectBuilder(object):
         check_not_none("project_type", self.project_type)
 
     def __fullfill_project_type(self):
-        '''
+        """
         @summary: Fullfill self.project_type based on the project that will be
         resume (self.wf_project_id)
         @raise WFBridgeException: if the project has an unsupported project
         type to resume.
-        '''
+        """
         prj = WFProject(self.wf, self.wf_project_id)
         params = prj.get_param_values()
         if "Project Type" not in params:
-            WFBrigeException("Unknown Project Type - {} is missing Project "
-                             "Type custom form field".format(prj))
+            WFBrigeException(
+                "Unknown Project Type - {} is missing Project "
+                "Type custom form field".format(prj)
+            )
         if params["Project Type"] not in self.supported_project_types:
-            WFBrigeException("Project Type {} not supported for resuming "
-                             "project {}".format(prj))
+            WFBrigeException(
+                "Project Type {} not supported for resuming " "project {}".format(prj)
+            )
         self.project_type = params["Project Type"]
 
     def __build_resume_email_deploy(self):
-        '''
+        """
         @return: a resume wf project to resume an email project.
-        '''
+        """
+
+        def first(_list):
+            return _list[0] if _list else None
+
         prj_being_resumed = WFProject(self.wf, self.wf_project_id)
 
         program = prj_being_resumed.get_program()
@@ -114,26 +122,46 @@ class ResumeProjectBuilder(object):
 
         # Get Audience Live Setup Push to Provider Task
         tasks = prj_being_resumed.get_tasks()
-        aud_tsk = [t for t in tasks if t.name == "Audience Live Setup"][0]
+        aud_tsk = first([t for t in tasks if t.name == "Audience Live Setup"])
 
-        aud_tasks = tasks[tasks.index(aud_tsk):]
-        ptp_task = [t for t in aud_tasks if t.name == "Push to provider"][0]
+        if aud_tsk:
+            aud_tasks = tasks[tasks.index(aud_tsk) :]
+            ptp_task = first([t for t in aud_tasks if t.name == "Push to provider"])
 
-        # Now link the resume task to the push to proivder one
-        resume_task = wf_project.get_tasks()[0]
-        resume_task.add_predecessor(ptp_task)
+            # Now link the resume task to the push to proivder one
+            resume_task = first(wf_project.get_tasks())
+            if resume_task and ptp_task:
+                resume_task.add_predecessor(ptp_task)
 
-        # Update "Deployment Date/Time" parameter with the new deploy_datetime
-        create_flight_task = [t for t in aud_tasks if t.name == "Create Flight"][0]
-        create_flight_task.set_param_values({"Deployment Date/Time": datetime_to_wf_format(self.deploy_datetime)})
+            # Update "Deployment Date/Time" parameter with the new deploy_datetime
+            create_flight_task = first(
+                [t for t in aud_tasks if t.name == "Create Flight"]
+            )
+            if create_flight_task:
+                create_flight_task.set_param_values(
+                    {
+                        "Deployment Date/Time": datetime_to_wf_format(
+                            self.deploy_datetime
+                        )
+                    }
+                )
 
         # Update Live Setup "Deployment Date/Time" parameter with the new deploy_datetime
-        live_setup_task = [t for t in tasks if t.name == "Live Setup"][0]
-        live_setup_task_tasks = tasks[tasks.index(live_setup_task):]
+        live_setup_task = first([t for t in tasks if t.name == "Live Setup"])
+        if live_setup_task:
+            live_setup_task_tasks = tasks[tasks.index(live_setup_task) :]
 
-        live_setup_create_flight_task = [t for t in live_setup_task_tasks if t.name == "Create Flight"][0]
-        live_setup_create_flight_task.set_param_values(
-            {"Deployment Date/Time": datetime_to_wf_format(self.deploy_datetime)})
+            live_setup_create_flight_task = first(
+                [t for t in live_setup_task_tasks if t.name == "Create Flight"]
+            )
+            if live_setup_create_flight_task:
+                live_setup_create_flight_task.set_param_values(
+                    {
+                        "Deployment Date/Time": datetime_to_wf_format(
+                            self.deploy_datetime
+                        )
+                    }
+                )
 
         return wf_project
 
@@ -171,13 +199,13 @@ class ResumeProjectBuilder(object):
         return wf_project
 
     def build(self):
-        '''
+        """
         @summary: According to all the parameters set to the builder, build a
         workfront resume project.
         @raise WFBrigeException: if the combination of parameters set in the
         builder are not compatible (like missing parameters).
         @return: a WFProject object.
-        '''
+        """
         self._check_viability()
 
         # Call the corresponding method to create the resume project
