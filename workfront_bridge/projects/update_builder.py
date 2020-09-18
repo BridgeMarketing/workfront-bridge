@@ -117,58 +117,57 @@ class UpdateProjectBuilder(object):
         '''
         @return: a update wf project to update an email project.
         '''
-        prj_being_updated = WFProject(self.wf, self.wf_project_id)
 
+        def first(_list):
+            return _list[0] if _list else None
+
+        prj_being_updated = WFProject(self.wf, self.wf_project_id)
         program = prj_being_updated.get_program()
         all_project = program.get_projects()
-
         cw_tool_projects = [p for p in all_project if p.name.startswith("CW tool")]
-
-        targeted_bonus_media_projects = [p for p in all_project if p.name.startswith("TBM - ")]
-
+        targeted_bonus_media_projects = [p for p in all_project if
+                                         p.name.startswith("TBM - ")]
         prj_name = "Update - {}".format(prj_being_updated.name)
         project = WFProjectUpdateContainer(prj_name)
         update_block = WFUpdateEmailDeployBlock()
         update_block.project_id = self.wf_project_id
         update_block.deploy_datetime = self.deploy_datetime
         project.append(update_block)
-
         parser = WFBlockParser(self.wf)
         wf_project = parser.create(project)
-
         # Get Audience Live Setup Push to Provider Task
         tasks = prj_being_updated.get_tasks()
-        aud_tsk = [t for t in tasks if t.name == "Audience Live Setup"][0]
-        aud_tasks = tasks[tasks.index(aud_tsk):]
-        ptp_task = [t for t in aud_tasks if t.name == "Push to provider"][0]
-
-        # # Now link the update task to the push to proivder one
-        # update_task = wf_project.get_tasks()[0]
-        # update_task.add_predecessor(ptp_task)
-
-        # Update Audience "Deployment Date/Time" parameter with the new deploy_datetime
-        create_flight_task = [t for t in aud_tasks if t.name == "Create Flight"][0]
-        create_flight_task.set_param_values({"Deployment Date/Time": datetime_to_wf_format(self.deploy_datetime)})
-
+        aud_tsk = first([t for t in tasks if t.name == "Audience Live Setup"])
+        if aud_tsk:
+            aud_tasks = tasks[tasks.index(aud_tsk):]
+            ptp_task = first([t for t in aud_tasks if t.name == "Push to provider"])
+            # # Now link the update task to the push to proivder one
+            # update_task = wf_project.get_tasks()[0]
+            # update_task.add_predecessor(ptp_task)
+            # Update Audience "Deployment Date/Time" parameter with the new deploy_datetime
+            create_flight_task = first(
+                [t for t in aud_tasks if t.name == "Create Flight"])
+            create_flight_task.set_param_values(
+                {"Deployment Date/Time": datetime_to_wf_format(self.deploy_datetime)})
         # Update Live Setup "Deployment Date/Time" parameter with the new deploy_datetime
-        live_setup_task = [t for t in tasks if t.name == "Live Setup"][0]
-        live_setup_task_tasks = tasks[tasks.index(live_setup_task):]
-
-        live_setup_create_flight_task = [t for t in live_setup_task_tasks if t.name == "Create Flight"][0]
-        live_setup_create_flight_task.set_param_values(
-            {"Deployment Date/Time": datetime_to_wf_format(self.deploy_datetime)})
-
+        live_setup_task = first([t for t in tasks if t.name == "Live Setup"])
+        if live_setup_task:
+            live_setup_task_tasks = tasks[tasks.index(live_setup_task):]
+            live_setup_create_flight_task = first(
+                [t for t in live_setup_task_tasks if t.name == "Create Flight"])
+            live_setup_create_flight_task.set_param_values(
+                {"Deployment Date/Time": datetime_to_wf_format(self.deploy_datetime)})
         # Update "Start Date" in CW tools project if exists
         if len(cw_tool_projects) > 0:
             cw_tool_project = cw_tool_projects[0]
-            cw_tool_project.set_param_values({"Start Date": datetime_to_wf_format(self.deploy_datetime)})
-
+            cw_tool_project.set_param_values(
+                {"Start Date": datetime_to_wf_format(self.deploy_datetime)})
         # Update "StartDateTimeInclusiveUTC" in TBM project if exists
         if len(targeted_bonus_media_projects) > 0:
             tarjeted_bonus_media_project = targeted_bonus_media_projects[0]
             tarjeted_bonus_media_project.set_param_values(
-                {"StartDateTimeInclusiveUTC": datetime_to_wf_format(self.deploy_datetime)})
-
+                {"StartDateTimeInclusiveUTC": datetime_to_wf_format(
+                    self.deploy_datetime)})
         return wf_project
 
     def __build_update_media_deploy(self):
