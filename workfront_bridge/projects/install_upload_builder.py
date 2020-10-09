@@ -19,11 +19,17 @@ class InstallUploadProjectBuilder(TTDBuilderMixin):
 
         # project level
         self._install_file_s3_url = None
+        self._account_id = None
+        self._install_id = None
+        self._installation_date = None
         self._project_type = None
 
     def build_project(self):
         project = WFProjectInstallUpload(self.project_name)
         project.install_file_s3_url = self._install_file_s3_url
+        project.account_id = self._account_id
+        project.install_id = self._install_id
+        project.installation_date = self._installation_date
         project.project_type = self._project_type
         return project
 
@@ -45,4 +51,16 @@ class InstallUploadProjectBuilder(TTDBuilderMixin):
 
     def set_install_file_s3_url(self, v):
         self._install_file_s3_url = v
+        return self
+
+    def set_account_id(self, v):
+        self._account_id = v
+        return self
+
+    def set_install_id(self, v):
+        self._install_id = v
+        return self
+
+    def set_installation_date(self, v):
+        self._installation_date = v
         return self

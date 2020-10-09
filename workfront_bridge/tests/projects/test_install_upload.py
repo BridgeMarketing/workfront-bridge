@@ -20,6 +20,9 @@ class Test_Install_Upload_Builder(BaseBuilderTest):
         self.builder.set_install_file_s3_url(
             "s3://bridge-file-assets/Installs/Install_File.csv"
         )
+        self.builder.set_account_id('5')
+        self.builder.set_install_id('555')
+        self.builder.set_installation_date('2025-05-25')
 
         prj = self.builder.build()
 
@@ -28,6 +31,9 @@ class Test_Install_Upload_Builder(BaseBuilderTest):
             "": {
                 "Project Type": "Upload Install",
                 "install_file_s3_url": "s3://bridge-file-assets/Installs/Install_File.csv",
+                "account_id": "5",
+                "install_id": "555",
+                "installation_date": "2025-05-25",
             },
         }
 
