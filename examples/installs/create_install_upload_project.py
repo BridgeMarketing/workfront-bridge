@@ -1,6 +1,6 @@
 import datetime
 from workfront.workfront import Workfront
-from workfront_bridge.projects import install_upload_builder
+from workfront_bridge.projects.installs import install_upload_builder
 
 
 wf = Workfront(

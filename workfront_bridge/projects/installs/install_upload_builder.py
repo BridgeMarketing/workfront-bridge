@@ -1,4 +1,4 @@
-from workfront_bridge.projects.install_upload import WFProjectInstallUpload
+from workfront_bridge.projects.installs.install_upload import WFProjectInstallUpload
 from workfront_bridge.projects.ttd import TTDBuilderMixin
 from workfront_bridge.exceptions import WFBrigeException
 from workfront_bridge.blocks.base import WFBlockParser
@@ -23,6 +23,9 @@ class InstallUploadProjectBuilder(TTDBuilderMixin):
         self._install_id = None
         self._installation_date = None
         self._project_type = None
+        self._account_id = None
+        self._install_id = None
+        self._installation_date = None
 
     def build_project(self):
         project = WFProjectInstallUpload(self.project_name)
