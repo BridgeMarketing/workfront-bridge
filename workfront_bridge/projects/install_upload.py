@@ -14,6 +14,9 @@ class WFProjectInstallUpload(WFBlock):
         "": [
             ("Project Type", "project_type", False),
             ("install_file_s3_url", "install_file_s3_url", False),
+            ("account_id", "account_id", False),
+            ("install_id", "install_id", False),
+            ("installation_date", "installation_date", False),
         ],
     }
 

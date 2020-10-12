@@ -14,8 +14,12 @@ b = install_upload_builder.InstallUploadProjectBuilder(
 )
 (
     b.set_install_file_s3_url(
-        "s3://bridge-file-assets/Installs/Install_File.csv"
-    ).set_project_type("Upload Install")
+            "s3://bridge-file-assets/Installs/Install_File.csv"
+        )
+        .set_account_id(5)
+        .set_install_id(555)
+        .set_installation_date('2025-05-15')
+        .set_project_type("Upload Install")
 )
 
 prj = b.build()
