@@ -2,7 +2,7 @@ import mock
 import datetime
 
 from workfront_bridge.tests.projects.base import BaseBuilderTest
-from workfront_bridge.projects import install_upload_builder
+from workfront_bridge.projects.installs import install_upload_builder
 
 
 class Test_Install_Upload_Builder(BaseBuilderTest):
