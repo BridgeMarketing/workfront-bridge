@@ -157,8 +157,9 @@ class DataProjectBuilder(object):
                     count_block.count_id = segment.get("count_id")
                     count_block.count_type = segment.get("segment_type")
                     group_block.append(count_block)
-                elif segment.get("segment_type") in ["ME"]:
+                elif segment.get("segment_type") in ["ME", "INSTALL"]:
                     client_block = WFClientAudienceBlock()
+                    client_block.segment_type = segment["segment_type"]
                     client_block.audience_file_path = segment["audience_file_path"]
                     client_block.audience_identifier = segment["audience_identifier"]
                     client_block.audience_name = segment["audience_name"]
