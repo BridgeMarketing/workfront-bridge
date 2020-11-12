@@ -43,7 +43,29 @@ class WFClientAudienceBlock(WFBlock):
             ("Audience File Path", "audience_file_path", True),
             ("Audience Field Identifier", "audience_identifier", False),
             ("Audience Field Map", "audience_field_map", False),
+        ],
+    }
+
+
+class WFInstallAudienceBlock(WFBlock):
+    """
+    @summary: Use this block to add pull count data tasks into a count id group.
+    There is 2 types of suppressions:
+    - type : use supression type setter
+    - file : use suppression file path and suppression file type
+    """
+
+    template_name = "Block - Data - Install Audience Segment"
+
+    block_params = {
+        "Install Audience Segment": [
+            ("Audience Name", "audience_name", True),
+            ("Audience File Path", "audience_file_path", True),
+            ("Audience Field Identifier", "audience_identifier", False),
+            ("Audience Field Map", "audience_field_map", False),
             ("Audience Segment Type", "segment_type", True),
+            ("install_tables", "install_tables", True),
+            ("install_columns", "install_columns", True),
         ],
     }
 

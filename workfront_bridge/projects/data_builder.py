@@ -1,7 +1,8 @@
 from workfront_bridge.blocks.base import WFBlockParser
 from workfront_bridge.blocks.data.audience import (
     WFAudienceBlock, WFBridgeAudienceBlock, WFClientAudienceBlock,
-    WFRetrieveProviderParamsFromDWH, WFRetrieveRetargetingAudience)
+    WFRetrieveProviderParamsFromDWH, WFRetrieveRetargetingAudience,
+    WFInstallAudienceBlock)
 from workfront_bridge.blocks.data.hygiene import HygieneDataBlock
 from workfront_bridge.blocks.data.merge import MergeDataBlock
 from workfront_bridge.blocks.data.review_data import (WFReviewDataBlock,
@@ -157,14 +158,21 @@ class DataProjectBuilder(object):
                     count_block.count_id = segment.get("count_id")
                     count_block.count_type = segment.get("segment_type")
                     group_block.append(count_block)
-                elif segment.get("segment_type") in ["ME", "INSTALL"]:
+                elif segment.get("segment_type") in ["ME"]:
                     client_block = WFClientAudienceBlock()
-                    client_block.segment_type = segment["segment_type"]
                     client_block.audience_file_path = segment["audience_file_path"]
                     client_block.audience_identifier = segment["audience_identifier"]
                     client_block.audience_name = segment["audience_name"]
                     client_block.audience_field_map = segment.get("audience_field_map")
                     group_block.append(client_block)
+                elif segment.get("segment_type") in ["INSTALL"]:
+                    install_block = WFInstallAudienceBlock()
+                    install_block.audience_file_path = segment["audience_file_path"]
+                    install_block.audience_identifier = segment["audience_identifier"]
+                    install_block.audience_name = segment["audience_name"]
+                    install_block.install_tables = segment.get("install_tables")
+                    install_block.install_columns = segment.get("install_columns")
+                    group_block.append(install_block)
                 else:
                     raise WFBrigeException(
                         "Invalid segment type: {}".format(
