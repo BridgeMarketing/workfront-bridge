@@ -12,7 +12,7 @@ b.add_test_list("s3://some/testlist1.csv")
 
 b.set_ecm_html("s3://some/creative.html")
 
-b.set_deployment_datetime(datetime(2020, 2, 3, 14, 29, 22))
+b.set_deployment_time(datetime(2020, 2, 3, 14, 29, 22))
 
 b.set_subject("asuntoooo")
 
@@ -21,6 +21,10 @@ b.set_seeds_sender_email("seedssender@email.com")
 b.set_seeds_sender_name("Seed Name")
 
 b.set_email_creative_id("10")
+
+b.set_subject_test_prefix('(test coso)')
+b.set_import_id('454545')
+b.set_list_id('789789')
 
 prj = b.build()
 prj.set_fields({"portfolioID": "5b45ff9b000aa3a5db15b2e269976a4c"})

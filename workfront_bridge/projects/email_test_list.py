@@ -14,12 +14,11 @@ class WFProjectEmailTestListContainer(WFBlock):
     block_params = {
         '': [
             ('ecm_subject', 'email_subject', True, lambda x: str(x.encode('utf-8'))),
-            ('email_creative_id', 'email_creative_id', True),
+            ('subject_test_prefix', 'subject_test_prefix', False, lambda x: str(x.encode('utf-8'))),
             ('input_html_s3_path', 'html_s3_path', False),
-            ('ecm_from_line', 'from_line', False),
-            ('ecm_test_seed_list', 'test_seed_list', False),
+            ('ecm_from_line', 'from_line', True, lambda x: str(x.encode('utf-8'))),
+            ('ecm_live_seed_list', 'live_seed_list', False),
             ('ecm_html', 'ecm_html', False),
-            ('subject_test_prefix', 'subject_test_prefix', False),
         ],
     }
 
