@@ -5,6 +5,7 @@ from workfront_bridge.blocks.email import WFEmailTestSeedBlockV2
 from workfront_bridge.blocks.base import WFBlockParser
 from workfront_bridge.exceptions import WFBrigeException
 from workfront_bridge.projects.email import WFProjectEmailContainer
+from workfront_bridge.projects.project_builder import ProjectBuilder
 
 
 class ProviderConfig(object):
@@ -17,7 +18,7 @@ class ProviderConfig(object):
         self.sender_name = None
 
 
-class EmailTestListProjectBuilder(object):
+class EmailTestListProjectBuilder(ProjectBuilder):
     '''
     @summary: Email test list project builder to easily construct
     email test list workfront projects.
@@ -31,32 +32,19 @@ class EmailTestListProjectBuilder(object):
 
         self.project_name = project_name
         self.wf = wf
-        self.test_seed_lists = None
-        self.subject = None
-        self.subject_test_prefix = None
-        self.html = None
-        self.html_zip = None
         self.provider = None
-        self.email_creative_id = None
-
         self.seeds_provider = ProviderConfig()
 
-        self.ecm_html = None
+        self.register_field('subject')
+        self.register_field('subject_test_prefix')
+
+        self.register_field('ecm_html')
+        self.register_field('import_id')
+        self.register_field('list_id')
+        self.register_field('deployment_time')
 
     def add_test_list(self, s3_path):
         self.test_seed_lists = s3_path
-        return self
-
-    def set_subject(self, subject):
-        self.subject = subject
-        return self
-
-    def set_subject_test_prefix(self, subject_test_prefix):
-        self.subject_test_prefix = subject_test_prefix
-        return self
-
-    def set_deployment_datetime(self, dt):
-        self.deployment_time = dt
         return self
 
     def set_seeds_sender_email(self, email):
@@ -77,10 +65,6 @@ class EmailTestListProjectBuilder(object):
 
     def set_email_creative_id(self, id):
         self.email_creative_id = id
-        return self
-
-    def set_ecm_html(self, s3_path):
-        self.ecm_html = s3_path
         return self
 
     def _check_viability(self):
@@ -119,10 +103,14 @@ class EmailTestListProjectBuilder(object):
         project.subject_test_prefix = self.subject_test_prefix
         project.email_creative_id = self.email_creative_id
         project.from_line = self.seeds_provider.sender_name
+        project.deployment_time = self.deployment_time
 
         project.ecm_html = self.ecm_html
 
         project.test_seed_lists = self.test_seed_lists
+
+        project.import_id = self.import_id
+        project.list_id = self.list_id
 
         sl_block = WFEmailTestSeedBlockV2()
         sl_block.seed_list_s3_path = self.test_seed_lists

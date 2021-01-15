@@ -8,6 +8,7 @@ wf.login()
 
 b = email_builder.EmailProjectBuilder(wf, "Test harsh manual email project builder 1")
 
+
 b.set_html("s3://some/creative.html")
 
 b.set_deployment_datetime(datetime(2020, 2, 3, 14, 29, 22))
@@ -21,7 +22,7 @@ b.set_deployment_datetime(datetime.today())
 
 b.set_ecm_html("s3://some/creative.html")
 b.set_is_created_from_onboarding(True)
-b.set_audience_provider("ongage")
+b.set_audience_provider("Ongage")
 b.set_audience_sender_email("audience_sender@email.com")
 b.set_audience_sender_name("Sender NAME")
 

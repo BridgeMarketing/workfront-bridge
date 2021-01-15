@@ -11,7 +11,7 @@ from workfront_bridge.blocks.email import WFEmailLiveSeedValidateBlock, \
     WFEmailLiveSeedSendBlock
 from workfront_bridge.blocks.email import WFEmailGenHtmlFromZipBlock
 from workfront_bridge.blocks.email import WFEmailValidateHtmlBlock
-
+from workfront_bridge.projects.project_builder import ProjectBuilder
 
 class ProviderConfig(object):
     def __init__(self):
@@ -23,7 +23,7 @@ class ProviderConfig(object):
         self.sender_name = None
 
 
-class EmailProjectBuilder(object):
+class EmailProjectBuilder(ProjectBuilder):
     '''
     @summary: Email project builder to easily construct email workfront
     projects.
@@ -60,6 +60,8 @@ class EmailProjectBuilder(object):
         self.add_tags_weight_approval_step = False
         self.deployment_time = None
         self.project_id = None
+
+        self.register_field('list_id')
 
     def set_project_id(self, project_id):
         self.project_id = project_id
@@ -235,7 +237,6 @@ class EmailProjectBuilder(object):
         @return: a WFProject object.
         '''
         self._check_viability()
-
         project = WFProjectEmailContainer(self.project_name)
 
         project.email_subject = self.subject
@@ -249,6 +250,7 @@ class EmailProjectBuilder(object):
         project.ttd_bonus_media_advertiser_id = self.ttd_bonus_media_advertiser_id
         project.lr_account_id = self.lr_account_id
         project.lr_bonus_media_account_id = self.lr_bonus_media_account_id
+        project.list_id = self.list_id
 
         if self.is_created_from_onboarding:
             project.ecm_html = self.ecm_html
@@ -414,6 +416,7 @@ class EmailOnBoardingProjectBuilder(object):
         project.client_id = self.client_id
         project.category = self.category
         project.email_creative_id = self.email_creative_id
+        project.list_id = self.list_id
 
         if self.html.lower().endswith(".zip"):
             zipb = WFEmailGenHtmlFromZipBlock()
