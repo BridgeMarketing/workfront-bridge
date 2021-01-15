@@ -9,6 +9,7 @@ def simple_single_segment(wf):
                            audience_file_path=None,
                            audience_name=None,
                            audience_identifier=None)
+    b.set_vertical("Home & Garden")
     prj = b.build()
     return prj
 

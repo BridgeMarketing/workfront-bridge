@@ -11,9 +11,10 @@ from workfront_bridge.blocks.data.suppression import (WFSuppressionBlock,
                                                       WFSuppressionGroupBlock)
 from workfront_bridge.exceptions import WFBrigeException
 from workfront_bridge.projects.data import WFProjectDataContainer
+from workfront_bridge.projects.project_builder import ProjectBuilder
 
 
-class DataProjectBuilder(object):
+class DataProjectBuilder(ProjectBuilder):
     """
     @summary: Project builder for M&E and B2C projects.
     """
@@ -47,6 +48,7 @@ class DataProjectBuilder(object):
 
         self.parent_wf_project_id = None
         self.retargeting_type = None
+        self.register_field('vertical')
 
     def add_audience_segment(self, **kwargs):
         self.segments.append(kwargs)
@@ -145,6 +147,7 @@ class DataProjectBuilder(object):
         project.audience_id = self.audience_id
         project.data_task_id = self.data_task_id
         project.suppression_task_ids = self.suppression_task_ids
+        project.vertical = self.vertical
 
         # Specific project blocks
         project.set_data()

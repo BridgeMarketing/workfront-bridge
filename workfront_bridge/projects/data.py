@@ -18,6 +18,7 @@ class WFProjectDataContainer(WFBlock):
             ('Audience File Path', 'audience_file_path', False),
             ('Data Task Id', 'data_task_id', False),
             ('Suppression Task Ids', 'suppression_task_ids', False, lambda v: ','.join(v)),
+            ('Vertical', 'vertical', False),
         ],
     }
 
