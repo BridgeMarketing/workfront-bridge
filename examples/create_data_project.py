@@ -14,6 +14,19 @@ def simple_single_segment(wf):
     return prj
 
 
+def simple_list_mgmt_project(wf):
+    b = data_builder.DataProjectBuilder(wf, "Test segment project builder")
+    b.add_audience_segment(count_id="COUNTID_1234",
+                           segment_type="B2C",
+                           audience_file_path=None,
+                           audience_name=None,
+                           audience_identifier=None)
+    b.set_vertical("Home & Garden")
+    b.set_list_mgmt_task(True)
+    prj = b.build()
+    return prj
+
+
 def simple_segment_with_suppression_type(wf):
     b = data_builder.DataProjectBuilder(wf, "Test segment project builder")
     b.add_audience_segment(count_id="COUNTID_1234",
@@ -62,3 +75,5 @@ print(simple_single_segment(wf))
 print(simple_segment_with_suppression_type(wf))
 
 print(simple_segment_with_suppression_files(wf))
+
+print(simple_list_mgmt_project(wf))

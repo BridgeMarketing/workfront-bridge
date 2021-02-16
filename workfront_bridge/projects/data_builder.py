@@ -4,6 +4,7 @@ from workfront_bridge.blocks.data.audience import (
     WFRetrieveProviderParamsFromDWH, WFRetrieveRetargetingAudience,
     WFInstallAudienceBlock)
 from workfront_bridge.blocks.data.hygiene import HygieneDataBlock
+from workfront_bridge.blocks.data.list_mgmt import WFCreateBlueFileAndEspFiles
 from workfront_bridge.blocks.data.merge import MergeDataBlock
 from workfront_bridge.blocks.data.review_data import (WFReviewDataBlock,
                                                       WFReviewUpdatedDataBlock)
@@ -49,6 +50,7 @@ class DataProjectBuilder(ProjectBuilder):
         self.parent_wf_project_id = None
         self.retargeting_type = None
         self.register_field('vertical')
+        self.register_field('list_mgmt_task')
 
     def add_audience_segment(self, **kwargs):
         self.segments.append(kwargs)
@@ -223,6 +225,10 @@ class DataProjectBuilder(ProjectBuilder):
             else WFReviewDataBlock()
         )
         project.append(rev_block)
+
+        if self.list_mgmt_task:
+            list_mgmt_block = WFCreateBlueFileAndEspFiles()
+            project.append(list_mgmt_block)
 
         parser = WFBlockParser(self.wf)
         wf_project = parser.create(project)
