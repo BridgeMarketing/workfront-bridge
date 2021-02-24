@@ -268,8 +268,13 @@ class EmailProjectBuilder(ProjectBuilder):
         bval_html = WFEmailValidateHtmlBlock()
         bval_html.email_subject = self.subject
         project.append(bval_html)
+        if self.live_seed_list is not None:
+            project.live_seed_list = self.live_seed_list
 
-        if not self.provider or self.provider.lower() != 'ongage':
+        if not self.provider or self.provider.lower() == 'manual_ongage':
+            push_dwh_el = WFEmailPushToDWHAndEL()
+            project.append(push_dwh_el)
+        else:
             if self.live_seed_list is not None:
                 email_seed_block = self._crt_live_list_block(self.live_seed_list)
                 project.append(email_seed_block)
@@ -284,11 +289,6 @@ class EmailProjectBuilder(ProjectBuilder):
             if self.review_deployment:
                 reviewb = WFEmailReviewDeploymentBlock()
                 project.append(reviewb)
-        else:
-            if self.live_seed_list is not None:
-                project.live_seed_list = self.live_seed_list
-            push_dwh_el = WFEmailPushToDWHAndEL()
-            project.append(push_dwh_el)
 
         parser = WFBlockParser(self.wf)
         wf_project = parser.create(project)
