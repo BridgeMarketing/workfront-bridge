@@ -76,6 +76,7 @@ class WFEmailTestSeedBlockV2(WFEmailSeedBlock):
     block_params = {
         'Test Setup': [
             ('cm_test_aud_s3_path', 'seed_list_s3_path', True),
+            ('provider', 'provider', False),
         ],
     }
 
@@ -102,6 +103,7 @@ class WFEmailLiveSeedBlock(WFEmailSeedBlock):
     block_params = {
         'Live Setup': [
             ('live_seed_list_s3_path', 'seed_list_s3_path', True),
+            ('provider', 'provider', False),
         ],
     }
 
@@ -151,6 +153,7 @@ class WFEmailAudienceLiveSetupBlock(WFBlock):
     block_params = {
         'Audience Live Setup': [
             ('cm_aud_s3_path', 'seed_list_s3_path', False),
+            ('provider', 'provider', False),
         ],
         'Create Flight': [
             ('Campaign Name', 'campaign_name', True),
