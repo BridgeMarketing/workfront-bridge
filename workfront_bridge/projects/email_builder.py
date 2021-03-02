@@ -167,6 +167,7 @@ class EmailProjectBuilder(ProjectBuilder):
         block.sender_name = provider.sender_name
 
         block.provider = provider.name
+        block.provider_name = provider.name
         block.provider_user = provider.user
         block.provider_password = provider.password
         block.provider_token = provider.token
@@ -390,6 +391,7 @@ class EmailOnBoardingProjectBuilder(object):
         block.sender_name = provider.sender_name
 
         block.provider = provider.name
+        block.provider_name = provider.name
         block.provider_user = provider.user
         block.provider_password = provider.password
         block.provider_token = provider.token
