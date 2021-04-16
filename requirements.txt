@@ -1,9 +1,8 @@
 mock==2.0.0
 nose==1.3.7
 rednose==1.2.3
-requests==2.18.4
+requests==2.25.1
 requests-mock==1.4.0
-workfront-sdk==0.22.1
 pytz==2018.5
 python-dateutil==2.7.3
-
+-e "git+https://git@github.com/BridgeMarketing/workfront-sdk.git@9527d73a9c23e8d632ab855a2c24fa12e58c21aa#egg=workfront_sdk"
