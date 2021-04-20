@@ -5,4 +5,4 @@ requests==2.25.1
 requests-mock==1.4.0
 pytz==2018.5
 python-dateutil==2.7.3
-workfront-sdk==0.24
+-e "git+https://git@github.com/BridgeMarketing/workfront-sdk.git@800d17c484d8c42029a820ca720492554178f787#egg=workfront"
