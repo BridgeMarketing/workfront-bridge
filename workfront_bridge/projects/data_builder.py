@@ -1,8 +1,8 @@
 from workfront_bridge.blocks.base import WFBlockParser
 from workfront_bridge.blocks.data.audience import (
     WFAudienceBlock, WFBridgeAudienceBlock, WFClientAudienceBlock,
-    WFRetrieveProviderParamsFromDWH, WFRetrieveRetargetingAudience,
-    WFInstallAudienceBlock)
+    WFInstallAudienceBlock, WFRetrieveProviderParamsFromDWH,
+    WFRetrieveRetargetingAudience)
 from workfront_bridge.blocks.data.hygiene import HygieneDataBlock
 from workfront_bridge.blocks.data.list_mgmt import WFCreateBlueFileAndEspFiles
 from workfront_bridge.blocks.data.merge import MergeDataBlock
@@ -226,9 +226,10 @@ class DataProjectBuilder(ProjectBuilder):
         )
         project.append(rev_block)
 
-        if self.list_mgmt_task:
-            list_mgmt_block = WFCreateBlueFileAndEspFiles()
-            project.append(list_mgmt_block)
+        # TODO: temporary disable Blue and ESP tasks for phase 1 of list management
+        # if self.list_mgmt_task:
+        #     list_mgmt_block = WFCreateBlueFileAndEspFiles()
+        #     project.append(list_mgmt_block)
 
         parser = WFBlockParser(self.wf)
         wf_project = parser.create(project)
