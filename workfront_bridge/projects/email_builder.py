@@ -272,7 +272,7 @@ class EmailProjectBuilder(ProjectBuilder):
         if self.live_seed_list is not None:
             project.live_seed_list = self.live_seed_list
 
-        if self.provider and self.provider.lower() == 'manual_ongage':
+        if self.provider and self.provider.lower() in ('ongage', 'manual_ongage'):
             push_dwh_el = WFEmailPushToDWHAndEL()
             project.append(push_dwh_el)
         else:
